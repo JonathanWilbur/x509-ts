@@ -1,0 +1,124 @@
+import { DERElement,ObjectIdentifier, ASN1TagClass, ASN1Construction, ASN1UniversalType } from "asn1-ts";
+import { Byteable,Elementable } from "../interfaces";
+import * as errors from "../errors";
+
+// Extension ::= SEQUENCE {
+//   extnId     EXTENSION.&id({ExtensionSet}),
+//   critical   BOOLEAN DEFAULT FALSE,
+//   extnValue  OCTET STRING
+//     (CONTAINING EXTENSION.&ExtnType({ExtensionSet}{@extnId})
+//        ENCODED BY der),
+//   ... }
+
+/**
+    Extension  ::=  SEQUENCE  {
+        extnID      OBJECT IDENTIFIER,
+        critical    BOOLEAN DEFAULT FALSE,
+        extnValue   OCTET STRING }
+*/
+export default
+class Extension implements Byteable,Elementable {
+    public extnID? : ObjectIdentifier;
+    public critical : boolean = false;
+    public extnValue : Uint8Array = new Uint8Array([]);
+
+    public fromElement (value : DERElement) : void {
+        switch (value.validateTag(
+            [ ASN1TagClass.universal ],
+            [ ASN1Construction.constructed ],
+            [ ASN1UniversalType.sequence ]
+        )) {
+            case 0: break;
+            case -1: throw new errors.X509Error("Invalid tag number on Extension");
+            case -2: throw new errors.X509Error("Invalid construction on Extension");
+            case -3: throw new errors.X509Error("Invalid tag number on Extension");
+            default: throw new errors.X509Error("Undefined error when validating Extension tag");
+        }
+
+        const extensionElements : DERElement[] = value.sequence;
+        if (extensionElements.length > 3)
+            throw new errors.X509Error("An Extension encoded more than three elements");
+        else if (extensionElements.length < 2)
+            throw new errors.X509Error("An Extension encoded fewer than two elements");
+
+        switch (extensionElements[0].validateTag(
+            [ ASN1TagClass.universal ],
+            [ ASN1Construction.primitive ],
+            [ ASN1UniversalType.objectIdentifier ]
+        )) {
+            case 0: break;
+            case -1: throw new errors.X509Error("Invalid tag number on Extension.identifier");
+            case -2: throw new errors.X509Error("Invalid construction on Extension.identifier");
+            case -3: throw new errors.X509Error("Invalid tag number on Extension.identifier");
+            default: throw new errors.X509Error("Undefined error when validating Extension.identifier tag");
+        }
+
+        if (extensionElements.length === 3) {
+            switch (extensionElements[1].validateTag(
+                [ ASN1TagClass.universal ],
+                [ ASN1Construction.primitive ],
+                [ ASN1UniversalType.boolean ]
+            )) {
+                case 0: break;
+                case -1: throw new errors.X509Error("Invalid tag number on Extension.critical");
+                case -2: throw new errors.X509Error("Invalid construction on Extension.critical");
+                case -3: throw new errors.X509Error("Invalid tag number on Extension.critical");
+                default: throw new errors.X509Error("Undefined error when validating Extension.critical tag");
+            }
+            this.critical = extensionElements[1].boolean;
+        } else {
+            this.critical = false;
+        }
+
+        switch (extensionElements[extensionElements.length - 1].validateTag(
+            [ ASN1TagClass.universal ],
+            [ ASN1Construction.primitive ],
+            [ ASN1UniversalType.octetString ]
+        )) {
+            case 0: break;
+            case -1: throw new errors.X509Error("Invalid tag number on Extension.extnValue");
+            case -2: throw new errors.X509Error("Invalid construction on Extension.extnValue");
+            case -3: throw new errors.X509Error("Invalid tag number on Extension.extnValue");
+            default: throw new errors.X509Error("Undefined error when validating Extension.extnValue tag");
+        }
+
+        this.extnID = extensionElements[0].objectIdentifier;
+        this.extnValue = extensionElements[extensionElements.length - 1].octetString;
+    }
+
+    public toElement () : DERElement {
+        if (this.extnID === undefined)
+            throw new errors.X509Error("extnID is undefined");
+        const extnIDElement : DERElement = new DERElement();
+        extnIDElement.tagClass = ASN1TagClass.universal;
+        extnIDElement.construction = ASN1Construction.primitive;
+        extnIDElement.tagNumber = ASN1UniversalType.objectIdentifier;
+
+        const criticalElement : DERElement = new DERElement();
+        criticalElement.tagClass = ASN1TagClass.universal;
+        criticalElement.construction = ASN1Construction.primitive;
+        criticalElement.tagNumber = ASN1UniversalType.boolean;
+
+        const extnValueElement : DERElement = new DERElement();
+        extnValueElement.tagClass = ASN1TagClass.universal;
+        extnValueElement.construction = ASN1Construction.primitive;
+        extnValueElement.tagNumber = ASN1UniversalType.octetString;
+
+        const ret : DERElement = new DERElement();
+        ret.tagClass = ASN1TagClass.universal;
+        ret.construction = ASN1Construction.constructed;
+        ret.tagNumber = ASN1UniversalType.sequence;
+        ret.sequence = [ extnIDElement, criticalElement, extnValueElement ];
+        return ret;
+    }
+
+    public fromBytes (value : Uint8Array) : void {
+        const el : DERElement = new DERElement();
+        el.fromBytes(value);
+        this.fromElement(el);
+    }
+
+    public toBytes () : Uint8Array {
+        return this.toElement().toBytes();
+    }
+}

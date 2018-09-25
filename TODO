@@ -1,2 +1,6 @@
 - Fix "ASN.1 library" in README.md of PEM library
 - Add "platform" bullet point to ASN.1 library
+- Make sure that each root constructed element is validated
+- Put these in an x501 library:
+  - PkiPMIProtocolSpecifications
+  - PkiPmiWrapper

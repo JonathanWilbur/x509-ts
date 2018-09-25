@@ -56,5 +56,7 @@
   },
   "types": "./dist/types/x509.d.ts",
   "version": "0.1.0",
-  "dependencies": {}
+  "dependencies": {
+    "asn1-ts": "^1.1.1"
+  }
 }
