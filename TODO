@@ -4,3 +4,6 @@
 - Put these in an x501 library:
   - PkiPMIProtocolSpecifications
   - PkiPmiWrapper
+- Make fromBytes static
+- Find some interface you can implement
+- See if you can implement methods on type aliases or implement them as classes gracefully.

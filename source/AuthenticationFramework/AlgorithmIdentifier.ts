@@ -1,5 +1,4 @@
 import { DERElement, ObjectIdentifier, ASN1TagClass, ASN1Construction, ASN1UniversalType } from "asn1-ts";
-import { Byteable,Elementable } from "../interfaces";
 import * as errors from "../errors";
 
 // ALGORITHM ::= CLASS {
@@ -35,15 +34,14 @@ import * as errors from "../errors";
 //     parameters              ANY DEFINED BY algorithm OPTIONAL  }
 
 export default
-class AlgorithmIdentifier implements Byteable,Elementable {
-    public algorithm? : ObjectIdentifier;
-    public parameters? : DERElement;
+class AlgorithmIdentifier {
 
-    constructor () {
+    constructor (
+        readonly algorithm : ObjectIdentifier,
+        readonly parameters : DERElement
+    ) {}
 
-    }
-
-    public fromElement (value : DERElement) : void {
+    public static fromElement (value : DERElement) : AlgorithmIdentifier {
         const algorithmIdentifierElements : DERElement[] = value.sequence;
         if (algorithmIdentifierElements.length !== 2)
             throw new errors.X509Error("Invalid number of elements in AlgorithmIdentifier");
@@ -58,8 +56,10 @@ class AlgorithmIdentifier implements Byteable,Elementable {
             case -3: throw new errors.X509Error("Invalid tag number on AlgorithmIdentifier.algorithm");
             default: throw new errors.X509Error("Undefined error when validating AlgorithmIdentifier.algorithm tag");
         }
-        this.algorithm = algorithmIdentifierElements[0].objectIdentifier;
-        this.parameters = algorithmIdentifierElements[1];
+        return new AlgorithmIdentifier(
+            algorithmIdentifierElements[0].objectIdentifier,
+            algorithmIdentifierElements[1]
+        );
     }
 
     public toElement () : DERElement {
@@ -80,10 +80,10 @@ class AlgorithmIdentifier implements Byteable,Elementable {
         return algorithmIdentifierElement;
     }
 
-    public fromBytes (value : Uint8Array) : void {
-        const algorithmIdentifierElement : DERElement = new DERElement();
-        algorithmIdentifierElement.fromBytes(value);
-        this.fromElement(algorithmIdentifierElement);
+    public static fromBytes (value : Uint8Array) : AlgorithmIdentifier {
+        const el : DERElement = new DERElement();
+        el.fromBytes(value);
+        return AlgorithmIdentifier.fromElement(el);
     }
 
     public toBytes () : Uint8Array {

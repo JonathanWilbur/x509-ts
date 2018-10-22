@@ -1,5 +1,4 @@
 import { DERElement,ObjectIdentifier, ASN1TagClass, ASN1Construction, ASN1UniversalType } from "asn1-ts";
-import { Byteable, Elementable } from "../interfaces";
 import * as errors from "../errors";
 
 // AttributeTypeAndValue ::= SEQUENCE {
@@ -68,11 +67,13 @@ import * as errors from "../errors";
 //     ID                      &id }
 
 export default
-class AttributeTypeAndValue implements Byteable,Elementable {
-    type : ObjectIdentifier;
-    value : DERElement;
+class AttributeTypeAndValue {
+    constructor(
+        readonly type : ObjectIdentifier,
+        readonly value : DERElement
+    ) {}
 
-    public fromElement (value : DERElement) : void {
+    public static fromElement (value : DERElement) : AttributeTypeAndValue {
         const attributeTypeAndValueElements : DERElement[] = value.sequence;
         if (attributeTypeAndValueElements.length !== 2)
             throw new errors.X509Error("Invalid number of elements in AttributeTypeAndValue");
@@ -87,8 +88,10 @@ class AttributeTypeAndValue implements Byteable,Elementable {
             case -3: throw new errors.X509Error("Invalid tag number on AttributeTypeAndValue.type");
             default: throw new errors.X509Error("Undefined error when validating AttributeTypeAndValue.type tag");
         }
-        this.type = attributeTypeAndValueElements[0].objectIdentifier;
-        this.value = attributeTypeAndValueElements[1];
+        return new AttributeTypeAndValue(
+            attributeTypeAndValueElements[0].objectIdentifier,
+            attributeTypeAndValueElements[1]
+        );
     }
 
     public toElement() : DERElement {
@@ -103,10 +106,10 @@ class AttributeTypeAndValue implements Byteable,Elementable {
         return attributeTypeAndValueElement;
     }
 
-    public fromBytes (value : Uint8Array) : void {
-        const attributeTypeAndValueElement : DERElement = new DERElement();
-        attributeTypeAndValueElement.fromBytes(value);
-        this.fromElement(attributeTypeAndValueElement);
+    public static fromBytes (value : Uint8Array) : AttributeTypeAndValue {
+        const el : DERElement = new DERElement();
+        el.fromBytes(value);
+        return AttributeTypeAndValue.fromElement(el);
     }
 
     public toBytes () : Uint8Array {

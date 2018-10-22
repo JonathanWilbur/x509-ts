@@ -1,5 +1,4 @@
-import { DERElement,ObjectIdentifier, ASN1TagClass, ASN1Construction, ASN1UniversalType } from "asn1-ts";
-import { Byteable,Elementable } from "../interfaces";
+import { DERElement, ASN1TagClass, ASN1Construction, ASN1UniversalType } from "asn1-ts";
 import * as errors from "../errors";
 import Name from "../InformationFramework/Name";
 import Validity from "./Validity";
@@ -29,33 +28,22 @@ import AttributeTypeAndValue from "../InformationFramework/AttributeTypeAndValue
 //    } (CONSTRAINED BY { -- shall be DER encoded -- } )
 
 export default
-class TBSCertificate implements Byteable,Elementable {
-    public ver : Version = Version.v3;
-    public serialNumber : CertificateSerialNumber = new Uint8Array([ 0 ]);
-    public signature : AlgorithmIdentifier;
-    public issuer : Name;
-    public validity : Validity;
-    public subject : Name;
-    public subjectPublicKeyInfo : SubjectPublicKeyInfo;
-    // public issuerUniqueID : boolean[];
-    // public subjectUniqueID : boolean[];
-    public extensions : Extensions = [];
+class TBSCertificate {
 
     constructor (
-        signature : AlgorithmIdentifier,
-        issuer : Name,
-        validity : Validity,
-        subject : Name,
-        subjectPublicKeyInfo : SubjectPublicKeyInfo
-    ) {
-        this.signature = signature;
-        this.issuer = issuer;
-        this.validity = validity;
-        this.subject = subject;
-        this.subjectPublicKeyInfo = subjectPublicKeyInfo;
-    }
+        readonly ver : Version = Version.v3,
+        readonly serialNumber : CertificateSerialNumber,
+        readonly signature : AlgorithmIdentifier,
+        readonly issuer : Name,
+        readonly validity : Validity,
+        readonly subject : Name,
+        readonly subjectPublicKeyInfo : SubjectPublicKeyInfo,
+        readonly issuerUniqueID? : boolean[],
+        readonly subjectUniqueID? : boolean[],
+        readonly extensions? : Extensions
+    ) {}
 
-    public fromElement (value : DERElement) : void {
+    public static fromElement (value : DERElement) : TBSCertificate {
         switch (value.validateTag(
             [ ASN1TagClass.universal ],
             [ ASN1Construction.constructed ],
@@ -74,6 +62,17 @@ class TBSCertificate implements Byteable,Elementable {
         else if (tbsCertificateElements.length < 7)
             throw new errors.X509Error("");
 
+        let ver : Version = Version.v3;
+        let serialNumber : CertificateSerialNumber;
+        let signature : AlgorithmIdentifier;
+        let issuer : Name = [];
+        let validity : Validity;
+        let subject : Name = [];
+        let subjectPublicKeyInfo : SubjectPublicKeyInfo;
+        // let issuerUniqueID : boolean[];
+        // let subjectUniqueID : boolean[];
+        let extensions : Extensions = [];
+
         // version
         {
             switch (tbsCertificateElements[0].validateTag(
@@ -87,7 +86,7 @@ class TBSCertificate implements Byteable,Elementable {
                 case -3: throw new errors.X509Error("Invalid tag number on TBSCertificate.version");
                 default: throw new errors.X509Error("Undefined error when validating TBSCertificate.version tag");
             }
-    
+
             const versionElements : DERElement[] = tbsCertificateElements[0].sequence;
             if (versionElements.length !== 1)
                 throw new errors.X509Error("version can only contain one element");
@@ -102,15 +101,15 @@ class TBSCertificate implements Byteable,Elementable {
                 case -3: throw new errors.X509Error("Invalid tag number on TBSCertificate.version inner element");
                 default: throw new errors.X509Error("Undefined error when validating TBSCertificate.version inner element tag");
             }
-    
+
             switch (versionElements[0].integer) {
-                case 0: this.ver = Version.v1; break;
-                case 1: this.ver = Version.v2; break;
-                case 2: this.ver = Version.v3; break;
+                case 0: ver = Version.v1; break;
+                case 1: ver = Version.v2; break;
+                case 2: ver = Version.v3; break;
                 default:
                     throw new errors.X509Error("Invalid X.509 Certificate version.");
             }
-    
+
             // serialNumber
             switch (tbsCertificateElements[1].validateTag(
                 [ ASN1TagClass.universal ],
@@ -138,19 +137,16 @@ class TBSCertificate implements Byteable,Elementable {
                 case -3: throw new errors.X509Error("Invalid tag number on TBSCertificate.serialNumber");
                 default: throw new errors.X509Error("Undefined error when validating TBSCertificate.serialNumber tag");
             }
-            this.serialNumber = tbsCertificateElements[1].octetString;
+            serialNumber = tbsCertificateElements[1].octetString;
         }
 
         // signature
         {
-            const signature : AlgorithmIdentifier = new AlgorithmIdentifier();
-            signature.fromElement(tbsCertificateElements[2]);
-            this.signature = signature;
+            signature = AlgorithmIdentifier.fromElement(tbsCertificateElements[2]);
         }
 
         // issuer
         {
-            let issuer : Name = [];
             switch (tbsCertificateElements[3].validateTag(
                 [ ASN1TagClass.universal ],
                 [ ASN1Construction.constructed ],
@@ -179,9 +175,7 @@ class TBSCertificate implements Byteable,Elementable {
                 const rdnValues : DERElement[] = rdnElement.set;
                 let rdn : RelativeDistinguishedName = [];
                 rdnValues.forEach(rdnValue => {
-                    const atav : AttributeTypeAndValue = new AttributeTypeAndValue();
-                    atav.fromElement(rdnValue);
-                    rdn.push(atav);
+                    rdn.push(AttributeTypeAndValue.fromElement(rdnValue));
                 });
                 issuer.push(rdn);
             });
@@ -189,14 +183,11 @@ class TBSCertificate implements Byteable,Elementable {
 
         // validity
         {
-            const validity : Validity = new Validity();
-            validity.fromElement(tbsCertificateElements[4]);
-            this.validity = validity;
+            validity = Validity.fromElement(tbsCertificateElements[4]);
         }
 
         // subject
         {
-            let subject : Name = [];
             switch (tbsCertificateElements[5].validateTag(
                 [ ASN1TagClass.universal ],
                 [ ASN1Construction.constructed ],
@@ -225,9 +216,7 @@ class TBSCertificate implements Byteable,Elementable {
                 const rdnValues : DERElement[] = rdnElement.set;
                 let rdn : RelativeDistinguishedName = [];
                 rdnValues.forEach(rdnValue => {
-                    const atav : AttributeTypeAndValue = new AttributeTypeAndValue();
-                    atav.fromElement(rdnValue);
-                    rdn.push(atav);
+                    rdn.push(AttributeTypeAndValue.fromElement(rdnValue));
                 });
                 subject.push(rdn);
             });
@@ -235,10 +224,56 @@ class TBSCertificate implements Byteable,Elementable {
 
         // subjectPublicKeyInfo
         {
-            const spki : SubjectPublicKeyInfo = new SubjectPublicKeyInfo();
-            spki.fromElement(tbsCertificateElements[6]);
-            this.subjectPublicKeyInfo = spki;
+            subjectPublicKeyInfo = SubjectPublicKeyInfo.fromElement(tbsCertificateElements[6]);
         }
+
+        switch (ver) {
+            case Version.v1: {
+                // FIXME:
+                return new TBSCertificate(
+                    ver,
+                    serialNumber,
+                    signature,
+                    issuer,
+                    validity,
+                    subject,
+                    subjectPublicKeyInfo,
+                    undefined,
+                    undefined
+                );
+            }
+            case Version.v2: {
+                // FIXME:
+                return new TBSCertificate(
+                    ver,
+                    serialNumber,
+                    signature,
+                    issuer,
+                    validity,
+                    subject,
+                    subjectPublicKeyInfo,
+                    undefined,
+                    undefined
+                );
+            }
+            case Version.v3: {
+                return new TBSCertificate(
+                    ver,
+                    serialNumber,
+                    signature,
+                    issuer,
+                    validity,
+                    subject,
+                    subjectPublicKeyInfo,
+                    undefined,
+                    undefined,
+                    extensions
+                );
+            }
+            default:
+                throw new errors.X509Error("Unrecognized X.509 Certificate version.");
+        }
+
     }
 
     public toElement () : DERElement {
@@ -344,14 +379,15 @@ class TBSCertificate implements Byteable,Elementable {
             ASN1Construction.constructed,
             ASN1UniversalType.sequence
         );
+        ret.sequence = retSequence;
         return ret;
 
     }
 
-    public fromBytes (value : Uint8Array) : void {
-        const tbsCertificateElement : DERElement = new DERElement();
-        tbsCertificateElement.fromBytes(value);
-        this.fromElement(tbsCertificateElement);
+    public fromBytes (value : Uint8Array) : TBSCertificate {
+        const el : DERElement = new DERElement();
+        el.fromBytes(value);
+        return TBSCertificate.fromElement(el);
     }
 
     public toBytes () : Uint8Array {

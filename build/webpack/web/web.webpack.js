@@ -4,7 +4,7 @@ module.exports = {
         "./source/x509.ts"
     ],
     output: {
-        path: path.resolve(__dirname, "../../dist/web"),
+        path: path.resolve(__dirname, "../../../dist/web"),
         filename: "x509.js",
         library: "x509",
         libraryTarget: "var"

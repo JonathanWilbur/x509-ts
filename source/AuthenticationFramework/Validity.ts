@@ -1,5 +1,4 @@
 import { DERElement, ASN1TagClass, ASN1Construction, ASN1UniversalType } from "asn1-ts";
-import { Byteable,Elementable } from "../interfaces";
 import * as errors from "../errors";
 
 // Validity ::= SEQUENCE {
@@ -12,16 +11,14 @@ import * as errors from "../errors";
 //     generalizedTime  GeneralizedTime }
 
 export default
-class Validity implements Byteable,Elementable {
-    notBefore : Date;
-    notAfter : Date;
+class Validity {
 
-    constructor (notBefore : Date = new Date(), notAfter : Date = new Date()) {
-        this.notBefore = notBefore;
-        this.notAfter = notAfter;
-    }
+    constructor (
+        readonly notBefore : Date,
+        readonly notAfter : Date
+    ) {}
 
-    public fromElement (value : DERElement) : void {
+    public static fromElement (value : DERElement) : Validity {
         switch(value.validateTag(
             [ ASN1TagClass.universal ],
             [ ASN1Construction.constructed ],
@@ -63,14 +60,12 @@ class Validity implements Byteable,Elementable {
             default: throw new errors.X509Error("Undefined error when validating validity.notBefore tag");
         }
 
-        this.notBefore =
+        return new Validity(
             (validityElements[0].tagNumber === ASN1UniversalType.generalizedTime) ?
-            validityElements[0].generalizedTime :
-            validityElements[0].utcTime;
-        this.notAfter =
+                validityElements[0].generalizedTime : validityElements[0].utcTime,
             (validityElements[1].tagNumber === ASN1UniversalType.generalizedTime) ?
-            validityElements[1].generalizedTime :
-            validityElements[1].utcTime;
+                validityElements[1].generalizedTime : validityElements[1].utcTime
+        );
     }
 
     public toElement () : DERElement {
@@ -88,9 +83,10 @@ class Validity implements Byteable,Elementable {
         return validityElement;
     }
 
-    public fromBytes (value : Uint8Array) : void {
-        const validityElement : DERElement = new DERElement();
-        validityElement.fromBytes(value);
+    public static fromBytes (value : Uint8Array) : Validity {
+        const el : DERElement = new DERElement();
+        el.fromBytes(value);
+        return Validity.fromElement(el);
     }
 
     public toBytes () : Uint8Array {

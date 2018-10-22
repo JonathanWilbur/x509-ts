@@ -1,5 +1,4 @@
-import { DERElement, ObjectIdentifier, ASN1TagClass, ASN1Construction, ASN1UniversalType } from "asn1-ts";
-import { Byteable, Elementable } from "../interfaces";
+import { DERElement, ASN1TagClass, ASN1Construction, ASN1UniversalType } from "asn1-ts";
 import * as errors from "../errors";
 import AlgorithmIdentifier from "./AlgorithmIdentifier";
 import PublicKey from "./PublicKey";
@@ -14,11 +13,14 @@ import PublicKey from "./PublicKey";
 //     subjectPublicKey     BIT STRING  }
 
 export default
-class SubjectPublicKeyInfo implements Byteable,Elementable {
-    public algorithm? : AlgorithmIdentifier;
-    public subjectPublicKey : PublicKey = [];
+class SubjectPublicKeyInfo {
 
-    public fromElement (value : DERElement) : void {
+    constructor (
+        readonly algorithm : AlgorithmIdentifier,
+        readonly subjectPublicKey : PublicKey
+    ) {}
+
+    public static fromElement (value : DERElement) : SubjectPublicKeyInfo {
         switch (value.validateTag(
             [ ASN1TagClass.universal ],
             [ ASN1Construction.constructed ],
@@ -44,10 +46,10 @@ class SubjectPublicKeyInfo implements Byteable,Elementable {
             default: throw new errors.X509Error("Undefined error when validating SubjectPublicKeyInfo.subjectPublicKey tag");
         }
 
-        const algorithmIdentifier : AlgorithmIdentifier = new AlgorithmIdentifier();
-        algorithmIdentifier.fromElement(subjectPublicKeyElements[1]);
-        this.algorithm = algorithmIdentifier;
-        this.subjectPublicKey = subjectPublicKeyElements[1].bitString;
+        return new SubjectPublicKeyInfo(
+            AlgorithmIdentifier.fromElement(subjectPublicKeyElements[1]),
+            subjectPublicKeyElements[1].bitString
+        );
     }
 
     public toElement () : DERElement {
@@ -68,10 +70,10 @@ class SubjectPublicKeyInfo implements Byteable,Elementable {
         return ret;
     }
 
-    public fromBytes (value : Uint8Array) : void {
-        const subjectPublicKeyInfoElement : DERElement = new DERElement();
-        subjectPublicKeyInfoElement.fromBytes(value);
-        this.fromElement(subjectPublicKeyInfoElement);
+    public static fromBytes (value : Uint8Array) : SubjectPublicKeyInfo {
+        const el : DERElement = new DERElement();
+        el.fromBytes(value);
+        return SubjectPublicKeyInfo.fromElement(el);
     }
 
     public toBytes () : Uint8Array {

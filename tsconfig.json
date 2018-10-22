@@ -4,6 +4,7 @@
         "allowUnreachableCode": false,
         "allowUnusedLabels": false,
         "alwaysStrict": true,
+        "experimentalDecorators": true,
         "forceConsistentCasingInFileNames": true,
         "module": "ESNext",
         "moduleResolution": "node",

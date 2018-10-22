@@ -28,3 +28,16 @@ export
 interface Elementable extends enElementable,deElementable {
 
 }
+
+// See: https://stackoverflow.com/questions/13955157/how-to-define-static-property-in-typescript-interface
+export
+interface Byteable2 {
+    new() : any;
+    fromBytes() : enByteable;
+}
+
+export
+interface Elementable2 {
+    new() : any;
+    fromElement() : enElementable;
+}

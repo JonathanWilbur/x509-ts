@@ -1,6 +1,5 @@
 import TBSCertificate from "./TBSCertificate";
 import AlgorithmIdentifier from "./AlgorithmIdentifier";
-import { Byteable,Elementable } from "../interfaces";
 import { DERElement, ASN1TagClass, ASN1Construction, ASN1UniversalType } from "asn1-ts";
 import * as errors from "../errors";
 
@@ -23,19 +22,16 @@ import * as errors from "../errors";
         signatureValue BIT STRING }
 */
 export default
-class Certificate implements Byteable,Elementable {
+class Certificate {
     public static maximumX509CertificateSizeInBytes : number = 100000;
-    public tbsCertificate : TBSCertificate;
-    public signatureAlgorithm : AlgorithmIdentifier;
-    public signatureValue : boolean[];
 
-    constructor (tbsCert : TBSCertificate, sigAlg : AlgorithmIdentifier, sigValue : boolean[]) {
-        this.tbsCertificate = tbsCert;
-        this.signatureAlgorithm = sigAlg;
-        this.signatureValue = sigValue;
-    }
+    constructor (
+        readonly tbsCertificate : TBSCertificate,
+        readonly signatureAlgorithm : AlgorithmIdentifier,
+        readonly signatureValue : boolean[]
+    ) {}
 
-    public fromElement (value : DERElement) : void {
+    public static fromElement (value : DERElement) : Certificate {
         switch(value.validateTag(
             [ ASN1TagClass.universal ],
             [ ASN1Construction.constructed ],
@@ -64,15 +60,11 @@ class Certificate implements Byteable,Elementable {
             default: throw new errors.X509Error("Undefined error when validating Certificate.signatureValue tag");
         }
 
-        const tbsCertificate : TBSCertificate = new TBSCertificate();
-        tbsCertificate.fromElement(certificateElements[0]);
-        this.tbsCertificate = tbsCertificate;
-
-        const signatureAlgorithm : AlgorithmIdentifier = new AlgorithmIdentifier();
-        signatureAlgorithm.fromElement(certificateElements[1]);
-        this.signatureAlgorithm = signatureAlgorithm;
-
-        this.signatureValue = certificateElements[2].bitString;
+        return new Certificate(
+            TBSCertificate.fromElement(certificateElements[0]),
+            AlgorithmIdentifier.fromElement(certificateElements[1]),
+            certificateElements[2].bitString
+        );
     }
 
     public toElement () : DERElement {
@@ -96,10 +88,10 @@ class Certificate implements Byteable,Elementable {
         return ret;
     }
 
-    public fromBytes (value : Uint8Array) : void {
+    public static fromBytes (value : Uint8Array) : Certificate {
         const el : DERElement = new DERElement();
         el.fromBytes(value);
-        this.fromElement(el);
+        return this.fromElement(el);
     }
 
     public toBytes () : Uint8Array {

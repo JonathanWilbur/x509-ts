@@ -1,10 +1,10 @@
 const path = require('path');
 module.exports = {
     entry: [
-        "./source/x509.ts"
+        "./source/index.ts"
     ],
     output: {
-        path: path.resolve(__dirname, "../../dist/node"),
+        path: path.resolve(__dirname, "../../../dist/node"),
         filename: "x509.js",
         libraryTarget: "commonjs2",
         "strictModuleExceptionHandling": true
