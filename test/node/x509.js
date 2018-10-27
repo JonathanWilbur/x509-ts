@@ -1,5 +1,6 @@
 const x509 = require("../../dist/node/x509.js");
 const asn1 = require("../../node_modules/asn1-ts/dist/node/asn1.js");
+const fs = require("fs");
 
 // TBSCertificate ::= SEQUENCE {
 //     version                  [0]  Version DEFAULT v1,
@@ -61,4 +62,5 @@ const cert = new x509.Certificate(
     [ true, false, true, true, false, true, true, true ]
 );
 
-console.log(cert.toBytes());
+// console.log(cert.toBytes());
+fs.writeFileSync("./test/output.der", cert.toBytes());

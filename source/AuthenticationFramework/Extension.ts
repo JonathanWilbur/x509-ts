@@ -74,7 +74,7 @@ class Extension { // implements Byteable,Elementable {
 
         switch (extensionElements[extensionElements.length - 1].validateTag(
             [ ASN1TagClass.universal ],
-            [ ASN1Construction.primitive ],
+            [ ASN1Construction.primitive, ASN1Construction.constructed ],
             [ ASN1UniversalType.octetString ]
         )) {
             case 0: break;

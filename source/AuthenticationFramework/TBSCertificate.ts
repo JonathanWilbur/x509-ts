@@ -254,7 +254,23 @@ class TBSCertificate {
                     case (3): { // extensions
                         if (ver !== Version.v3)
                             throw new errors.X509Error("extensions not allowed in Version 1 or 2 X.509 certificate.");
-                        const extensionElements : DERElement[] = tbsCertificateElements[i].sequence;
+
+                        switch (tbsCertificateElements[i].validateTag(
+                            [ ASN1TagClass.context ],
+                            [ ASN1Construction.constructed ],
+                            [ 3 ]
+                        )) {
+                            case 0: break;
+                            case -1: throw new errors.X509Error("Invalid tag number on a TBSCertificate.extensions outer element");
+                            case -2: throw new errors.X509Error("Invalid construction on a TBSCertificate.extensions outer element");
+                            case -3: throw new errors.X509Error("Invalid tag number on a TBSCertificate.extensions outer element");
+                            default: throw new errors.X509Error("Undefined error when validating a TBSCertificate.extensions outer element tag");
+                        }
+
+                        // const extensionsElement : DERElement = DERElement.fromBytes(tbsCertificateElements[i].value);
+                        const extensionsElement : DERElement = new DERElement();
+                        extensionsElement.fromBytes(tbsCertificateElements[i].value);
+                        const extensionElements : DERElement[] = extensionsElement.sequence;
                         if (extensionElements.length === 0)
                             throw new errors.X509Error("extensions element may not be present in X.509 TBSCertificate if there are no extensions in it.");
                         extensionElements.forEach((extensionElement) => {
@@ -453,7 +469,13 @@ class TBSCertificate {
                     ASN1UniversalType.sequence
                 );
                 extensionsElement.sequence = extensionElements;
-                retSequence.push(extensionsElement);
+                const extensionsOuterElement : DERElement = new DERElement(
+                    ASN1TagClass.context,
+                    ASN1Construction.constructed,
+                    3
+                );
+                extensionsOuterElement.sequence = [ extensionsElement ];
+                retSequence.push(extensionsOuterElement);
             }
 
         }

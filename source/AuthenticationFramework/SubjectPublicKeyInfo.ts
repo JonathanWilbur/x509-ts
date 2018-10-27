@@ -47,7 +47,7 @@ class SubjectPublicKeyInfo {
         }
 
         return new SubjectPublicKeyInfo(
-            AlgorithmIdentifier.fromElement(subjectPublicKeyElements[1]),
+            AlgorithmIdentifier.fromElement(subjectPublicKeyElements[0]),
             subjectPublicKeyElements[1].bitString
         );
     }

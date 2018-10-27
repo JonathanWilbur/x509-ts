@@ -349,8 +349,8 @@ var ASN1TagClass;
 (function (ASN1TagClass) {
     ASN1TagClass[ASN1TagClass["universal"] = 0] = "universal";
     ASN1TagClass[ASN1TagClass["application"] = 1] = "application";
-    ASN1TagClass[ASN1TagClass["context"] = 3] = "context";
-    ASN1TagClass[ASN1TagClass["private"] = 4] = "private";
+    ASN1TagClass[ASN1TagClass["context"] = 2] = "context";
+    ASN1TagClass[ASN1TagClass["private"] = 3] = "private";
 })(ASN1TagClass || (ASN1TagClass = {}));
 var ASN1Construction;
 (function (ASN1Construction) {
@@ -434,9 +434,9 @@ class ObjectIdentifier {
             throw new Error("Cannot construct an OID with less than two nodes!");
         if (nodes.length >= 1 && !(nodes[0] in [0, 1, 2]))
             throw new Error("OIDs first node must be 0, 1, or 2!");
-        if (((nodes[0] == 0 || nodes[0] == 1) && nodes[2] > 39) ||
-            (nodes[0] == 2 && nodes[0] > 175))
-            throw new Error("OID Node #2 cannot exceed 39 if node #1 is 0 or 1, and 175 if node #1 is 2!");
+        if (((nodes[0] < 2) && nodes[1] > 39) ||
+            (nodes[0] === 2 && nodes[1] > 175))
+            throw new Error(`OID Node #2 cannot exceed 39 if node #1 is 0 or 1, and 175 if node #1 is 2. Received these nodes: ${nodes}.`);
         nodes.forEach(node => {
             if (node < 0)
                 throw new Error("OID node numbers cannot be negative!");
@@ -1223,10 +1223,10 @@ class ber_BERElement extends x690_X690Element {
                 this.tagClass = 1;
                 break;
             case (0b10000000):
-                this.tagClass = 3;
+                this.tagClass = 2;
                 break;
             case (0b11000000):
-                this.tagClass = 4;
+                this.tagClass = 3;
                 break;
             default: this.tagClass = 0;
         }
@@ -1315,8 +1315,8 @@ class ber_BERElement extends x690_X690Element {
     }
     toBytes() {
         let tagBytes = [0x00];
-        tagBytes[0] |= this.tagClass;
-        tagBytes[0] |= this.construction;
+        tagBytes[0] |= (this.tagClass << 6);
+        tagBytes[0] |= (this.construction << 5);
         if (this.tagNumber < 31) {
             tagBytes[0] |= this.tagNumber;
         }
@@ -1987,10 +1987,10 @@ class der_DERElement extends x690_X690Element {
                 this.tagClass = 1;
                 break;
             case (0b10000000):
-                this.tagClass = 3;
+                this.tagClass = 2;
                 break;
             case (0b11000000):
-                this.tagClass = 4;
+                this.tagClass = 3;
                 break;
             default: this.tagClass = 0;
         }
@@ -2061,8 +2061,8 @@ class der_DERElement extends x690_X690Element {
     }
     toBytes() {
         let tagBytes = [0x00];
-        tagBytes[0] |= this.tagClass;
-        tagBytes[0] |= this.construction;
+        tagBytes[0] |= (this.tagClass << 6);
+        tagBytes[0] |= (this.construction << 5);
         if (this.tagNumber < 31) {
             tagBytes[0] |= this.tagNumber;
         }
@@ -2316,7 +2316,7 @@ class SubjectPublicKeyInfo_SubjectPublicKeyInfo {
             case -3: throw new X509Error("Invalid tag number on SubjectPublicKeyInfo.subjectPublicKey");
             default: throw new X509Error("Undefined error when validating SubjectPublicKeyInfo.subjectPublicKey tag");
         }
-        return new SubjectPublicKeyInfo_SubjectPublicKeyInfo(AlgorithmIdentifier_AlgorithmIdentifier.fromElement(subjectPublicKeyElements[1]), subjectPublicKeyElements[1].bitString);
+        return new SubjectPublicKeyInfo_SubjectPublicKeyInfo(AlgorithmIdentifier_AlgorithmIdentifier.fromElement(subjectPublicKeyElements[0]), subjectPublicKeyElements[1].bitString);
     }
     toElement() {
         if (this.algorithm === undefined)
@@ -2425,7 +2425,7 @@ class Extension_Extension {
             }
             critical = extensionElements[1].boolean;
         }
-        switch (extensionElements[extensionElements.length - 1].validateTag([0], [0], [4])) {
+        switch (extensionElements[extensionElements.length - 1].validateTag([0], [0, 1], [4])) {
             case 0: break;
             case -1: throw new X509Error("Invalid tag number on Extension.extnValue");
             case -2: throw new X509Error("Invalid construction on Extension.extnValue");
@@ -2513,7 +2513,7 @@ class TBSCertificate_TBSCertificate {
         let subjectUniqueID = undefined;
         let extensions = [];
         {
-            switch (tbsCertificateElements[0].validateTag([3], [1], [0])) {
+            switch (tbsCertificateElements[0].validateTag([2], [1], [0])) {
                 case 0: break;
                 case -1: throw new X509Error("Invalid tag number on TBSCertificate.version");
                 case -2: throw new X509Error("Invalid construction on TBSCertificate.version");
@@ -2644,7 +2644,16 @@ class TBSCertificate_TBSCertificate {
                     case (3): {
                         if (ver !== 2)
                             throw new X509Error("extensions not allowed in Version 1 or 2 X.509 certificate.");
-                        const extensionElements = tbsCertificateElements[i].sequence;
+                        switch (tbsCertificateElements[i].validateTag([2], [1], [3])) {
+                            case 0: break;
+                            case -1: throw new X509Error("Invalid tag number on a TBSCertificate.extensions outer element");
+                            case -2: throw new X509Error("Invalid construction on a TBSCertificate.extensions outer element");
+                            case -3: throw new X509Error("Invalid tag number on a TBSCertificate.extensions outer element");
+                            default: throw new X509Error("Undefined error when validating a TBSCertificate.extensions outer element tag");
+                        }
+                        const extensionsElement = new asn1["DERElement"]();
+                        extensionsElement.fromBytes(tbsCertificateElements[i].value);
+                        const extensionElements = extensionsElement.sequence;
                         if (extensionElements.length === 0)
                             throw new X509Error("extensions element may not be present in X.509 TBSCertificate if there are no extensions in it.");
                         extensionElements.forEach((extensionElement) => {
@@ -2676,7 +2685,7 @@ class TBSCertificate_TBSCertificate {
         {
             const versionInnerElement = new asn1["DERElement"](0, 0, 2);
             versionInnerElement.integer = this.ver;
-            const versionOuterElement = new asn1["DERElement"](3, 1, 0);
+            const versionOuterElement = new asn1["DERElement"](2, 1, 0);
             versionOuterElement.sequence = [versionInnerElement];
             retSequence.push(versionOuterElement);
         }
@@ -2726,12 +2735,12 @@ class TBSCertificate_TBSCertificate {
         }
         if (this.ver !== 0) {
             if (this.issuerUniqueID) {
-                const issuerUniqueIdentifierElement = new asn1["DERElement"](3, 0, 1);
+                const issuerUniqueIdentifierElement = new asn1["DERElement"](2, 0, 1);
                 issuerUniqueIdentifierElement.bitString = this.issuerUniqueID;
                 retSequence.push(issuerUniqueIdentifierElement);
             }
             if (this.subjectUniqueID) {
-                const subjectUniqueIdentifierElement = new asn1["DERElement"](3, 0, 2);
+                const subjectUniqueIdentifierElement = new asn1["DERElement"](2, 0, 2);
                 subjectUniqueIdentifierElement.bitString = this.subjectUniqueID;
                 retSequence.push(subjectUniqueIdentifierElement);
             }
@@ -2744,7 +2753,9 @@ class TBSCertificate_TBSCertificate {
                 });
                 const extensionsElement = new asn1["DERElement"](0, 1, 16);
                 extensionsElement.sequence = extensionElements;
-                retSequence.push(extensionsElement);
+                const extensionsOuterElement = new asn1["DERElement"](2, 1, 3);
+                extensionsOuterElement.sequence = [extensionsElement];
+                retSequence.push(extensionsOuterElement);
             }
         }
         const ret = new asn1["DERElement"](0, 1, 16);
