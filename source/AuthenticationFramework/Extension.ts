@@ -1,5 +1,5 @@
 import { DERElement,ObjectIdentifier, ASN1TagClass, ASN1Construction, ASN1UniversalType } from "asn1-ts";
-import { Byteable,Elementable } from "../interfaces";
+// import { Byteable,Elementable } from "../interfaces";
 import * as errors from "../errors";
 
 // Extension ::= SEQUENCE {
@@ -17,12 +17,15 @@ import * as errors from "../errors";
         extnValue   OCTET STRING }
 */
 export default
-class Extension implements Byteable,Elementable {
-    public extnID? : ObjectIdentifier;
-    public critical : boolean = false;
-    public extnValue : Uint8Array = new Uint8Array([]);
+class Extension { // implements Byteable,Elementable {
 
-    public fromElement (value : DERElement) : void {
+    constructor (
+        readonly extnID : ObjectIdentifier,
+        readonly critical : boolean,
+        readonly extnValue : Uint8Array
+    ) {}
+
+    public static fromElement (value : DERElement) : Extension {
         switch (value.validateTag(
             [ ASN1TagClass.universal ],
             [ ASN1Construction.constructed ],
@@ -53,6 +56,7 @@ class Extension implements Byteable,Elementable {
             default: throw new errors.X509Error("Undefined error when validating Extension.identifier tag");
         }
 
+        let critical : boolean = false;
         if (extensionElements.length === 3) {
             switch (extensionElements[1].validateTag(
                 [ ASN1TagClass.universal ],
@@ -65,9 +69,7 @@ class Extension implements Byteable,Elementable {
                 case -3: throw new errors.X509Error("Invalid tag number on Extension.critical");
                 default: throw new errors.X509Error("Undefined error when validating Extension.critical tag");
             }
-            this.critical = extensionElements[1].boolean;
-        } else {
-            this.critical = false;
+            critical = extensionElements[1].boolean;
         }
 
         switch (extensionElements[extensionElements.length - 1].validateTag(
@@ -82,8 +84,10 @@ class Extension implements Byteable,Elementable {
             default: throw new errors.X509Error("Undefined error when validating Extension.extnValue tag");
         }
 
-        this.extnID = extensionElements[0].objectIdentifier;
-        this.extnValue = extensionElements[extensionElements.length - 1].octetString;
+        const extnID : ObjectIdentifier= extensionElements[0].objectIdentifier;
+        const extnValue : Uint8Array = extensionElements[extensionElements.length - 1].octetString;
+
+        return new Extension(extnID, critical, extnValue);
     }
 
     public toElement () : DERElement {
@@ -115,7 +119,7 @@ class Extension implements Byteable,Elementable {
     public fromBytes (value : Uint8Array) : void {
         const el : DERElement = new DERElement();
         el.fromBytes(value);
-        this.fromElement(el);
+        Extension.fromElement(el);
     }
 
     public toBytes () : Uint8Array {

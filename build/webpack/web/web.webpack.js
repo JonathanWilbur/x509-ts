@@ -1,7 +1,7 @@
 const path = require('path');
 module.exports = {
     entry: [
-        "./source/x509.ts"
+        "./source/index.ts"
     ],
     output: {
         path: path.resolve(__dirname, "../../../dist/web"),

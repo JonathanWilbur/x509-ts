@@ -2385,7 +2385,91 @@ class AttributeTypeAndValue_AttributeTypeAndValue {
     }
 }
 
+// CONCATENATED MODULE: ./source/AuthenticationFramework/Extension.ts
+
+
+class Extension_Extension {
+    constructor(extnID, critical, extnValue) {
+        this.extnID = extnID;
+        this.critical = critical;
+        this.extnValue = extnValue;
+    }
+    static fromElement(value) {
+        switch (value.validateTag([0], [1], [16])) {
+            case 0: break;
+            case -1: throw new X509Error("Invalid tag number on Extension");
+            case -2: throw new X509Error("Invalid construction on Extension");
+            case -3: throw new X509Error("Invalid tag number on Extension");
+            default: throw new X509Error("Undefined error when validating Extension tag");
+        }
+        const extensionElements = value.sequence;
+        if (extensionElements.length > 3)
+            throw new X509Error("An Extension encoded more than three elements");
+        else if (extensionElements.length < 2)
+            throw new X509Error("An Extension encoded fewer than two elements");
+        switch (extensionElements[0].validateTag([0], [0], [6])) {
+            case 0: break;
+            case -1: throw new X509Error("Invalid tag number on Extension.identifier");
+            case -2: throw new X509Error("Invalid construction on Extension.identifier");
+            case -3: throw new X509Error("Invalid tag number on Extension.identifier");
+            default: throw new X509Error("Undefined error when validating Extension.identifier tag");
+        }
+        let critical = false;
+        if (extensionElements.length === 3) {
+            switch (extensionElements[1].validateTag([0], [0], [1])) {
+                case 0: break;
+                case -1: throw new X509Error("Invalid tag number on Extension.critical");
+                case -2: throw new X509Error("Invalid construction on Extension.critical");
+                case -3: throw new X509Error("Invalid tag number on Extension.critical");
+                default: throw new X509Error("Undefined error when validating Extension.critical tag");
+            }
+            critical = extensionElements[1].boolean;
+        }
+        switch (extensionElements[extensionElements.length - 1].validateTag([0], [0], [4])) {
+            case 0: break;
+            case -1: throw new X509Error("Invalid tag number on Extension.extnValue");
+            case -2: throw new X509Error("Invalid construction on Extension.extnValue");
+            case -3: throw new X509Error("Invalid tag number on Extension.extnValue");
+            default: throw new X509Error("Undefined error when validating Extension.extnValue tag");
+        }
+        const extnID = extensionElements[0].objectIdentifier;
+        const extnValue = extensionElements[extensionElements.length - 1].octetString;
+        return new Extension_Extension(extnID, critical, extnValue);
+    }
+    toElement() {
+        if (this.extnID === undefined)
+            throw new X509Error("extnID is undefined");
+        const extnIDElement = new asn1["DERElement"]();
+        extnIDElement.tagClass = 0;
+        extnIDElement.construction = 0;
+        extnIDElement.tagNumber = 6;
+        const criticalElement = new asn1["DERElement"]();
+        criticalElement.tagClass = 0;
+        criticalElement.construction = 0;
+        criticalElement.tagNumber = 1;
+        const extnValueElement = new asn1["DERElement"]();
+        extnValueElement.tagClass = 0;
+        extnValueElement.construction = 0;
+        extnValueElement.tagNumber = 4;
+        const ret = new asn1["DERElement"]();
+        ret.tagClass = 0;
+        ret.construction = 1;
+        ret.tagNumber = 16;
+        ret.sequence = [extnIDElement, criticalElement, extnValueElement];
+        return ret;
+    }
+    fromBytes(value) {
+        const el = new asn1["DERElement"]();
+        el.fromBytes(value);
+        Extension_Extension.fromElement(el);
+    }
+    toBytes() {
+        return this.toElement().toBytes();
+    }
+}
+
 // CONCATENATED MODULE: ./source/AuthenticationFramework/TBSCertificate.ts
+
 
 
 
@@ -2425,6 +2509,8 @@ class TBSCertificate_TBSCertificate {
         let validity;
         let subject = [];
         let subjectPublicKeyInfo;
+        let issuerUniqueID = undefined;
+        let subjectUniqueID = undefined;
         let extensions = [];
         {
             switch (tbsCertificateElements[0].validateTag([3], [1], [0])) {
@@ -2534,15 +2620,52 @@ class TBSCertificate_TBSCertificate {
         {
             subjectPublicKeyInfo = SubjectPublicKeyInfo_SubjectPublicKeyInfo.fromElement(tbsCertificateElements[6]);
         }
+        if (tbsCertificateElements.length > 8) {
+            for (let i = 8; i < tbsCertificateElements.length; i++) {
+                if (tbsCertificateElements[i].tagNumber <= tbsCertificateElements[i - 1].tagNumber)
+                    throw new X509Error("TBSCertificate sequence out of order.");
+            }
+        }
+        if (tbsCertificateElements.length > 7) {
+            for (let i = 7; i < tbsCertificateElements.length; i++) {
+                switch (tbsCertificateElements[i].tagNumber) {
+                    case (1): {
+                        if (ver === 0)
+                            throw new X509Error("issuerUniqueIdentifier not allowed in Version 1 X.509 certificate.");
+                        issuerUniqueID = tbsCertificateElements[i].bitString;
+                        break;
+                    }
+                    case (2): {
+                        if (ver === 0)
+                            throw new X509Error("subjectUniqueIdentifier not allowed in Version 1 X.509 certificate.");
+                        subjectUniqueID = tbsCertificateElements[i].bitString;
+                        break;
+                    }
+                    case (3): {
+                        if (ver !== 2)
+                            throw new X509Error("extensions not allowed in Version 1 or 2 X.509 certificate.");
+                        const extensionElements = tbsCertificateElements[i].sequence;
+                        if (extensionElements.length === 0)
+                            throw new X509Error("extensions element may not be present in X.509 TBSCertificate if there are no extensions in it.");
+                        extensionElements.forEach((extensionElement) => {
+                            extensions.push(Extension_Extension.fromElement(extensionElement));
+                        });
+                        break;
+                    }
+                    default:
+                        throw new X509Error(`Invalid element with context-specific tag number ${tbsCertificateElements[i].tagNumber} in X.509 TBSCertificate.`);
+                }
+            }
+        }
         switch (ver) {
             case 0: {
-                return new TBSCertificate_TBSCertificate(ver, serialNumber, signature, issuer, validity, subject, subjectPublicKeyInfo, undefined, undefined);
+                return new TBSCertificate_TBSCertificate(ver, serialNumber, signature, issuer, validity, subject, subjectPublicKeyInfo, undefined, undefined, undefined);
             }
             case 1: {
-                return new TBSCertificate_TBSCertificate(ver, serialNumber, signature, issuer, validity, subject, subjectPublicKeyInfo, undefined, undefined);
+                return new TBSCertificate_TBSCertificate(ver, serialNumber, signature, issuer, validity, subject, subjectPublicKeyInfo, issuerUniqueID, subjectUniqueID, undefined);
             }
             case 2: {
-                return new TBSCertificate_TBSCertificate(ver, serialNumber, signature, issuer, validity, subject, subjectPublicKeyInfo, undefined, undefined, extensions);
+                return new TBSCertificate_TBSCertificate(ver, serialNumber, signature, issuer, validity, subject, subjectPublicKeyInfo, issuerUniqueID, subjectUniqueID, extensions);
             }
             default:
                 throw new X509Error("Unrecognized X.509 Certificate version.");
@@ -2600,6 +2723,29 @@ class TBSCertificate_TBSCertificate {
         }
         {
             retSequence.push(this.subjectPublicKeyInfo.toElement());
+        }
+        if (this.ver !== 0) {
+            if (this.issuerUniqueID) {
+                const issuerUniqueIdentifierElement = new asn1["DERElement"](3, 0, 1);
+                issuerUniqueIdentifierElement.bitString = this.issuerUniqueID;
+                retSequence.push(issuerUniqueIdentifierElement);
+            }
+            if (this.subjectUniqueID) {
+                const subjectUniqueIdentifierElement = new asn1["DERElement"](3, 0, 2);
+                subjectUniqueIdentifierElement.bitString = this.subjectUniqueID;
+                retSequence.push(subjectUniqueIdentifierElement);
+            }
+        }
+        if (this.ver === 2) {
+            if (this.extensions) {
+                let extensionElements = [];
+                this.extensions.forEach(extension => {
+                    extensionElements.push(extension.toElement());
+                });
+                const extensionsElement = new asn1["DERElement"](0, 1, 16);
+                extensionsElement.sequence = extensionElements;
+                retSequence.push(extensionsElement);
+            }
         }
         const ret = new asn1["DERElement"](0, 1, 16);
         ret.sequence = retSequence;
@@ -2667,89 +2813,6 @@ class Certificate_Certificate {
     }
 }
 Certificate_Certificate.maximumX509CertificateSizeInBytes = 100000;
-
-// CONCATENATED MODULE: ./source/AuthenticationFramework/Extension.ts
-
-
-class Extension_Extension {
-    constructor() {
-        this.critical = false;
-        this.extnValue = new Uint8Array([]);
-    }
-    fromElement(value) {
-        switch (value.validateTag([0], [1], [16])) {
-            case 0: break;
-            case -1: throw new X509Error("Invalid tag number on Extension");
-            case -2: throw new X509Error("Invalid construction on Extension");
-            case -3: throw new X509Error("Invalid tag number on Extension");
-            default: throw new X509Error("Undefined error when validating Extension tag");
-        }
-        const extensionElements = value.sequence;
-        if (extensionElements.length > 3)
-            throw new X509Error("An Extension encoded more than three elements");
-        else if (extensionElements.length < 2)
-            throw new X509Error("An Extension encoded fewer than two elements");
-        switch (extensionElements[0].validateTag([0], [0], [6])) {
-            case 0: break;
-            case -1: throw new X509Error("Invalid tag number on Extension.identifier");
-            case -2: throw new X509Error("Invalid construction on Extension.identifier");
-            case -3: throw new X509Error("Invalid tag number on Extension.identifier");
-            default: throw new X509Error("Undefined error when validating Extension.identifier tag");
-        }
-        if (extensionElements.length === 3) {
-            switch (extensionElements[1].validateTag([0], [0], [1])) {
-                case 0: break;
-                case -1: throw new X509Error("Invalid tag number on Extension.critical");
-                case -2: throw new X509Error("Invalid construction on Extension.critical");
-                case -3: throw new X509Error("Invalid tag number on Extension.critical");
-                default: throw new X509Error("Undefined error when validating Extension.critical tag");
-            }
-            this.critical = extensionElements[1].boolean;
-        }
-        else {
-            this.critical = false;
-        }
-        switch (extensionElements[extensionElements.length - 1].validateTag([0], [0], [4])) {
-            case 0: break;
-            case -1: throw new X509Error("Invalid tag number on Extension.extnValue");
-            case -2: throw new X509Error("Invalid construction on Extension.extnValue");
-            case -3: throw new X509Error("Invalid tag number on Extension.extnValue");
-            default: throw new X509Error("Undefined error when validating Extension.extnValue tag");
-        }
-        this.extnID = extensionElements[0].objectIdentifier;
-        this.extnValue = extensionElements[extensionElements.length - 1].octetString;
-    }
-    toElement() {
-        if (this.extnID === undefined)
-            throw new X509Error("extnID is undefined");
-        const extnIDElement = new asn1["DERElement"]();
-        extnIDElement.tagClass = 0;
-        extnIDElement.construction = 0;
-        extnIDElement.tagNumber = 6;
-        const criticalElement = new asn1["DERElement"]();
-        criticalElement.tagClass = 0;
-        criticalElement.construction = 0;
-        criticalElement.tagNumber = 1;
-        const extnValueElement = new asn1["DERElement"]();
-        extnValueElement.tagClass = 0;
-        extnValueElement.construction = 0;
-        extnValueElement.tagNumber = 4;
-        const ret = new asn1["DERElement"]();
-        ret.tagClass = 0;
-        ret.construction = 1;
-        ret.tagNumber = 16;
-        ret.sequence = [extnIDElement, criticalElement, extnValueElement];
-        return ret;
-    }
-    fromBytes(value) {
-        const el = new asn1["DERElement"]();
-        el.fromBytes(value);
-        this.fromElement(el);
-    }
-    toBytes() {
-        return this.toElement().toBytes();
-    }
-}
 
 // CONCATENATED MODULE: ./source/AuthenticationFramework/Version.ts
 var Version;
