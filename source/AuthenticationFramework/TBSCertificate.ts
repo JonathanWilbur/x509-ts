@@ -202,7 +202,7 @@ class TBSCertificate {
                 default: throw new errors.X509Error("Undefined error when validating TBSCertificate.subject tag");
             }
 
-            const rdnElements : DERElement[] = tbsCertificateElements[3].sequence;
+            const rdnElements : DERElement[] = tbsCertificateElements[5].sequence;
             rdnElements.forEach(rdnElement => {
                 switch (rdnElement.validateTag(
                     [ ASN1TagClass.universal ],

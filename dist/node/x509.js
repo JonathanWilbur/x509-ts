@@ -2600,7 +2600,7 @@ class TBSCertificate_TBSCertificate {
                 case -3: throw new X509Error("Invalid tag number on TBSCertificate.subject");
                 default: throw new X509Error("Undefined error when validating TBSCertificate.subject tag");
             }
-            const rdnElements = tbsCertificateElements[3].sequence;
+            const rdnElements = tbsCertificateElements[5].sequence;
             rdnElements.forEach(rdnElement => {
                 switch (rdnElement.validateTag([0], [1], [17])) {
                     case 0: break;
