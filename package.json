@@ -62,6 +62,6 @@
     "build-web": "webpack --config build/webpack/web/web.webpack.js",
     "test": "karma run"
   },
-  "types": "./dist/types/x509.d.ts",
-  "version": "0.5.0"
+  "types": "./dist/types/index.d.ts",
+  "version": "0.5.1"
 }
