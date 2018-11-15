@@ -1,4 +1,5 @@
-- Fix "ASN.1 library" in README.md of PEM library
+- I noticed that GeneralSubtree is not done...
+- Document `./node_modules/util/support/isBuffer` fix.
 - Add "platform" bullet point to ASN.1 library
 - Make sure that each root constructed element is validated
 - Put these in an x501 library:
@@ -7,3 +8,72 @@
 - Make fromBytes static
 - Find some interface you can implement
 - See if you can implement methods on type aliases or implement them as classes gracefully.
+- Certificate Extensions
+  - authorityKeyIdentifier (Done)
+  - keyAttributes
+  - certificatePolicies (Too complicated)
+  - keyUsageRestriction (Cannot find)
+  - policyMapping (Too complicated)
+  - subtreesConstraint
+  - subjectAltName
+  - issuerAltName
+  - subjectDirectoryAttributes
+  - basicConstraints (Done)
+  - subjectKeyIdentifier
+  - keyUsage
+  - privateKeyUsagePeriod
+  - subjectAltName (Done)
+  - issuerAltName (Done)
+  - basicConstraints (Done)
+  - cRLNumber
+  - reasonCode
+  - expirationDate
+  - instructionCode
+  - invalidityDate
+  - cRLDistributionPoints (Done)
+  - issuingDistributionPoint (Done)
+  - deltaCRLIndicator
+  - issuingDistributionPoint (Done)
+  - certificateIssuer
+  - nameConstraints
+  - cRLDistributionPoints (Done)
+  - certificatePolicies
+  - policyMappings
+  - policyConstraints
+  - authorityKeyIdentifier
+  - policyConstraints
+  - extKeyUsage
+  - authorityAttributeIdentifier
+  - roleSpecCertIdentifier
+  - cRLStreamIdentifier
+  - basicAttConstraints
+  - delegatedNameConstraints
+  - timeSpecification
+  - cRLScope
+  - statusReferrals
+  - freshestCRL
+  - orderedList
+  - attributeDescriptor
+  - userNotice
+  - sOAIdentifier
+  - baseUpdateTime
+  - acceptableCertPolicies
+  - deltaInfo
+  - inhibitAnyPolicy
+  - targetInformation
+  - noRevAvail
+  - acceptablePrivilegePolicies
+  - id-ce-toBeRevoked
+  - id-ce-RevokedGroups
+  - id-ce-expiredCertsOnCRL
+  - indirectIssuer
+  - id-ce-noAssertion
+  - id-ce-aAissuingDistributionPoint
+  - id-ce-issuedOnBehaIFOF
+  - id-ce-singleUse
+  - id-ce-groupAC
+  - id-ce-allowedAttAss
+  - id-ce-attributeMappings
+  - id-ce-holderNameConstraints
+  - oCSPNocheck
+  - authorityInfoAccess

@@ -93,7 +93,7 @@ module.exports =
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 module.exports =
 /******/ (function(modules) { // webpackBootstrap
@@ -185,18 +185,24 @@ module.exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-module.exports = __webpack_require__(1);
-
+module.exports = __webpack_require__(2);
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(2);
+
+
+/***/ }),
+/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -426,6 +432,12 @@ const nr2Regex = /^\ *(\+|\-)?(?:\d+(\.|,)\d*)|(?:\d*(\.|,)\d+)$/;
 const nr3Regex = /^\ *(\+|\-)?(?:\d+(\.|,)\d*)|(?:\d*(\.|,)\d+)(e|E)(\+|\-)?\d+$/;
 const canonicalNR3Regex = /^\ *\-?(?:[1-9]\d*)?[1-9]\.E(?:\+0)|(?:\-?[1-9]\d*)$/;
 const distinguishedNR3Regex = /^\ *\-?(?:[1-9]\d*)?[1-9]\.E(?:\+0)|(?:\-?[1-9]\d*)$/;
+const CANONICAL_TAG_CLASS_ORDERING = [
+    0,
+    1,
+    3,
+    2
+];
 
 // CONCATENATED MODULE: ./source/types/objectidentifier.ts
 class ObjectIdentifier {
@@ -456,7 +468,11 @@ class ObjectIdentifier {
     }
 }
 
+// EXTERNAL MODULE: external "util"
+var external_util_ = __webpack_require__(0);
+
 // CONCATENATED MODULE: ./source/x690.ts
+
 
 
 
@@ -617,6 +633,36 @@ class x690_X690Element extends asn1_ASN1Element {
             ret = ret.concat(encodedOIDNode);
         }
         return ret;
+    }
+    static isInCanonicalOrder(elements) {
+        let previousTagClass = null;
+        let previousTagNumber = null;
+        if (!elements.every((element) => {
+            if (!Object(external_util_["isNull"])(previousTagClass) &&
+                element.tagClass !== previousTagClass &&
+                CANONICAL_TAG_CLASS_ORDERING.indexOf(element.tagClass) <=
+                    CANONICAL_TAG_CLASS_ORDERING.indexOf(previousTagClass))
+                return false;
+            if (element.tagClass !== previousTagClass)
+                previousTagNumber = null;
+            if (!Object(external_util_["isNull"])(previousTagNumber) && element.tagNumber < previousTagNumber)
+                return false;
+            previousTagClass = element.tagClass;
+            previousTagNumber = element.tagNumber;
+            return true;
+        }))
+            return false;
+        return true;
+    }
+    static isUniquelyTagged(elements) {
+        const finds = {};
+        for (let i = 0; i < elements.length; i++) {
+            const key = `${elements[i].tagClass}.${elements[i].tagNumber}`;
+            if (key in finds)
+                return false;
+            finds[key] = null;
+        }
+        return true;
     }
 }
 
@@ -2142,6 +2188,7 @@ class der_DERElement extends x690_X690Element {
 /* concated harmony reexport nr3Regex */__webpack_require__.d(__webpack_exports__, "nr3Regex", function() { return nr3Regex; });
 /* concated harmony reexport canonicalNR3Regex */__webpack_require__.d(__webpack_exports__, "canonicalNR3Regex", function() { return canonicalNR3Regex; });
 /* concated harmony reexport distinguishedNR3Regex */__webpack_require__.d(__webpack_exports__, "distinguishedNR3Regex", function() { return distinguishedNR3Regex; });
+/* concated harmony reexport CANONICAL_TAG_CLASS_ORDERING */__webpack_require__.d(__webpack_exports__, "CANONICAL_TAG_CLASS_ORDERING", function() { return CANONICAL_TAG_CLASS_ORDERING; });
 
 
 
@@ -2157,11 +2204,17 @@ class der_DERElement extends x690_X690Element {
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(2);
+module.exports = __webpack_require__(3);
 
 
 /***/ }),
 /* 2 */
+/***/ (function(module, exports) {
+
+module.exports = require("util");
+
+/***/ }),
+/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2845,9 +2898,424 @@ const authenticationFrameworkOID = new asn1["ObjectIdentifier"]([2, 5, 1, 7]);
 
 
 
+// CONCATENATED MODULE: ./source/CertificateExtensions/AuthorityKeyIdentifier.ts
+
+
+class AuthorityKeyIdentifier_AuthorityKeyIdentifier {
+    constructor(keyIdentifier, authorityCertIssuer, authorityCertSerialNumber) {
+        this.keyIdentifier = keyIdentifier;
+        this.authorityCertIssuer = authorityCertIssuer;
+        this.authorityCertSerialNumber = authorityCertSerialNumber;
+    }
+    static fromElement(value) {
+        switch (value.validateTag([0], [1], [16])) {
+            case 0: break;
+            case -1: throw new X509Error("Invalid tag number on AuthorityKeyIdentifier");
+            case -2: throw new X509Error("Invalid construction on AuthorityKeyIdentifier");
+            case -3: throw new X509Error("Invalid tag number on AuthorityKeyIdentifier");
+            default: throw new X509Error("Undefined error when validating AuthorityKeyIdentifier tag");
+        }
+        const authorityKeyIdentifierElements = value.sequence;
+        if (authorityKeyIdentifierElements.length !== 1 &&
+            authorityKeyIdentifierElements.length !== 3)
+            throw new X509Error("Invalid number of elements in AuthorityKeyIdentifier");
+        switch (authorityKeyIdentifierElements[0].validateTag([2], [0], [0])) {
+            case 0: break;
+            case -1: throw new X509Error("Invalid tag number on AuthorityKeyIdentifier.keyIdentifier");
+            case -2: throw new X509Error("Invalid construction on AuthorityKeyIdentifier.keyIdentifier");
+            case -3: throw new X509Error("Invalid tag number on AuthorityKeyIdentifier.keyIdentifier");
+            default: throw new X509Error("Undefined error when validating AuthorityKeyIdentifier.keyIdentifier tag");
+        }
+        const keyIdentifier = authorityKeyIdentifierElements[0].octetString;
+        let authorityCertIssuer;
+        let authorityCertSerialNumber;
+        if (authorityKeyIdentifierElements.length === 3) {
+            switch (authorityKeyIdentifierElements[1].validateTag([2], [1], [1])) {
+                case 0: break;
+                case -1: throw new X509Error("Invalid tag number on AuthorityKeyIdentifier.authorityCertIssuer");
+                case -2: throw new X509Error("Invalid construction on AuthorityKeyIdentifier.authorityCertIssuer");
+                case -3: throw new X509Error("Invalid tag number on AuthorityKeyIdentifier.authorityCertIssuer");
+                default: throw new X509Error("Undefined error when validating AuthorityKeyIdentifier.authorityCertIssuer tag");
+            }
+            switch (authorityKeyIdentifierElements[2].validateTag([2], [0], [2])) {
+                case 0: break;
+                case -1: throw new X509Error("Invalid tag number on AuthorityKeyIdentifier.authorityCertSerialNumber");
+                case -2: throw new X509Error("Invalid construction on AuthorityKeyIdentifier.authorityCertSerialNumber");
+                case -3: throw new X509Error("Invalid tag number on AuthorityKeyIdentifier.authorityCertSerialNumber");
+                default: throw new X509Error("Undefined error when validating AuthorityKeyIdentifier.authorityCertSerialNumber tag");
+            }
+            authorityCertIssuer = authorityKeyIdentifierElements[1].sequence;
+            authorityCertSerialNumber = authorityKeyIdentifierElements[2].octetString;
+        }
+        return new AuthorityKeyIdentifier_AuthorityKeyIdentifier(keyIdentifier, authorityCertIssuer, authorityCertSerialNumber);
+    }
+    toElement() {
+        let authorityKeyIdentifierElements = [];
+        const keyIdentifierElement = new asn1["DERElement"](2, 0, 0);
+        authorityKeyIdentifierElements.push(keyIdentifierElement);
+        if ((this.authorityCertIssuer && !this.authorityCertSerialNumber) ||
+            (!this.authorityCertIssuer && this.authorityCertSerialNumber)) {
+            throw new X509Error("AuthorityKeyIdentifer must have both authorityCertIssuer and authorityCertSerialNumber PRESENT or ABSENT");
+        }
+        else if (this.authorityCertIssuer && this.authorityCertSerialNumber) {
+            const authorityCertIssuer = new asn1["DERElement"](2, 1, 1);
+            const authorityCertSerialNumber = new asn1["DERElement"](2, 0, 2);
+            authorityKeyIdentifierElements.push(authorityCertIssuer);
+            authorityKeyIdentifierElements.push(authorityCertSerialNumber);
+        }
+        const authorityKeyIdentifierElement = new asn1["DERElement"](0, 1, 16);
+        authorityKeyIdentifierElement.sequence = authorityKeyIdentifierElements;
+        return authorityKeyIdentifierElement;
+    }
+    static fromBytes(value) {
+        const el = new asn1["DERElement"]();
+        el.fromBytes(value);
+        return AuthorityKeyIdentifier_AuthorityKeyIdentifier.fromElement(el);
+    }
+    toBytes() {
+        return this.toElement().toBytes();
+    }
+}
+
+// CONCATENATED MODULE: ./source/CertificateExtensions/BasicConstraintsSyntax.ts
+
+
+class BasicConstraintsSyntax_BasicConstraintsSyntax {
+    constructor(ca, pathLenConstraint) {
+        this.ca = ca;
+        this.pathLenConstraint = pathLenConstraint;
+    }
+    static fromElement(value) {
+        switch (value.validateTag([0], [1], [16])) {
+            case 0: break;
+            case -1: throw new X509Error("Invalid tag number on BasicConstraintsSyntax");
+            case -2: throw new X509Error("Invalid construction on BasicConstraintsSyntax");
+            case -3: throw new X509Error("Invalid tag number on BasicConstraintsSyntax");
+            default: throw new X509Error("Undefined error when validating BasicConstraintsSyntax tag");
+        }
+        let ca;
+        let pathLenConstraint;
+        let fixedPositionElementsEncountered = 0;
+        const basicConstraintsSyntaxElements = value.sequence;
+        if (!asn1["DERElement"].isUniquelyTagged(basicConstraintsSyntaxElements))
+            throw new X509Error("Elements of BasicConstraintsSyntax were not uniquely tagged");
+        basicConstraintsSyntaxElements.forEach((element, index) => {
+            if (element.tagClass === 0) {
+                if (element.tagNumber === 1) {
+                    if (element.construction !== 0)
+                        throw new X509Error("BasicConstraintsSyntax.ca was not primitively constructed");
+                    if (index !== 0)
+                        throw new X509Error("BasicConstraintsSyntax.ca was not the first element");
+                    ca = element.boolean;
+                    fixedPositionElementsEncountered++;
+                }
+                else if (element.tagNumber === 2) {
+                    if (element.construction !== 0)
+                        throw new X509Error("BasicConstraintsSyntax.pathLenConstraint was not primitively constructed");
+                    if (index > 1)
+                        throw new X509Error("BasicConstraintsSyntax.pathLenConstraint was not the first or second element");
+                    if (index === 1 &&
+                        (basicConstraintsSyntaxElements[0].tagClass !== 0 ||
+                            basicConstraintsSyntaxElements[0].construction !== 0 ||
+                            basicConstraintsSyntaxElements[0].tagNumber !== 1))
+                        throw new X509Error("BasicConstraintsSyntax missing ca element before pathLenConstraint when pathLenConstraint was the second element");
+                    pathLenConstraint = element.integer;
+                    fixedPositionElementsEncountered++;
+                }
+            }
+        });
+        if (!asn1["DERElement"].isInCanonicalOrder(basicConstraintsSyntaxElements.slice(fixedPositionElementsEncountered)))
+            throw new X509Error("Extended elements of BasicConstraintsSyntax were not in canonical order");
+        if (ca === false)
+            throw new X509Error("BasicConstraintsSyntax.cA was encoded with the default value, which is prohibited by the Distinguished Encoding Rules.");
+        if (ca === undefined)
+            ca = false;
+        return new BasicConstraintsSyntax_BasicConstraintsSyntax(ca, pathLenConstraint);
+    }
+    toElement() {
+        let basicConstraintsSyntaxElements = [];
+        if (this.ca === true) {
+            const caElement = new asn1["DERElement"](0, 0, 1);
+            caElement.boolean = true;
+            basicConstraintsSyntaxElements.push(caElement);
+        }
+        if (this.pathLenConstraint) {
+            const pathLenConstraintElement = new asn1["DERElement"](0, 0, 2);
+            pathLenConstraintElement.integer = this.pathLenConstraint;
+            basicConstraintsSyntaxElements.push(pathLenConstraintElement);
+        }
+        const basicConstraintsSyntaxElement = new asn1["DERElement"](0, 1, 16);
+        basicConstraintsSyntaxElement.sequence = basicConstraintsSyntaxElements;
+        return basicConstraintsSyntaxElement;
+    }
+    static fromBytes(value) {
+        const el = new asn1["DERElement"]();
+        el.fromBytes(value);
+        return BasicConstraintsSyntax_BasicConstraintsSyntax.fromElement(el);
+    }
+    toBytes() {
+        return this.toElement().toBytes();
+    }
+}
+
+// CONCATENATED MODULE: ./source/CertificateExtensions/ReasonFlags.ts
+
+
+class ReasonFlags_ReasonFlags {
+    constructor(unused = false, keyCompromise = false, cACompromise = false, affiliationChanged = false, superseded = false, cessationOfOperation = false, certificateHold = false, privilegeWithdrawn = false, aACompromise = false, weakAlgorithmOrKeySize = false) {
+        this.unused = unused;
+        this.keyCompromise = keyCompromise;
+        this.cACompromise = cACompromise;
+        this.affiliationChanged = affiliationChanged;
+        this.superseded = superseded;
+        this.cessationOfOperation = cessationOfOperation;
+        this.certificateHold = certificateHold;
+        this.privilegeWithdrawn = privilegeWithdrawn;
+        this.aACompromise = aACompromise;
+        this.weakAlgorithmOrKeySize = weakAlgorithmOrKeySize;
+    }
+    static fromElement(value) {
+        switch (value.validateTag([0], [0], [3])) {
+            case 0: break;
+            case -1: throw new X509Error("Invalid tag number on ReasonFlags");
+            case -2: throw new X509Error("Invalid construction on ReasonFlags");
+            case -3: throw new X509Error("Invalid tag number on ReasonFlags");
+            default: throw new X509Error("Undefined error when validating ReasonFlags tag");
+        }
+        const bits = value.bitString;
+        return new ReasonFlags_ReasonFlags(((bits.length >= 1) ? bits[0] : false), ((bits.length >= 2) ? bits[1] : false), ((bits.length >= 3) ? bits[2] : false), ((bits.length >= 4) ? bits[3] : false), ((bits.length >= 5) ? bits[4] : false), ((bits.length >= 6) ? bits[5] : false), ((bits.length >= 7) ? bits[6] : false), ((bits.length >= 8) ? bits[7] : false), ((bits.length >= 9) ? bits[8] : false), ((bits.length >= 10) ? bits[9] : false));
+    }
+    toElement() {
+        const ret = new asn1["DERElement"](0, 1, 3);
+        ret.bitString = [
+            this.unused,
+            this.keyCompromise,
+            this.cACompromise,
+            this.affiliationChanged,
+            this.superseded,
+            this.cessationOfOperation,
+            this.certificateHold,
+            this.privilegeWithdrawn,
+            this.aACompromise,
+            this.weakAlgorithmOrKeySize
+        ];
+        return ret;
+    }
+    static fromBytes(value) {
+        const el = new asn1["DERElement"]();
+        el.fromBytes(value);
+        return ReasonFlags_ReasonFlags.fromElement(el);
+    }
+    toBytes() {
+        return this.toElement().toBytes();
+    }
+}
+
+// CONCATENATED MODULE: ./source/CertificateExtensions/DistributionPoint.ts
+
+
+
+class DistributionPoint_DistributionPoint {
+    constructor(distributionPoint, reasons, cRLIssuer) {
+        this.distributionPoint = distributionPoint;
+        this.reasons = reasons;
+        this.cRLIssuer = cRLIssuer;
+    }
+    static fromElement(value) {
+        switch (value.validateTag([0], [1], [16])) {
+            case 0: break;
+            case -1: throw new X509Error("Invalid tag number on DistributionPoint");
+            case -2: throw new X509Error("Invalid construction on DistributionPoint");
+            case -3: throw new X509Error("Invalid tag number on DistributionPoint");
+            default: throw new X509Error("Undefined error when validating DistributionPoint tag");
+        }
+        const distributionPointElements = value.sequence;
+        let distributionPoint;
+        let reasons;
+        let cRLIssuer;
+        distributionPointElements.forEach(element => {
+            switch (element.tagNumber) {
+                case (0): {
+                    distributionPoint = element;
+                    break;
+                }
+                case (1): {
+                    if (element.construction !== 0)
+                        throw new X509Error("DistributionPoint.reasons may not be constructed.");
+                    reasons = ReasonFlags_ReasonFlags.fromElement(element);
+                    break;
+                }
+                case (2): {
+                    cRLIssuer = element.sequence;
+                    break;
+                }
+                default: break;
+            }
+        });
+        return new DistributionPoint_DistributionPoint(distributionPoint, reasons, cRLIssuer);
+    }
+    toElement() {
+        let distributionPointElements = [];
+        if (this.distributionPoint) {
+            distributionPointElements.push(this.distributionPoint);
+        }
+        if (this.reasons) {
+            distributionPointElements.push(this.reasons.toElement());
+        }
+        if (this.cRLIssuer) {
+            const crlIssuerElement = new asn1["DERElement"](2, 1, 2);
+            crlIssuerElement.sequence = this.cRLIssuer;
+            distributionPointElements.push(crlIssuerElement);
+        }
+        const ret = new asn1["DERElement"](0, 1, 16);
+        ret.sequence = distributionPointElements;
+        return ret;
+    }
+    static fromBytes(value) {
+        const el = new asn1["DERElement"]();
+        el.fromBytes(value);
+        return DistributionPoint_DistributionPoint.fromElement(el);
+    }
+    toBytes() {
+        return this.toElement().toBytes();
+    }
+}
+
+// CONCATENATED MODULE: ./source/CertificateExtensions/GeneralSubtree.ts
+class GeneralSubtree {
+    constructor(base, minimum = 0, maximum) {
+        this.base = base;
+        this.minimum = minimum;
+        this.maximum = maximum;
+    }
+}
+
+// CONCATENATED MODULE: ./source/CertificateExtensions/IssuingDistPointSyntax.ts
+
+
+
+class IssuingDistPointSyntax_IssuingDistPointSyntax {
+    constructor(distributionPoint, onlyContainsUserPublicKeyCerts = false, onlyContainsCACerts = false, onlySomeReasons, indirectCRL = false) {
+        this.distributionPoint = distributionPoint;
+        this.onlyContainsUserPublicKeyCerts = onlyContainsUserPublicKeyCerts;
+        this.onlyContainsCACerts = onlyContainsCACerts;
+        this.onlySomeReasons = onlySomeReasons;
+        this.indirectCRL = indirectCRL;
+    }
+    static fromElement(value) {
+        switch (value.validateTag([0], [1], [16])) {
+            case 0: break;
+            case -1: throw new X509Error("Invalid tag number on IssuingDistPointSyntax");
+            case -2: throw new X509Error("Invalid construction on IssuingDistPointSyntax");
+            case -3: throw new X509Error("Invalid tag number on IssuingDistPointSyntax");
+            default: throw new X509Error("Undefined error when validating IssuingDistPointSyntax tag");
+        }
+        let distributionPoint;
+        let onlyContainsUserPublicKeyCerts;
+        let onlyContainsCACerts;
+        let onlySomeReasons;
+        let indirectCRL;
+        const issuingDistPointSyntaxElements = value.sequence;
+        let lastEncounteredTagNumber;
+        issuingDistPointSyntaxElements.forEach(element => {
+            if (!lastEncounteredTagNumber) {
+                lastEncounteredTagNumber = element.tagNumber;
+            }
+            else if (element.tagNumber <= lastEncounteredTagNumber) {
+                throw new X509Error("Elements out of order in IssuingDistPointSyntax");
+            }
+            if (element.tagClass === 2) {
+                switch (element.tagNumber) {
+                    case (0): {
+                        distributionPoint = element;
+                        break;
+                    }
+                    case (1): {
+                        if (element.construction !== 0)
+                            throw new X509Error("Invalid construction for IssuingDistPointSyntax.onlyContainsUserPublicKeyCerts");
+                        onlyContainsUserPublicKeyCerts = element.boolean;
+                        break;
+                    }
+                    case (2): {
+                        if (element.construction !== 0)
+                            throw new X509Error("Invalid construction for IssuingDistPointSyntax.onlyContainsCACerts");
+                        onlyContainsCACerts = element.boolean;
+                        break;
+                    }
+                    case (3): {
+                        if (element.construction !== 1)
+                            throw new X509Error("Invalid construction for IssuingDistPointSyntax.onlySomeReasons");
+                        onlySomeReasons = ReasonFlags_ReasonFlags.fromElement(element);
+                        break;
+                    }
+                    case (4): {
+                        if (element.construction !== 0)
+                            throw new X509Error("Invalid construction for IssuingDistPointSyntax.indirectCRL");
+                        indirectCRL = element.boolean;
+                        break;
+                    }
+                    default: break;
+                }
+            }
+            lastEncounteredTagNumber = element.tagNumber;
+        });
+        return new IssuingDistPointSyntax_IssuingDistPointSyntax(distributionPoint, onlyContainsUserPublicKeyCerts, onlyContainsCACerts, onlySomeReasons, indirectCRL);
+    }
+    toElement() {
+        let issuingDistPointSyntaxElements = [];
+        if (this.distributionPoint) {
+            issuingDistPointSyntaxElements.push(this.distributionPoint);
+        }
+        if (this.onlyContainsUserPublicKeyCerts) {
+            const onlyContainsUserPublicKeyCertsElement = new asn1["DERElement"](2, 0, 1);
+            onlyContainsUserPublicKeyCertsElement.boolean = this.onlyContainsUserPublicKeyCerts;
+            issuingDistPointSyntaxElements.push(onlyContainsUserPublicKeyCertsElement);
+        }
+        if (this.onlyContainsCACerts) {
+            const onlyContainsCACertsElement = new asn1["DERElement"](2, 0, 1);
+            onlyContainsCACertsElement.boolean = this.onlyContainsUserPublicKeyCerts;
+            issuingDistPointSyntaxElements.push(onlyContainsCACertsElement);
+        }
+        if (this.onlySomeReasons) {
+            issuingDistPointSyntaxElements.push(this.onlySomeReasons.toElement());
+        }
+        if (this.indirectCRL) {
+            const indirectCRLElement = new asn1["DERElement"](2, 0, 1);
+            indirectCRLElement.boolean = this.onlyContainsUserPublicKeyCerts;
+            issuingDistPointSyntaxElements.push(indirectCRLElement);
+        }
+        const issuingDistPointSyntaxElement = new asn1["DERElement"](0, 1, 16);
+        issuingDistPointSyntaxElement.sequence = issuingDistPointSyntaxElements;
+        return issuingDistPointSyntaxElement;
+    }
+    static fromBytes(value) {
+        const el = new asn1["DERElement"]();
+        el.fromBytes(value);
+        return IssuingDistPointSyntax_IssuingDistPointSyntax.fromElement(el);
+    }
+    toBytes() {
+        return this.toElement().toBytes();
+    }
+}
+
+// CONCATENATED MODULE: ./source/CertificateExtensions/NameConstraintsSyntax.ts
+class NameConstraintsSyntax {
+    constructor(permittedSubtrees, excludedSubtrees) {
+        this.permittedSubtrees = permittedSubtrees;
+        this.excludedSubtrees = excludedSubtrees;
+    }
+}
+
 // CONCATENATED MODULE: ./source/CertificateExtensions/index.ts
 
 const certificateExtensionsOID = new asn1["ObjectIdentifier"]([2, 5, 1, 26]);
+
+
+
+
+
+
+
 
 // CONCATENATED MODULE: ./source/InformationFramework/index.ts
 
@@ -2875,6 +3343,13 @@ const pkiPMIProtocolSpecificationsOID = new asn1["ObjectIdentifier"]([2, 5, 1, 4
 /* concated harmony reexport Validity */__webpack_require__.d(__webpack_exports__, "Validity", function() { return Validity_Validity; });
 /* concated harmony reexport Version */__webpack_require__.d(__webpack_exports__, "Version", function() { return AuthenticationFramework_Version; });
 /* concated harmony reexport certificateExtensionsOID */__webpack_require__.d(__webpack_exports__, "certificateExtensionsOID", function() { return certificateExtensionsOID; });
+/* concated harmony reexport AuthorityKeyIdentifier */__webpack_require__.d(__webpack_exports__, "AuthorityKeyIdentifier", function() { return AuthorityKeyIdentifier_AuthorityKeyIdentifier; });
+/* concated harmony reexport BasicConstraintsSyntax */__webpack_require__.d(__webpack_exports__, "BasicConstraintsSyntax", function() { return BasicConstraintsSyntax_BasicConstraintsSyntax; });
+/* concated harmony reexport DistributionPoint */__webpack_require__.d(__webpack_exports__, "DistributionPoint", function() { return DistributionPoint_DistributionPoint; });
+/* concated harmony reexport GeneralSubtree */__webpack_require__.d(__webpack_exports__, "GeneralSubtree", function() { return GeneralSubtree; });
+/* concated harmony reexport IssuingDistPointSyntax */__webpack_require__.d(__webpack_exports__, "IssuingDistPointSyntax", function() { return IssuingDistPointSyntax_IssuingDistPointSyntax; });
+/* concated harmony reexport NameConstraintsSyntax */__webpack_require__.d(__webpack_exports__, "NameConstraintsSyntax", function() { return NameConstraintsSyntax; });
+/* concated harmony reexport ReasonFlags */__webpack_require__.d(__webpack_exports__, "ReasonFlags", function() { return ReasonFlags_ReasonFlags; });
 /* concated harmony reexport informationFrameworkOID */__webpack_require__.d(__webpack_exports__, "informationFrameworkOID", function() { return informationFrameworkOID; });
 /* concated harmony reexport AttributeTypeAndValue */__webpack_require__.d(__webpack_exports__, "AttributeTypeAndValue", function() { return AttributeTypeAndValue_AttributeTypeAndValue; });
 /* concated harmony reexport pkiPMIProtocolSpecificationsOID */__webpack_require__.d(__webpack_exports__, "pkiPMIProtocolSpecificationsOID", function() { return pkiPMIProtocolSpecificationsOID; });
