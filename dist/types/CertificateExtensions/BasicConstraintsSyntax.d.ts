@@ -1,5 +1,5 @@
 import { DERElement } from "asn1-ts";
-export declare class BasicConstraintsSyntax {
+export default class BasicConstraintsSyntax {
     readonly ca: boolean;
     readonly pathLenConstraint?: number | undefined;
     constructor(ca: boolean, pathLenConstraint?: number | undefined);

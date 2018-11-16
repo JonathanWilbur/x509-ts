@@ -1,6 +1,6 @@
 import { DERElement } from "asn1-ts";
-import { ReasonFlags } from "./ReasonFlags";
-export declare class DistributionPoint {
+import ReasonFlags from "./ReasonFlags";
+export default class DistributionPoint {
     readonly distributionPoint?: DERElement | undefined;
     readonly reasons?: ReasonFlags | undefined;
     readonly cRLIssuer?: DERElement[] | undefined;

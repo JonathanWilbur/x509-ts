@@ -1,5 +1,5 @@
 import { DERElement } from "asn1-ts";
-export declare class AuthorityKeyIdentifier {
+export default class AuthorityKeyIdentifier {
     readonly keyIdentifier: Uint8Array;
     readonly authorityCertIssuer?: DERElement[] | undefined;
     readonly authorityCertSerialNumber?: Uint8Array | undefined;

@@ -1,6 +1,6 @@
-import { ReasonFlags } from "./ReasonFlags";
+import ReasonFlags from "./ReasonFlags";
 import { DERElement } from "asn1-ts";
-export declare class IssuingDistPointSyntax {
+export default class IssuingDistPointSyntax {
     readonly distributionPoint?: DERElement | undefined;
     readonly onlyContainsUserPublicKeyCerts: boolean;
     readonly onlyContainsCACerts: boolean;

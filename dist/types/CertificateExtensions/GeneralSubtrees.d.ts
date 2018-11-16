@@ -1,3 +1,3 @@
-import { GeneralSubtree } from "./GeneralSubtree";
+import GeneralSubtree from "./GeneralSubtree";
 declare type GeneralSubtrees = GeneralSubtree[];
 export default GeneralSubtrees;

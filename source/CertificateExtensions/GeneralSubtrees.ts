@@ -1,4 +1,4 @@
-import { GeneralSubtree } from "./GeneralSubtree";
+import GeneralSubtree from "./GeneralSubtree";
 
 //   GeneralSubtrees ::= SEQUENCE SIZE (1..MAX) OF GeneralSubtree
 

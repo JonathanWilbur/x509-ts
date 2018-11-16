@@ -1,5 +1,5 @@
 import { DERElement } from "asn1-ts";
-export declare class ReasonFlags {
+export default class ReasonFlags {
     readonly unused: boolean;
     readonly keyCompromise: boolean;
     readonly cACompromise: boolean;

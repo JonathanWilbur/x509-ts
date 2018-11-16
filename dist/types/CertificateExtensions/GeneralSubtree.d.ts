@@ -1,6 +1,6 @@
 import GeneralName from "./GeneralName";
 import BaseDistance from "./BaseDistance";
-export declare class GeneralSubtree {
+export default class GeneralSubtree {
     readonly base: GeneralName;
     readonly minimum: BaseDistance;
     readonly maximum?: number | undefined;
