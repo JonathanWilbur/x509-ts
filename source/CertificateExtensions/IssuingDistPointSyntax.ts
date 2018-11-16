@@ -1,5 +1,5 @@
 import DistributionPointName from "./DistributionPointName";
-import { ReasonFlags } from "./ReasonFlags";
+import ReasonFlags from "./ReasonFlags";
 import { DERElement, ASN1TagClass, ASN1Construction, ASN1UniversalType } from "asn1-ts";
 import * as errors from "../errors";
 // IssuingDistPointSyntax ::= SEQUENCE {
@@ -13,7 +13,7 @@ import * as errors from "../errors";
 //     ...
 //   }
 
-export
+export default
 class IssuingDistPointSyntax {
 
     constructor (

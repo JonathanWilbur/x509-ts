@@ -10,7 +10,7 @@ import BaseDistance from "./BaseDistance";
 //     ...
 //   }
 
-export
+export default
 class GeneralSubtree {
 
     constructor(

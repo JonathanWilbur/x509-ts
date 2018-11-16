@@ -7,7 +7,7 @@ import * as errors from "../errors";
 //     ...
 //   }
 
-export
+export default
 class BasicConstraintsSyntax {
 
     constructor(

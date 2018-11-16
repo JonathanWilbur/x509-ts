@@ -6,7 +6,7 @@ import * as errors from "../errors";
 //     superseded(4), cessationOfOperation(5), certificateHold(6),
 //     privilegeWithdrawn(7), aACompromise(8), weakAlgorithmOrKey(9)}(SIZE (0..9,...,10))
 
-export
+export default
 class ReasonFlags {
 
     constructor (

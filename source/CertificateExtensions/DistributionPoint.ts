@@ -1,6 +1,6 @@
 import { DERElement, ASN1TagClass, ASN1Construction, ASN1UniversalType } from "asn1-ts";
 import * as errors from "../errors";
-import { ReasonFlags } from "./ReasonFlags";
+import ReasonFlags from "./ReasonFlags";
 import DistributionPointName from "./DistributionPointName";
 import GeneralNames from "./GeneralNames";
 
@@ -17,7 +17,7 @@ import GeneralNames from "./GeneralNames";
 //     ...
 //   }
 
-export
+export default
 class DistributionPoint {
 
     constructor (

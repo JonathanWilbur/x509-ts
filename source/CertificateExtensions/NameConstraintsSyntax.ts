@@ -13,7 +13,7 @@ import GeneralSubtrees from "./GeneralSubtrees";
 //          excludedSubtrees  PRESENT
 //        })
 
-export
+export default
 class NameConstraintsSyntax {
 
     constructor(

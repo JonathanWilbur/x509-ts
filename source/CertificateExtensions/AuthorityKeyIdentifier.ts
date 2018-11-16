@@ -21,7 +21,7 @@ import * as errors from "../errors";
 
 //   KeyIdentifier ::= OCTET STRING
 
-export
+export default
 class AuthorityKeyIdentifier {
 
     constructor (
