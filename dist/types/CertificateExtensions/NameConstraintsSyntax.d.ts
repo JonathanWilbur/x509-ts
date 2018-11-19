@@ -1,6 +1,11 @@
-import GeneralSubtrees from "./GeneralSubtrees";
+import GeneralSubtree from "./GeneralSubtree";
+import { DERElement } from "asn1-ts";
 export default class NameConstraintsSyntax {
-    readonly permittedSubtrees: GeneralSubtrees;
-    readonly excludedSubtrees: GeneralSubtrees;
-    constructor(permittedSubtrees: GeneralSubtrees, excludedSubtrees: GeneralSubtrees);
+    readonly permittedSubtrees?: GeneralSubtree[] | undefined;
+    readonly excludedSubtrees?: GeneralSubtree[] | undefined;
+    constructor(permittedSubtrees?: GeneralSubtree[] | undefined, excludedSubtrees?: GeneralSubtree[] | undefined);
+    static fromElement(value: DERElement): NameConstraintsSyntax;
+    toElement(): DERElement;
+    static fromBytes(value: Uint8Array): NameConstraintsSyntax;
+    toBytes(): Uint8Array;
 }

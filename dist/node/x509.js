@@ -3182,11 +3182,82 @@ class DistributionPoint_DistributionPoint {
 }
 
 // CONCATENATED MODULE: ./source/CertificateExtensions/GeneralSubtree.ts
-class GeneralSubtree {
+
+
+class GeneralSubtree_GeneralSubtree {
     constructor(base, minimum = 0, maximum) {
         this.base = base;
         this.minimum = minimum;
         this.maximum = maximum;
+    }
+    static fromElement(value) {
+        switch (value.validateTag([0], [1], [16])) {
+            case 0: break;
+            case -1: throw new X509Error("Invalid tag number on GeneralSubtree");
+            case -2: throw new X509Error("Invalid construction on GeneralSubtree");
+            case -3: throw new X509Error("Invalid tag number on GeneralSubtree");
+            default: throw new X509Error("Undefined error when validating GeneralSubtree tag");
+        }
+        const generalSubtreeElements = value.sequence;
+        if (generalSubtreeElements.length === 0)
+            throw new X509Error("Invalid number of elements in GeneralSubtree");
+        let base = generalSubtreeElements[0];
+        let minimum;
+        let maximum;
+        let fixedPositionElementsEncountered = 1;
+        generalSubtreeElements.slice(1).forEach((element) => {
+            if (element.tagClass === 2) {
+                if (element.tagNumber === 0) {
+                    if (element.construction !== 0)
+                        throw new X509Error("GeneralSubtree.minimum was not primitively constructed");
+                    if (minimum)
+                        throw new X509Error("GeneralSubtree.minimum already defined");
+                    minimum = element.integer;
+                    fixedPositionElementsEncountered++;
+                }
+                else if (element.tagNumber === 1) {
+                    if (element.construction !== 0)
+                        throw new X509Error("GeneralSubtree.maximum was not primitively constructed");
+                    if (maximum)
+                        throw new X509Error("GeneralSubtree.maximum already defined");
+                    maximum = element.integer;
+                    fixedPositionElementsEncountered++;
+                }
+            }
+        });
+        if (!asn1["DERElement"].isUniquelyTagged(generalSubtreeElements.slice(fixedPositionElementsEncountered)))
+            throw new X509Error("Elements of GeneralSubtree were not uniquely tagged");
+        if (!asn1["DERElement"].isInCanonicalOrder(generalSubtreeElements.slice(fixedPositionElementsEncountered)))
+            throw new X509Error("Extended elements of GeneralSubtree were not in canonical order");
+        if (minimum === 0)
+            throw new X509Error("GeneralSubtree.minimum was encoded with the default value, which is prohibited by the Distinguished Encoding Rules.");
+        if (minimum === undefined)
+            minimum = 0;
+        return new GeneralSubtree_GeneralSubtree(base, minimum, maximum);
+    }
+    toElement() {
+        let generalSubtreeElements = [this.base];
+        if (this.minimum) {
+            const minimumElement = new asn1["DERElement"](2, 0, 0);
+            minimumElement.integer = this.minimum;
+            generalSubtreeElements.push(minimumElement);
+        }
+        if (this.maximum) {
+            const maximumElement = new asn1["DERElement"](2, 0, 1);
+            maximumElement.integer = this.minimum;
+            generalSubtreeElements.push(maximumElement);
+        }
+        const generalSubtreeElement = new asn1["DERElement"](0, 1, 16);
+        generalSubtreeElement.sequence = generalSubtreeElements;
+        return generalSubtreeElement;
+    }
+    static fromBytes(value) {
+        const el = new asn1["DERElement"]();
+        el.fromBytes(value);
+        return GeneralSubtree_GeneralSubtree.fromElement(el);
+    }
+    toBytes() {
+        return this.toElement().toBytes();
     }
 }
 
@@ -3299,10 +3370,81 @@ class IssuingDistPointSyntax_IssuingDistPointSyntax {
 }
 
 // CONCATENATED MODULE: ./source/CertificateExtensions/NameConstraintsSyntax.ts
-class NameConstraintsSyntax {
+
+
+
+class NameConstraintsSyntax_NameConstraintsSyntax {
     constructor(permittedSubtrees, excludedSubtrees) {
         this.permittedSubtrees = permittedSubtrees;
         this.excludedSubtrees = excludedSubtrees;
+        if (!permittedSubtrees && !excludedSubtrees)
+            throw new X509Error("NameConstraintsSyntax requires either permittedSubtrees or excludedSubtrees to be defined");
+    }
+    static fromElement(value) {
+        switch (value.validateTag([0], [1], [16])) {
+            case 0: break;
+            case -1: throw new X509Error("Invalid tag number on NameConstraintsSyntax");
+            case -2: throw new X509Error("Invalid construction on NameConstraintsSyntax");
+            case -3: throw new X509Error("Invalid tag number on NameConstraintsSyntax");
+            default: throw new X509Error("Undefined error when validating NameConstraintsSyntax tag");
+        }
+        const nameConstraintsSyntaxElements = value.sequence;
+        if (nameConstraintsSyntaxElements.length === 0)
+            throw new X509Error("NameConstraintsSyntax SEQUENCE was constituted from zero elements");
+        let permittedSubtrees;
+        let excludedSubtrees;
+        let fixedPositionElementsEncountered = 0;
+        nameConstraintsSyntaxElements.forEach((element) => {
+            if (element.tagClass === 2) {
+                if (element.tagNumber === 0) {
+                    if (element.construction !== 0)
+                        throw new X509Error("NameConstraintsSyntax.permittedSubtrees was not primitively constructed");
+                    if (permittedSubtrees)
+                        throw new X509Error("NameConstraintsSyntax.permittedSubtrees already defined");
+                    permittedSubtrees = element.sequence.map((psub) => GeneralSubtree_GeneralSubtree.fromElement(psub));
+                    fixedPositionElementsEncountered++;
+                }
+                else if (element.tagNumber === 1) {
+                    if (element.construction !== 0)
+                        throw new X509Error("NameConstraintsSyntax.excludedSubtrees was not primitively constructed");
+                    if (excludedSubtrees)
+                        throw new X509Error("NameConstraintsSyntax.excludedSubtrees already defined");
+                    excludedSubtrees = element.sequence.map((xsub) => GeneralSubtree_GeneralSubtree.fromElement(xsub));
+                    fixedPositionElementsEncountered++;
+                }
+            }
+        });
+        if (!asn1["DERElement"].isUniquelyTagged(nameConstraintsSyntaxElements.slice(fixedPositionElementsEncountered)))
+            throw new X509Error("Elements of GeneralSubtree were not uniquely tagged");
+        if (!asn1["DERElement"].isInCanonicalOrder(nameConstraintsSyntaxElements.slice(fixedPositionElementsEncountered)))
+            throw new X509Error("Extended elements of GeneralSubtree were not in canonical order");
+        return new NameConstraintsSyntax_NameConstraintsSyntax(permittedSubtrees, excludedSubtrees);
+    }
+    toElement() {
+        let nameConstraintsSyntaxElements = [];
+        if (this.permittedSubtrees) {
+            const permittedSubtreesElement = new asn1["DERElement"](2, 1, 0);
+            permittedSubtreesElement.sequence =
+                this.permittedSubtrees.map((psub) => psub.toElement());
+            nameConstraintsSyntaxElements.push(permittedSubtreesElement);
+        }
+        if (this.excludedSubtrees) {
+            const excludedSubtreesElement = new asn1["DERElement"](2, 1, 1);
+            excludedSubtreesElement.sequence =
+                this.excludedSubtrees.map((xsub) => xsub.toElement());
+            nameConstraintsSyntaxElements.push(excludedSubtreesElement);
+        }
+        const nameConstraintsSyntaxElement = new asn1["DERElement"](0, 1, 16);
+        nameConstraintsSyntaxElement.sequence = nameConstraintsSyntaxElements;
+        return nameConstraintsSyntaxElement;
+    }
+    static fromBytes(value) {
+        const el = new asn1["DERElement"]();
+        el.fromBytes(value);
+        return NameConstraintsSyntax_NameConstraintsSyntax.fromElement(el);
+    }
+    toBytes() {
+        return this.toElement().toBytes();
     }
 }
 
@@ -3346,9 +3488,9 @@ const pkiPMIProtocolSpecificationsOID = new asn1["ObjectIdentifier"]([2, 5, 1, 4
 /* concated harmony reexport AuthorityKeyIdentifier */__webpack_require__.d(__webpack_exports__, "AuthorityKeyIdentifier", function() { return AuthorityKeyIdentifier_AuthorityKeyIdentifier; });
 /* concated harmony reexport BasicConstraintsSyntax */__webpack_require__.d(__webpack_exports__, "BasicConstraintsSyntax", function() { return BasicConstraintsSyntax_BasicConstraintsSyntax; });
 /* concated harmony reexport DistributionPoint */__webpack_require__.d(__webpack_exports__, "DistributionPoint", function() { return DistributionPoint_DistributionPoint; });
-/* concated harmony reexport GeneralSubtree */__webpack_require__.d(__webpack_exports__, "GeneralSubtree", function() { return GeneralSubtree; });
+/* concated harmony reexport GeneralSubtree */__webpack_require__.d(__webpack_exports__, "GeneralSubtree", function() { return GeneralSubtree_GeneralSubtree; });
 /* concated harmony reexport IssuingDistPointSyntax */__webpack_require__.d(__webpack_exports__, "IssuingDistPointSyntax", function() { return IssuingDistPointSyntax_IssuingDistPointSyntax; });
-/* concated harmony reexport NameConstraintsSyntax */__webpack_require__.d(__webpack_exports__, "NameConstraintsSyntax", function() { return NameConstraintsSyntax; });
+/* concated harmony reexport NameConstraintsSyntax */__webpack_require__.d(__webpack_exports__, "NameConstraintsSyntax", function() { return NameConstraintsSyntax_NameConstraintsSyntax; });
 /* concated harmony reexport ReasonFlags */__webpack_require__.d(__webpack_exports__, "ReasonFlags", function() { return ReasonFlags_ReasonFlags; });
 /* concated harmony reexport informationFrameworkOID */__webpack_require__.d(__webpack_exports__, "informationFrameworkOID", function() { return informationFrameworkOID; });
 /* concated harmony reexport AttributeTypeAndValue */__webpack_require__.d(__webpack_exports__, "AttributeTypeAndValue", function() { return AttributeTypeAndValue_AttributeTypeAndValue; });

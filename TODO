@@ -2,6 +2,21 @@
 - Document `./node_modules/util/support/isBuffer` fix.
 - Add "platform" bullet point to ASN.1 library
 - Make sure that each root constructed element is validated
+- Create ASN1Element.serialize
+  - Encode undefined as EOC
+  - Encode boolean as BOOLEAN
+  - Encode integer as INTEGER
+  - Encode Int8Array as BIT STRING
+  - Encode Uint8ClampedArray or Uint8Array as OCTET STRING
+  - Encode float as REAL
+  - Encode null as NULL
+  - Encode Uint32Array as OBJECT IDENTIFIER
+  - Encode Uint16Array as RELATIVE OBJECT IDENTIFIER
+  - Encode object as SEQUENCE
+  - Encode array as SET
+  - Encode string as UTF8String
+  - Encode Date as GeneralizedTime
+- PolicyQualifierInfo.qualified
 - Put these in an x501 library:
   - PkiPMIProtocolSpecifications
   - PkiPmiWrapper
