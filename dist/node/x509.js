@@ -3464,6 +3464,64 @@ const certificateExtensionsOID = new asn1["ObjectIdentifier"]([2, 5, 1, 26]);
 const informationFrameworkOID = new asn1["ObjectIdentifier"]([2, 5, 1, 1]);
 
 
+// CONCATENATED MODULE: ./source/PkiPmiExternalDataTypes/Version8/AccessDescription.ts
+
+
+class AccessDescription_AccessDescription {
+    constructor(accessMethod, accessLocation) {
+        this.accessMethod = accessMethod;
+        this.accessLocation = accessLocation;
+    }
+    static fromElement(value) {
+        switch (value.validateTag([0], [1], [16])) {
+            case 0: break;
+            case -1: throw new X509Error("Invalid tag number on AccessDescription");
+            case -2: throw new X509Error("Invalid construction on AccessDescription");
+            case -3: throw new X509Error("Invalid tag number on AccessDescription");
+            default: throw new X509Error("Undefined error when validating AccessDescription tag");
+        }
+        const accessDescriptionElements = value.sequence;
+        if (accessDescriptionElements.length !== 2)
+            throw new X509Error("Invalid number of elements in AccessDescription.");
+        switch (accessDescriptionElements[0].validateTag([0], [0], [6])) {
+            case 0: break;
+            case -1: throw new X509Error("Invalid tag number on AccessDescription.accessMethod");
+            case -2: throw new X509Error("Invalid construction on AccessDescription.accessMethod");
+            case -3: throw new X509Error("Invalid tag number on AccessDescription.accessMethod");
+            default: throw new X509Error("Undefined error when validating AccessDescription.accessMethod tag");
+        }
+        return new AccessDescription_AccessDescription(accessDescriptionElements[0].objectIdentifier, accessDescriptionElements[1]);
+    }
+    toElement() {
+        const accessMethodElement = new asn1["DERElement"](0, 0, 6);
+        accessMethodElement.objectIdentifier = this.accessMethod;
+        const accessDescriptionElement = new asn1["DERElement"](0, 1, 16);
+        accessDescriptionElement.sequence = [
+            accessMethodElement,
+            this.accessLocation
+        ];
+        return accessDescriptionElement;
+    }
+    static fromBytes(value) {
+        const el = new asn1["DERElement"]();
+        el.fromBytes(value);
+        return AccessDescription_AccessDescription.fromElement(el);
+    }
+    toBytes() {
+        return this.toElement().toBytes();
+    }
+}
+
+// CONCATENATED MODULE: ./source/PkiPmiExternalDataTypes/Version8/index.ts
+
+const pkiPmiExternalDataTypesVersion8OID = new asn1["ObjectIdentifier"]([2, 5, 1, 40, 8]);
+
+
+// CONCATENATED MODULE: ./source/PkiPmiExternalDataTypes/index.ts
+
+const pkiPmiExternalDataTypesOID = new asn1["ObjectIdentifier"]([2, 5, 1, 40]);
+
+
 // CONCATENATED MODULE: ./source/PkiPMIProtocolSpecifications/Version8/index.ts
 
 const pkiPMIProtocolSpecificationsVersion8OID = new asn1["ObjectIdentifier"]([2, 5, 1, 43, 8]);
@@ -3494,8 +3552,12 @@ const pkiPMIProtocolSpecificationsOID = new asn1["ObjectIdentifier"]([2, 5, 1, 4
 /* concated harmony reexport ReasonFlags */__webpack_require__.d(__webpack_exports__, "ReasonFlags", function() { return ReasonFlags_ReasonFlags; });
 /* concated harmony reexport informationFrameworkOID */__webpack_require__.d(__webpack_exports__, "informationFrameworkOID", function() { return informationFrameworkOID; });
 /* concated harmony reexport AttributeTypeAndValue */__webpack_require__.d(__webpack_exports__, "AttributeTypeAndValue", function() { return AttributeTypeAndValue_AttributeTypeAndValue; });
+/* concated harmony reexport pkiPmiExternalDataTypesOID */__webpack_require__.d(__webpack_exports__, "pkiPmiExternalDataTypesOID", function() { return pkiPmiExternalDataTypesOID; });
+/* concated harmony reexport pkiPmiExternalDataTypesVersion8OID */__webpack_require__.d(__webpack_exports__, "pkiPmiExternalDataTypesVersion8OID", function() { return pkiPmiExternalDataTypesVersion8OID; });
+/* concated harmony reexport AccessDescription */__webpack_require__.d(__webpack_exports__, "AccessDescription", function() { return AccessDescription_AccessDescription; });
 /* concated harmony reexport pkiPMIProtocolSpecificationsOID */__webpack_require__.d(__webpack_exports__, "pkiPMIProtocolSpecificationsOID", function() { return pkiPMIProtocolSpecificationsOID; });
 /* concated harmony reexport pkiPMIProtocolSpecificationsVersion8OID */__webpack_require__.d(__webpack_exports__, "pkiPMIProtocolSpecificationsVersion8OID", function() { return pkiPMIProtocolSpecificationsVersion8OID; });
+
 
 
 
