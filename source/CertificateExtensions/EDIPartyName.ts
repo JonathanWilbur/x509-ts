@@ -16,6 +16,10 @@ class EDIPartyName {
         readonly partyName : UnboundedDirectoryString
     ) {}
 
+    public toString () : string {
+        return this.partyName.toString();
+    }
+
     public static fromElement (value : DERElement) : EDIPartyName {
 
         switch(value.validateTag(

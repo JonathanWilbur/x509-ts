@@ -11,6 +11,7 @@ import RelativeDistinguishedName from "../InformationFramework/RelativeDistingui
 import AttributeTypeAndValue from "../InformationFramework/AttributeTypeAndValue";
 import UniqueIdentifier from "../SelectedAttributeTypes/Version8/UniqueIdentifier";
 import Extension from "./Extension";
+import { RDNSequence } from "../InformationFramework";
 
 // TBSCertificate ::= SEQUENCE {
 //     version                  [0]  Version DEFAULT v1,
@@ -67,9 +68,9 @@ class TBSCertificate {
         let ver : Version = Version.v3;
         let serialNumber : CertificateSerialNumber;
         let signature : AlgorithmIdentifier;
-        let issuer : Name = [];
+        let issuer : Name;
         let validity : Validity;
-        let subject : Name = [];
+        let subject : Name;
         let subjectPublicKeyInfo : SubjectPublicKeyInfo;
         let issuerUniqueID : UniqueIdentifier | undefined = undefined;
         let subjectUniqueID : UniqueIdentifier | undefined = undefined;
@@ -142,92 +143,11 @@ class TBSCertificate {
             serialNumber = tbsCertificateElements[1].octetString;
         }
 
-        // signature
-        {
-            signature = AlgorithmIdentifier.fromElement(tbsCertificateElements[2]);
-        }
-
-        // issuer
-        {
-            switch (tbsCertificateElements[3].validateTag(
-                [ ASN1TagClass.universal ],
-                [ ASN1Construction.constructed ],
-                [ ASN1UniversalType.sequence ]
-            )) {
-                case 0: break;
-                case -1: throw new errors.X509Error("Invalid tag number on TBSCertificate.issuer");
-                case -2: throw new errors.X509Error("Invalid construction on TBSCertificate.issuer");
-                case -3: throw new errors.X509Error("Invalid tag number on TBSCertificate.issuer");
-                default: throw new errors.X509Error("Undefined error when validating TBSCertificate.issuer tag");
-            }
-
-            const rdnElements : DERElement[] = tbsCertificateElements[3].sequence;
-            rdnElements.forEach(rdnElement => {
-                switch (rdnElement.validateTag(
-                    [ ASN1TagClass.universal ],
-                    [ ASN1Construction.constructed ],
-                    [ ASN1UniversalType.set ]
-                )) {
-                    case 0: break;
-                    case -1: throw new errors.X509Error("Invalid tag number on a TBSCertificate.issuer RDN");
-                    case -2: throw new errors.X509Error("Invalid construction on a TBSCertificate.issuer RDN");
-                    case -3: throw new errors.X509Error("Invalid tag number on a TBSCertificate.issuer RDN");
-                    default: throw new errors.X509Error("Undefined error when validating a TBSCertificate.issuer RDN tag");
-                }
-                const rdnValues : DERElement[] = rdnElement.set;
-                let rdn : RelativeDistinguishedName = [];
-                rdnValues.forEach(rdnValue => {
-                    rdn.push(AttributeTypeAndValue.fromElement(rdnValue));
-                });
-                issuer.push(rdn);
-            });
-        }
-
-        // validity
-        {
-            validity = Validity.fromElement(tbsCertificateElements[4]);
-        }
-
-        // subject
-        {
-            switch (tbsCertificateElements[5].validateTag(
-                [ ASN1TagClass.universal ],
-                [ ASN1Construction.constructed ],
-                [ ASN1UniversalType.sequence ]
-            )) {
-                case 0: break;
-                case -1: throw new errors.X509Error("Invalid tag number on TBSCertificate.subject");
-                case -2: throw new errors.X509Error("Invalid construction on TBSCertificate.subject");
-                case -3: throw new errors.X509Error("Invalid tag number on TBSCertificate.subject");
-                default: throw new errors.X509Error("Undefined error when validating TBSCertificate.subject tag");
-            }
-
-            const rdnElements : DERElement[] = tbsCertificateElements[5].sequence;
-            rdnElements.forEach(rdnElement => {
-                switch (rdnElement.validateTag(
-                    [ ASN1TagClass.universal ],
-                    [ ASN1Construction.constructed ],
-                    [ ASN1UniversalType.set ]
-                )) {
-                    case 0: break;
-                    case -1: throw new errors.X509Error("Invalid tag number on a TBSCertificate.subject RDN");
-                    case -2: throw new errors.X509Error("Invalid construction on a TBSCertificate.subject RDN");
-                    case -3: throw new errors.X509Error("Invalid tag number on a TBSCertificate.subject RDN");
-                    default: throw new errors.X509Error("Undefined error when validating a TBSCertificate.subject RDN tag");
-                }
-                const rdnValues : DERElement[] = rdnElement.set;
-                let rdn : RelativeDistinguishedName = [];
-                rdnValues.forEach(rdnValue => {
-                    rdn.push(AttributeTypeAndValue.fromElement(rdnValue));
-                });
-                subject.push(rdn);
-            });
-        }
-
-        // subjectPublicKeyInfo
-        {
-            subjectPublicKeyInfo = SubjectPublicKeyInfo.fromElement(tbsCertificateElements[6]);
-        }
+        signature = AlgorithmIdentifier.fromElement(tbsCertificateElements[2]);
+        issuer = RDNSequence.fromElement(tbsCertificateElements[3]);
+        validity = Validity.fromElement(tbsCertificateElements[4]);
+        subject = RDNSequence.fromElement(tbsCertificateElements[5]);
+        subjectPublicKeyInfo = SubjectPublicKeyInfo.fromElement(tbsCertificateElements[6]);
 
         if (tbsCertificateElements.length > 8) {
             for (let i = 8; i < tbsCertificateElements.length; i++) {
@@ -373,27 +293,23 @@ class TBSCertificate {
 
         // issuer
         {
-            let issuerElements : DERElement[] = [];
-            this.issuer.forEach(rdn => {
-                let rdnElements : DERElement[] = [];
-                rdn.forEach(rdnValue => {
-                    rdnElements.push(rdnValue.toElement());
-                });
-                const rdnElement : DERElement = new DERElement(
-                    ASN1TagClass.universal,
-                    ASN1Construction.constructed,
-                    ASN1UniversalType.set
-                );
-                rdnElement.sequence = rdnElements;
-                issuerElements.push(rdnElement);
-            });
             const issuerElement : DERElement = new DERElement(
                 ASN1TagClass.universal,
                 ASN1Construction.constructed,
                 ASN1UniversalType.sequence
             );
-            issuerElement.sequence = issuerElements;
-            retSequence.push(issuerElement);
+
+            issuerElement.sequence = this.issuer.value.map((rdn : RelativeDistinguishedName) => {
+                const rdnElement : DERElement = new DERElement(
+                    ASN1TagClass.universal,
+                    ASN1Construction.constructed,
+                    ASN1UniversalType.set
+                );
+                rdnElement.sequence = rdn.value.map((rdnValue : AttributeTypeAndValue) : DERElement => {
+                    return rdnValue.toElement();
+                });
+                return rdnElement;
+            });
         }
 
         // validity
@@ -403,27 +319,23 @@ class TBSCertificate {
 
         // subject
         {
-            let subjectElements : DERElement[] = [];
-            this.subject.forEach(rdn => {
-                let rdnElements : DERElement[] = [];
-                rdn.forEach(rdnValue => {
-                    rdnElements.push(rdnValue.toElement());
-                });
-                const rdnElement : DERElement = new DERElement(
-                    ASN1TagClass.universal,
-                    ASN1Construction.constructed,
-                    ASN1UniversalType.set
-                );
-                rdnElement.sequence = rdnElements;
-                subjectElements.push(rdnElement);
-            });
             const subjectElement : DERElement = new DERElement(
                 ASN1TagClass.universal,
                 ASN1Construction.constructed,
                 ASN1UniversalType.sequence
             );
-            subjectElement.sequence = subjectElements;
-            retSequence.push(subjectElement);
+
+            subjectElement.sequence = this.subject.value.map((rdn : RelativeDistinguishedName) => {
+                const rdnElement : DERElement = new DERElement(
+                    ASN1TagClass.universal,
+                    ASN1Construction.constructed,
+                    ASN1UniversalType.set
+                );
+                rdnElement.sequence = rdn.value.map((rdnValue : AttributeTypeAndValue) : DERElement => {
+                    return rdnValue.toElement();
+                });
+                return rdnElement;
+            });
         }
 
         // subjectPublicKeyInfo

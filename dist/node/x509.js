@@ -752,7 +752,7 @@ class ber_BERElement extends x690_X690Element {
         }
     }
     set octetString(value) {
-        this.value = value.subarray(0);
+        this.value = new Uint8Array(value);
     }
     get octetString() {
         return this.deconstruct("OCTET STRING");
@@ -1019,13 +1019,13 @@ class ber_BERElement extends x690_X690Element {
         return ret;
     }
     set teletexString(value) {
-        this.value = value.subarray(0);
+        this.value = new Uint8Array(value);
     }
     get teletexString() {
         return this.deconstruct("TeletexString");
     }
     set videotexString(value) {
-        this.value = value.subarray(0);
+        this.value = new Uint8Array(value);
     }
     get videotexString() {
         return this.deconstruct("VideotexString");
@@ -1418,7 +1418,7 @@ class ber_BERElement extends x690_X690Element {
     }
     deconstruct(dataType) {
         if (this.construction === 0) {
-            return this.value.subarray(0);
+            return new Uint8Array(this.value);
         }
         else {
             if ((this.recursionCount + 1) > ber_BERElement.nestingRecursionLimit)
@@ -1513,12 +1513,12 @@ class der_DERElement extends x690_X690Element {
         return ret;
     }
     set octetString(value) {
-        this.value = value.subarray(0);
+        this.value = new Uint8Array(value);
     }
     get octetString() {
         if (this.construction !== 0)
             throw new ASN1ConstructionError("OCTET STRING cannot be constructed.");
-        return this.value.subarray(0);
+        return new Uint8Array(this.value);
     }
     set objectDescriptor(value) {
         this.graphicString = value;
@@ -1661,7 +1661,7 @@ class der_DERElement extends x690_X690Element {
             throw new ASN1ConstructionError("UTF8String cannot be constructed.");
         let ret = "";
         if (typeof TextEncoder !== "undefined") {
-            ret = (new TextDecoder("utf-8")).decode(this.value.subarray(0).buffer);
+            ret = (new TextDecoder("utf-8")).decode(new Uint8Array(this.value));
         }
         else if (typeof Buffer !== "undefined") {
             ret = (new Buffer(this.value)).toString("utf-8");
@@ -1725,7 +1725,7 @@ class der_DERElement extends x690_X690Element {
             throw new ASN1ConstructionError("NumericString cannot be constructed.");
         let ret = "";
         if (typeof TextEncoder !== "undefined") {
-            ret = (new TextDecoder("utf-8")).decode(this.value.subarray(0).buffer);
+            ret = (new TextDecoder("utf-8")).decode(new Uint8Array(this.value));
         }
         else if (typeof Buffer !== "undefined") {
             ret = (new Buffer(this.value)).toString("utf-8");
@@ -1756,7 +1756,7 @@ class der_DERElement extends x690_X690Element {
             throw new ASN1ConstructionError("PrintableString cannot be constructed.");
         let ret = "";
         if (typeof TextEncoder !== "undefined") {
-            ret = (new TextDecoder("utf-8")).decode(this.value.subarray(0).buffer);
+            ret = (new TextDecoder("utf-8")).decode(new Uint8Array(this.value));
         }
         else if (typeof Buffer !== "undefined") {
             ret = (new Buffer(this.value)).toString("utf-8");
@@ -1769,13 +1769,13 @@ class der_DERElement extends x690_X690Element {
         return ret;
     }
     set teletexString(value) {
-        this.value = value.subarray(0);
+        this.value = new Uint8Array(value);
     }
     get teletexString() {
         return this.octetString;
     }
     set videotexString(value) {
-        this.value = value.subarray(0);
+        this.value = new Uint8Array(value);
     }
     get videotexString() {
         return this.octetString;
@@ -1793,7 +1793,7 @@ class der_DERElement extends x690_X690Element {
             throw new ASN1ConstructionError("IA5String cannot be constructed.");
         let ret = "";
         if (typeof TextEncoder !== "undefined") {
-            ret = (new TextDecoder("utf-8")).decode(this.value.subarray(0).buffer);
+            ret = (new TextDecoder("utf-8")).decode(new Uint8Array(this.value));
         }
         else if (typeof Buffer !== "undefined") {
             ret = (new Buffer(this.value)).toString("utf-8");
@@ -1821,7 +1821,7 @@ class der_DERElement extends x690_X690Element {
             throw new ASN1ConstructionError("UTCTime cannot be constructed.");
         let dateString = "";
         if (typeof TextEncoder !== "undefined") {
-            dateString = (new TextDecoder("utf-8")).decode(this.value.subarray(0).buffer);
+            dateString = (new TextDecoder("utf-8")).decode(new Uint8Array(this.value));
         }
         else if (typeof Buffer !== "undefined") {
             dateString = (new Buffer(this.value)).toString("utf-8");
@@ -1868,7 +1868,7 @@ class der_DERElement extends x690_X690Element {
             throw new ASN1ConstructionError("GeneralizedTime cannot be constructed.");
         let dateString = "";
         if (typeof TextEncoder !== "undefined") {
-            dateString = (new TextDecoder("utf-8")).decode(this.value.subarray(0).buffer);
+            dateString = (new TextDecoder("utf-8")).decode(new Uint8Array(this.value));
         }
         else if (typeof Buffer !== "undefined") {
             dateString = (new Buffer(this.value)).toString("utf-8");
@@ -1913,7 +1913,7 @@ class der_DERElement extends x690_X690Element {
             throw new ASN1ConstructionError("GraphicString cannot be constructed.");
         let ret = "";
         if (typeof TextEncoder !== "undefined") {
-            ret = (new TextDecoder("utf-8")).decode(this.value.subarray(0).buffer);
+            ret = (new TextDecoder("utf-8")).decode(new Uint8Array(this.value));
         }
         else if (typeof Buffer !== "undefined") {
             ret = (new Buffer(this.value)).toString("utf-8");
@@ -1950,7 +1950,7 @@ class der_DERElement extends x690_X690Element {
             throw new ASN1ConstructionError("GeneralString cannot be constructed.");
         let ret = "";
         if (typeof TextEncoder !== "undefined") {
-            ret = (new TextDecoder("windows-1252")).decode(this.value.subarray(0).buffer);
+            ret = (new TextDecoder("windows-1252")).decode(new Uint8Array(this.value));
         }
         else if (typeof Buffer !== "undefined") {
             ret = (new Buffer(this.value)).toString("ascii");
@@ -2000,7 +2000,7 @@ class der_DERElement extends x690_X690Element {
             throw new ASN1Error("BMPString encoded on non-mulitple of two bytes.");
         let ret = "";
         if (typeof TextEncoder !== "undefined") {
-            ret = (new TextDecoder("utf-16be")).decode(this.value.subarray(0).buffer);
+            ret = (new TextDecoder("utf-16be")).decode(new Uint8Array(this.value));
         }
         else if (typeof Buffer !== "undefined") {
             const swappedEndianness = new Uint8Array(this.value.length);
@@ -2396,48 +2396,6 @@ class SubjectPublicKeyInfo_SubjectPublicKeyInfo {
     }
 }
 
-// CONCATENATED MODULE: ./source/InformationFramework/AttributeTypeAndValue.ts
-
-
-class AttributeTypeAndValue_AttributeTypeAndValue {
-    constructor(type, value) {
-        this.type = type;
-        this.value = value;
-    }
-    static fromElement(value) {
-        const attributeTypeAndValueElements = value.sequence;
-        if (attributeTypeAndValueElements.length !== 2)
-            throw new X509Error("Invalid number of elements in AttributeTypeAndValue");
-        switch (attributeTypeAndValueElements[0].validateTag([0], [0], [6])) {
-            case 0: break;
-            case -1: throw new X509Error("Invalid tag number on AttributeTypeAndValue.type");
-            case -2: throw new X509Error("Invalid construction on AttributeTypeAndValue.type");
-            case -3: throw new X509Error("Invalid tag number on AttributeTypeAndValue.type");
-            default: throw new X509Error("Undefined error when validating AttributeTypeAndValue.type tag");
-        }
-        return new AttributeTypeAndValue_AttributeTypeAndValue(attributeTypeAndValueElements[0].objectIdentifier, attributeTypeAndValueElements[1]);
-    }
-    toElement() {
-        const typeElement = new asn1["DERElement"]();
-        typeElement.tagNumber = 6;
-        typeElement.objectIdentifier = this.type;
-        const attributeTypeAndValueElement = new asn1["DERElement"]();
-        attributeTypeAndValueElement.tagClass = 0;
-        attributeTypeAndValueElement.construction = 1;
-        attributeTypeAndValueElement.tagNumber = 16;
-        attributeTypeAndValueElement.sequence = [typeElement, this.value];
-        return attributeTypeAndValueElement;
-    }
-    static fromBytes(value) {
-        const el = new asn1["DERElement"]();
-        el.fromBytes(value);
-        return AttributeTypeAndValue_AttributeTypeAndValue.fromElement(el);
-    }
-    toBytes() {
-        return this.toElement().toBytes();
-    }
-}
-
 // CONCATENATED MODULE: ./source/AuthenticationFramework/Extension.ts
 
 
@@ -2521,6 +2479,395 @@ class Extension_Extension {
     }
 }
 
+// CONCATENATED MODULE: ./source/SelectedAttributeTypes/Version8/UnboundedDirectoryString.ts
+
+
+class UnboundedDirectoryString_UnboundedDirectoryString {
+    constructor(value) {
+        this.value = value;
+    }
+    toString() {
+        return this.value;
+    }
+    static print(element) {
+        const uds = UnboundedDirectoryString_UnboundedDirectoryString.fromElement(element);
+        return uds.toString();
+    }
+    static fromElement(value) {
+        if (value.tagClass !== 0)
+            throw new X509Error("UnboundedDirectoryString must be of universal class");
+        if (value.construction !== 0)
+            throw new X509Error("UnboundedDirectoryString must be of primitive construction");
+        switch (value.tagNumber) {
+            case (20): {
+                return new UnboundedDirectoryString_UnboundedDirectoryString("");
+            }
+            case (19): {
+                return new UnboundedDirectoryString_UnboundedDirectoryString(value.printableString);
+            }
+            case (30): {
+                return new UnboundedDirectoryString_UnboundedDirectoryString(value.bmpString);
+            }
+            case (28): {
+                return new UnboundedDirectoryString_UnboundedDirectoryString(value.universalString);
+            }
+            case (12): {
+                return new UnboundedDirectoryString_UnboundedDirectoryString(value.utf8String);
+            }
+            default:
+                throw new X509Error("UnboundedDirectoryString was constituted of an invalid CHOICE");
+        }
+    }
+    toElement() {
+        const unboundedDirectoryStringElement = new asn1["DERElement"](0, 0, 12);
+        unboundedDirectoryStringElement.utf8String = this.value;
+        return unboundedDirectoryStringElement;
+    }
+    static fromBytes(value) {
+        const el = new asn1["DERElement"]();
+        el.fromBytes(value);
+        return this.fromElement(el);
+    }
+    toBytes() {
+        return this.toElement().toBytes();
+    }
+}
+
+// CONCATENATED MODULE: ./source/InformationFramework/AttributeTypeAndValue.ts
+
+
+
+class AttributeTypeAndValue_AttributeTypeAndValue {
+    constructor(type, value) {
+        this.type = type;
+        this.value = value;
+    }
+    static escapeDirectoryCharacters(unescaped) {
+        return unescaped.replace(",", "\,").replace("+", "\+");
+    }
+    toString() {
+        const oidString = this.type.toString();
+        if (oidString in AttributeTypeAndValue_AttributeTypeAndValue.attributeToNameMapping &&
+            oidString in AttributeTypeAndValue_AttributeTypeAndValue.attributeToValuePrinterMapping) {
+            const attributeNameString = AttributeTypeAndValue_AttributeTypeAndValue.attributeToNameMapping[oidString];
+            const valueString = AttributeTypeAndValue_AttributeTypeAndValue.escapeDirectoryCharacters(AttributeTypeAndValue_AttributeTypeAndValue.attributeToValuePrinterMapping[oidString](this.value));
+            return `${attributeNameString}=${valueString}`;
+        }
+        else {
+            return `${oidString}=${this.value.toBytes()}`;
+        }
+    }
+    static fromElement(value) {
+        const attributeTypeAndValueElements = value.sequence;
+        if (attributeTypeAndValueElements.length !== 2)
+            throw new X509Error("Invalid number of elements in AttributeTypeAndValue");
+        switch (attributeTypeAndValueElements[0].validateTag([0], [0], [6])) {
+            case 0: break;
+            case -1: throw new X509Error("Invalid tag number on AttributeTypeAndValue.type");
+            case -2: throw new X509Error("Invalid construction on AttributeTypeAndValue.type");
+            case -3: throw new X509Error("Invalid tag number on AttributeTypeAndValue.type");
+            default: throw new X509Error("Undefined error when validating AttributeTypeAndValue.type tag");
+        }
+        return new AttributeTypeAndValue_AttributeTypeAndValue(attributeTypeAndValueElements[0].objectIdentifier, attributeTypeAndValueElements[1]);
+    }
+    toElement() {
+        const typeElement = new asn1["DERElement"]();
+        typeElement.tagNumber = 6;
+        typeElement.objectIdentifier = this.type;
+        const attributeTypeAndValueElement = new asn1["DERElement"]();
+        attributeTypeAndValueElement.tagClass = 0;
+        attributeTypeAndValueElement.construction = 1;
+        attributeTypeAndValueElement.tagNumber = 16;
+        attributeTypeAndValueElement.sequence = [typeElement, this.value];
+        return attributeTypeAndValueElement;
+    }
+    static fromBytes(value) {
+        const el = new asn1["DERElement"]();
+        el.fromBytes(value);
+        return AttributeTypeAndValue_AttributeTypeAndValue.fromElement(el);
+    }
+    toBytes() {
+        return this.toElement().toBytes();
+    }
+}
+AttributeTypeAndValue_AttributeTypeAndValue.attributeToNameMapping = {
+    "2.5.4.3": "cn",
+    "2.5.4.7.1": "c-l",
+    "2.5.4.8.1": "c-st",
+    "2.5.4.9.1": "c-street",
+    "2.5.4.10.1": "c-o",
+    "2.5.4.11.1": "c-ou",
+    "2.5.4.16.1": "c-PostalAddress",
+    "2.5.4.17.1": "c-PostalCode",
+    "2.5.4.18.1": "c-PostOfficeBox",
+    "2.5.4.19.1": "c-PhysicalDeliveryOfficeName",
+    "2.5.4.20.1": "c-TelephoneNumber",
+    "2.5.4.21.1": "c-TelexNumber",
+    "2.5.4.23.1": "c-FacsimileTelephoneNumber",
+    "2.5.4.25.1": "c-InternationalISDNNumber",
+    "2.5.4.2": "knowledgeInformation",
+    "2.5.4.4": "sn",
+    "2.5.4.5": "serialNumber",
+    "2.5.4.6": "c",
+    "2.5.4.7": "l",
+    "2.5.4.8": "st",
+    "2.5.4.9": "streetAddress",
+    "2.5.4.10": "o",
+    "2.5.4.11": "ou",
+    "2.5.4.12": "title",
+    "2.5.4.14": "searchGuide",
+    "2.5.4.15": "businessCategory",
+    "2.5.4.16": "postalAddress",
+    "2.5.4.17": "postalCode",
+    "2.5.4.18": "postOfficeBox",
+    "2.5.4.19": "physicalDeliveryOfficeName",
+    "2.5.4.20": "telephoneNumber",
+    "2.5.4.21": "telexNumber",
+    "2.5.4.22": "teletexTerminalIdentifier",
+    "2.5.4.23": "facsimileTelephoneNumber",
+    "2.5.4.24": "x121Address",
+    "2.5.4.25": "internationaliSDNNumber",
+    "2.5.4.26": "registeredAddress",
+    "2.5.4.27": "destinationIndicator",
+    "2.5.4.28": "preferredDeliveryMethod",
+    "2.5.4.29": "presentationAddress",
+    "2.5.4.30": "supportedApplicationContext",
+    "2.5.4.31": "member",
+    "2.5.4.32": "owner",
+    "2.5.4.33": "roleOccupant",
+    "2.5.4.36": "userCertificate",
+    "2.5.4.37": "cACertificate",
+    "2.5.4.38": "authorityRevocationList",
+    "2.5.4.39": "certificateRevocationList",
+    "2.5.4.40": "crossCertificatePair",
+    "2.5.4.42": "gn",
+    "2.5.4.43": "initials",
+    "2.5.4.44": "generationQualifier",
+    "2.5.4.45": "x500UniqueIdentifier",
+    "2.5.4.46": "dnQualifier",
+    "2.5.4.47": "enhancedSearchGuide",
+    "2.5.4.48": "protocolInformation",
+    "2.5.4.50": "uniqueMember",
+    "2.5.4.51": "houseIdentifier",
+    "2.5.4.52": "supportedAlgorithms",
+    "2.5.4.53": "deltaRevocationList",
+    "2.5.4.54": "dmdName",
+    "2.5.4.65": "pseudonym",
+    "0.9.2342.19200300.100.1.3": "mail",
+    "0.9.2342.19200300.100.1.25": "dc",
+    "0.9.2342.19200300.100.1.37": "associatedDomain",
+    "1.2.840.113549.1.9.1": "emailAddress",
+    "0.9.2342.19200300.100.1.2": "textEncodedORAddress",
+    "0.9.2342.19200300.100.1.4": "info",
+    "0.9.2342.19200300.100.1.5": "favouriteDrink",
+    "0.9.2342.19200300.100.1.6": "roomNumber",
+    "0.9.2342.19200300.100.1.7": "photo",
+    "0.9.2342.19200300.100.1.8": "userClass",
+    "0.9.2342.19200300.100.1.9": "host",
+    "0.9.2342.19200300.100.1.10": "manager",
+    "0.9.2342.19200300.100.1.11": "documentIdentifier",
+    "0.9.2342.19200300.100.1.12": "documentTitle",
+    "0.9.2342.19200300.100.1.13": "documentVersion",
+    "0.9.2342.19200300.100.1.14": "documentAuthor",
+    "0.9.2342.19200300.100.1.15": "documentLocation",
+    "0.9.2342.19200300.100.1.20": "homeTelephoneNumber",
+    "0.9.2342.19200300.100.1.21": "secretary",
+    "0.9.2342.19200300.100.1.22": "otherMailbox",
+    "0.9.2342.19200300.100.1.26": "aRecord",
+    "0.9.2342.19200300.100.1.27": "mDRecord",
+    "0.9.2342.19200300.100.1.28": "mXRecord",
+    "0.9.2342.19200300.100.1.29": "nSRecord",
+    "0.9.2342.19200300.100.1.30": "sOARecord",
+    "0.9.2342.19200300.100.1.31": "cNAMERecord",
+    "0.9.2342.19200300.100.1.38": "associatedName",
+    "0.9.2342.19200300.100.1.39": "homePostalAddress",
+    "0.9.2342.19200300.100.1.40": "personalTitle",
+    "0.9.2342.19200300.100.1.41": "mobileTelephoneNumber",
+    "0.9.2342.19200300.100.1.42": "pagerTelephoneNumber",
+    "0.9.2342.19200300.100.1.43": "friendlyCountryName",
+    "0.9.2342.19200300.100.1.44": "uniqueIdentifier",
+    "0.9.2342.19200300.100.1.45": "organizationalStatus",
+    "0.9.2342.19200300.100.1.46": "janetMailbox",
+    "0.9.2342.19200300.100.1.47": "mailPreferenceOption",
+    "0.9.2342.19200300.100.1.48": "buildingName",
+    "0.9.2342.19200300.100.1.49": "dSAQuality",
+    "0.9.2342.19200300.100.1.50": "singleLevelQuality",
+    "0.9.2342.19200300.100.1.51": "subtreeMinimumQuality",
+    "0.9.2342.19200300.100.1.52": "subtreeMaximumQuality",
+    "0.9.2342.19200300.100.1.53": "personalSignature",
+    "0.9.2342.19200300.100.1.54": "dITRedirect",
+    "0.9.2342.19200300.100.1.55": "audio",
+    "0.9.2342.19200300.100.1.56": "documentPublisher",
+    "2.16.840.1.113730.3.1.1": "carLicense",
+    "2.16.840.1.113730.3.1.2": "departmentNumber",
+    "2.16.840.1.113730.3.1.241": "displayName",
+    "2.16.840.1.113730.3.1.3": "employeeNumber",
+    "2.16.840.1.113730.3.1.4": "employeeType",
+    "0.9.2342.19200300.100.1.60": "jpegPhoto",
+    "2.16.840.1.113730.3.1.39": "preferredLanguage",
+    "2.16.840.1.113730.3.1.40": "userSMIMECertificate",
+    "2.16.840.1.113730.3.1.216": "userPKCS12",
+    "2.16.840.1.113730.3.1.13": "mailLocalAddress",
+    "2.16.840.1.113730.3.1.18": "mailHost",
+    "2.16.840.1.113730.3.1.47": "mailRoutingAddress",
+    "1.3.6.1.4.1.42.2.27.2.1.15": "rfc822MailMember",
+    "1.3.6.1.1.1.1.2": "gecos",
+    "1.3.6.1.1.1.1.3": "homeDirectory",
+    "1.3.6.1.1.1.1.4": "loginShell",
+    "1.3.6.1.1.1.1.5": "shadowLastChange",
+    "1.3.6.1.1.1.1.6": "shadowMin",
+    "1.3.6.1.1.1.1.7": "shadowMax",
+    "1.3.6.1.1.1.1.8": "shadowWarning",
+    "1.3.6.1.1.1.1.9": "shadowInactive",
+    "1.3.6.1.1.1.1.10": "shadowExpire",
+    "1.3.6.1.1.1.1.11": "shadowFlag",
+    "1.3.6.1.1.1.1.12": "memberUid",
+    "1.3.6.1.1.1.1.13": "memberNisNetgroup",
+    "1.3.6.1.1.1.1.14": "nisNetgroupTriple",
+    "1.3.6.1.1.1.1.15": "ipServicePort",
+    "1.3.6.1.1.1.1.16": "ipServiceProtocol",
+    "1.3.6.1.1.1.1.17": "ipProtocolNumber",
+    "1.3.6.1.1.1.1.18": "oncRpcNumber",
+    "1.3.6.1.1.1.1.19": "ipHostNumber",
+    "1.3.6.1.1.1.1.20": "ipNetworkNumber",
+    "1.3.6.1.1.1.1.21": "ipNetmaskNumber",
+    "1.3.6.1.1.1.1.22": "macAddress",
+    "1.3.6.1.1.1.1.23": "bootParameter",
+    "1.3.6.1.1.1.1.24": "bootFile",
+    "1.3.6.1.1.1.1.26": "nisMapName",
+    "1.3.6.1.1.1.1.27": "nisMapEntry",
+    "2.5.4.72": "role",
+    "2.5.4.75": "xmlPrivilegeInfo",
+    "2.5.4.58": "attributeCertificateA",
+    "2.5.4.61": "aACertificate",
+    "2.5.4.62": "attributeDescriptorCertificate",
+    "2.5.4.59": "attributeCertificateRevocationList",
+    "2.5.4.63": "attributeAuthorityRevocationList",
+    "2.5.4.73": "delegationPath",
+    "2.5.4.71": "privPolicy",
+    "2.5.4.74": "protPrivPolicy",
+    "2.5.4.76": "xmlPrivPolicy"
+};
+AttributeTypeAndValue_AttributeTypeAndValue.attributeToValuePrinterMapping = {
+    "2.5.4.3": (element) => UnboundedDirectoryString_UnboundedDirectoryString.print(element),
+    "2.5.4.4": (element) => UnboundedDirectoryString_UnboundedDirectoryString.print(element),
+    "2.5.4.5": (element) => element.printableString,
+    "2.5.4.6": (element) => element.printableString,
+    "2.5.4.7": (element) => UnboundedDirectoryString_UnboundedDirectoryString.print(element),
+    "2.5.4.8": (element) => UnboundedDirectoryString_UnboundedDirectoryString.print(element),
+    "2.5.4.9": (element) => UnboundedDirectoryString_UnboundedDirectoryString.print(element),
+    "2.5.4.10": (element) => UnboundedDirectoryString_UnboundedDirectoryString.print(element),
+    "2.5.4.11": (element) => UnboundedDirectoryString_UnboundedDirectoryString.print(element),
+    "2.5.4.12": (element) => UnboundedDirectoryString_UnboundedDirectoryString.print(element),
+    "2.5.4.15": (element) => UnboundedDirectoryString_UnboundedDirectoryString.print(element),
+    "2.5.4.17": (element) => UnboundedDirectoryString_UnboundedDirectoryString.print(element),
+    "2.5.4.18": (element) => UnboundedDirectoryString_UnboundedDirectoryString.print(element),
+    "2.5.4.19": (element) => UnboundedDirectoryString_UnboundedDirectoryString.print(element),
+    "2.5.4.20": (element) => element.printableString,
+    "2.5.4.24": (element) => element.numericString,
+    "2.5.4.25": (element) => element.numericString,
+    "2.5.4.27": (element) => element.printableString,
+    "2.5.4.42": (element) => UnboundedDirectoryString_UnboundedDirectoryString.print(element),
+    "2.5.4.43": (element) => UnboundedDirectoryString_UnboundedDirectoryString.print(element),
+    "2.5.4.44": (element) => UnboundedDirectoryString_UnboundedDirectoryString.print(element),
+    "2.5.4.46": (element) => element.printableString,
+};
+
+// CONCATENATED MODULE: ./source/InformationFramework/RelativeDistinguishedName.ts
+
+
+
+class RelativeDistinguishedName_RelativeDistinguishedName {
+    constructor(value) {
+        this.value = value;
+        if (value.length < 1)
+            throw new X509Error("RelativeDistinguishedName must contain at least one AttributeTypeAndValue.");
+    }
+    toString() {
+        return this.value.map((atav) => {
+            return atav.toString();
+        }).join("+");
+    }
+    static fromElement(value) {
+        switch (value.validateTag([0], [1], [17])) {
+            case 0: break;
+            case -1: throw new X509Error("Invalid tag number on RelativeDistinguishedName");
+            case -2: throw new X509Error("Invalid construction on RelativeDistinguishedName");
+            case -3: throw new X509Error("Invalid tag number on RelativeDistinguishedName");
+            default: throw new X509Error("Undefined error when validating RelativeDistinguishedName tag");
+        }
+        const relativeDistinguishedNameElements = value.set;
+        return new RelativeDistinguishedName_RelativeDistinguishedName(relativeDistinguishedNameElements.map((element) => {
+            return AttributeTypeAndValue_AttributeTypeAndValue.fromElement(element);
+        }));
+    }
+    toElement() {
+        const relativeDistinguishedNameElement = new asn1["DERElement"](0, 1, 17);
+        relativeDistinguishedNameElement.set = this.value.map((atav) => {
+            return atav.toElement();
+        });
+        return relativeDistinguishedNameElement;
+    }
+    static fromBytes(value) {
+        const el = new asn1["DERElement"]();
+        el.fromBytes(value);
+        return this.fromElement(el);
+    }
+    toBytes() {
+        return this.toElement().toBytes();
+    }
+}
+
+// CONCATENATED MODULE: ./source/InformationFramework/RDNSequence.ts
+
+
+
+class RDNSequence_RDNSequence {
+    constructor(value) {
+        this.value = value;
+    }
+    toString() {
+        return this.value.map((rdn) => {
+            return rdn.toString();
+        }).join(",");
+    }
+    static fromElement(value) {
+        switch (value.validateTag([0], [1], [16])) {
+            case 0: break;
+            case -1: throw new X509Error("Invalid tag number on RDNSequence");
+            case -2: throw new X509Error("Invalid construction on RDNSequence");
+            case -3: throw new X509Error("Invalid tag number on RDNSequence");
+            default: throw new X509Error("Undefined error when validating RDNSequence tag");
+        }
+        const rdnSequenceElements = value.set;
+        return new RDNSequence_RDNSequence(rdnSequenceElements.map((element) => {
+            return RelativeDistinguishedName_RelativeDistinguishedName.fromElement(element);
+        }));
+    }
+    toElement() {
+        const rdnSequenceElement = new asn1["DERElement"](0, 1, 16);
+        rdnSequenceElement.set = this.value.map((rdn) => {
+            return rdn.toElement();
+        });
+        return rdnSequenceElement;
+    }
+    static fromBytes(value) {
+        const el = new asn1["DERElement"]();
+        el.fromBytes(value);
+        return this.fromElement(el);
+    }
+    toBytes() {
+        return this.toElement().toBytes();
+    }
+}
+
+// CONCATENATED MODULE: ./source/InformationFramework/index.ts
+
+const informationFrameworkOID = new asn1["ObjectIdentifier"]([2, 5, 1, 1]);
+
+
+
+
 // CONCATENATED MODULE: ./source/AuthenticationFramework/TBSCertificate.ts
 
 
@@ -2558,9 +2905,9 @@ class TBSCertificate_TBSCertificate {
         let ver = 2;
         let serialNumber;
         let signature;
-        let issuer = [];
+        let issuer;
         let validity;
-        let subject = [];
+        let subject;
         let subjectPublicKeyInfo;
         let issuerUniqueID = undefined;
         let subjectUniqueID = undefined;
@@ -2618,57 +2965,13 @@ class TBSCertificate_TBSCertificate {
             signature = AlgorithmIdentifier_AlgorithmIdentifier.fromElement(tbsCertificateElements[2]);
         }
         {
-            switch (tbsCertificateElements[3].validateTag([0], [1], [16])) {
-                case 0: break;
-                case -1: throw new X509Error("Invalid tag number on TBSCertificate.issuer");
-                case -2: throw new X509Error("Invalid construction on TBSCertificate.issuer");
-                case -3: throw new X509Error("Invalid tag number on TBSCertificate.issuer");
-                default: throw new X509Error("Undefined error when validating TBSCertificate.issuer tag");
-            }
-            const rdnElements = tbsCertificateElements[3].sequence;
-            rdnElements.forEach(rdnElement => {
-                switch (rdnElement.validateTag([0], [1], [17])) {
-                    case 0: break;
-                    case -1: throw new X509Error("Invalid tag number on a TBSCertificate.issuer RDN");
-                    case -2: throw new X509Error("Invalid construction on a TBSCertificate.issuer RDN");
-                    case -3: throw new X509Error("Invalid tag number on a TBSCertificate.issuer RDN");
-                    default: throw new X509Error("Undefined error when validating a TBSCertificate.issuer RDN tag");
-                }
-                const rdnValues = rdnElement.set;
-                let rdn = [];
-                rdnValues.forEach(rdnValue => {
-                    rdn.push(AttributeTypeAndValue_AttributeTypeAndValue.fromElement(rdnValue));
-                });
-                issuer.push(rdn);
-            });
+            issuer = RDNSequence_RDNSequence.fromElement(tbsCertificateElements[3]);
         }
         {
             validity = Validity_Validity.fromElement(tbsCertificateElements[4]);
         }
         {
-            switch (tbsCertificateElements[5].validateTag([0], [1], [16])) {
-                case 0: break;
-                case -1: throw new X509Error("Invalid tag number on TBSCertificate.subject");
-                case -2: throw new X509Error("Invalid construction on TBSCertificate.subject");
-                case -3: throw new X509Error("Invalid tag number on TBSCertificate.subject");
-                default: throw new X509Error("Undefined error when validating TBSCertificate.subject tag");
-            }
-            const rdnElements = tbsCertificateElements[5].sequence;
-            rdnElements.forEach(rdnElement => {
-                switch (rdnElement.validateTag([0], [1], [17])) {
-                    case 0: break;
-                    case -1: throw new X509Error("Invalid tag number on a TBSCertificate.subject RDN");
-                    case -2: throw new X509Error("Invalid construction on a TBSCertificate.subject RDN");
-                    case -3: throw new X509Error("Invalid tag number on a TBSCertificate.subject RDN");
-                    default: throw new X509Error("Undefined error when validating a TBSCertificate.subject RDN tag");
-                }
-                const rdnValues = rdnElement.set;
-                let rdn = [];
-                rdnValues.forEach(rdnValue => {
-                    rdn.push(AttributeTypeAndValue_AttributeTypeAndValue.fromElement(rdnValue));
-                });
-                subject.push(rdn);
-            });
+            subject = RDNSequence_RDNSequence.fromElement(tbsCertificateElements[5]);
         }
         {
             subjectPublicKeyInfo = SubjectPublicKeyInfo_SubjectPublicKeyInfo.fromElement(tbsCertificateElements[6]);
@@ -2751,37 +3054,27 @@ class TBSCertificate_TBSCertificate {
             retSequence.push(this.signature.toElement());
         }
         {
-            let issuerElements = [];
-            this.issuer.forEach(rdn => {
-                let rdnElements = [];
-                rdn.forEach(rdnValue => {
-                    rdnElements.push(rdnValue.toElement());
-                });
-                const rdnElement = new asn1["DERElement"](0, 1, 17);
-                rdnElement.sequence = rdnElements;
-                issuerElements.push(rdnElement);
-            });
             const issuerElement = new asn1["DERElement"](0, 1, 16);
-            issuerElement.sequence = issuerElements;
-            retSequence.push(issuerElement);
+            issuerElement.sequence = this.issuer.value.map((rdn) => {
+                const rdnElement = new asn1["DERElement"](0, 1, 17);
+                rdnElement.sequence = rdn.value.map((rdnValue) => {
+                    return rdnValue.toElement();
+                });
+                return rdnElement;
+            });
         }
         {
             retSequence.push(this.validity.toElement());
         }
         {
-            let subjectElements = [];
-            this.subject.forEach(rdn => {
-                let rdnElements = [];
-                rdn.forEach(rdnValue => {
-                    rdnElements.push(rdnValue.toElement());
-                });
-                const rdnElement = new asn1["DERElement"](0, 1, 17);
-                rdnElement.sequence = rdnElements;
-                subjectElements.push(rdnElement);
-            });
             const subjectElement = new asn1["DERElement"](0, 1, 16);
-            subjectElement.sequence = subjectElements;
-            retSequence.push(subjectElement);
+            subjectElement.sequence = this.subject.value.map((rdn) => {
+                const rdnElement = new asn1["DERElement"](0, 1, 17);
+                rdnElement.sequence = rdn.value.map((rdnValue) => {
+                    return rdnValue.toElement();
+                });
+                return rdnElement;
+            });
         }
         {
             retSequence.push(this.subjectPublicKeyInfo.toElement());
@@ -3459,11 +3752,6 @@ const certificateExtensionsOID = new asn1["ObjectIdentifier"]([2, 5, 1, 26]);
 
 
 
-// CONCATENATED MODULE: ./source/InformationFramework/index.ts
-
-const informationFrameworkOID = new asn1["ObjectIdentifier"]([2, 5, 1, 1]);
-
-
 // CONCATENATED MODULE: ./source/PkiPmiExternalDataTypes/Version8/AccessDescription.ts
 
 
@@ -3552,6 +3840,8 @@ const pkiPMIProtocolSpecificationsOID = new asn1["ObjectIdentifier"]([2, 5, 1, 4
 /* concated harmony reexport ReasonFlags */__webpack_require__.d(__webpack_exports__, "ReasonFlags", function() { return ReasonFlags_ReasonFlags; });
 /* concated harmony reexport informationFrameworkOID */__webpack_require__.d(__webpack_exports__, "informationFrameworkOID", function() { return informationFrameworkOID; });
 /* concated harmony reexport AttributeTypeAndValue */__webpack_require__.d(__webpack_exports__, "AttributeTypeAndValue", function() { return AttributeTypeAndValue_AttributeTypeAndValue; });
+/* concated harmony reexport RDNSequence */__webpack_require__.d(__webpack_exports__, "RDNSequence", function() { return RDNSequence_RDNSequence; });
+/* concated harmony reexport RelativeDistinguishedName */__webpack_require__.d(__webpack_exports__, "RelativeDistinguishedName", function() { return RelativeDistinguishedName_RelativeDistinguishedName; });
 /* concated harmony reexport pkiPmiExternalDataTypesOID */__webpack_require__.d(__webpack_exports__, "pkiPmiExternalDataTypesOID", function() { return pkiPmiExternalDataTypesOID; });
 /* concated harmony reexport pkiPmiExternalDataTypesVersion8OID */__webpack_require__.d(__webpack_exports__, "pkiPmiExternalDataTypesVersion8OID", function() { return pkiPmiExternalDataTypesVersion8OID; });
 /* concated harmony reexport AccessDescription */__webpack_require__.d(__webpack_exports__, "AccessDescription", function() { return AccessDescription_AccessDescription; });

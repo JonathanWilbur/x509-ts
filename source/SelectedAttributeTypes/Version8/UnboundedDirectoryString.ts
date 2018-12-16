@@ -13,6 +13,15 @@ class UnboundedDirectoryString {
 
     constructor (readonly value : string) {}
 
+    public toString() : string {
+        return this.value;
+    }
+
+    public static print (element : DERElement) : string {
+        const uds : UnboundedDirectoryString = UnboundedDirectoryString.fromElement(element);
+        return uds.toString();
+    }
+
     public static fromElement (value : DERElement) : UnboundedDirectoryString {
         if (value.tagClass !== ASN1TagClass.universal)
             throw new errors.X509Error("UnboundedDirectoryString must be of universal class");

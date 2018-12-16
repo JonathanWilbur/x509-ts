@@ -11,7 +11,7 @@
     }
   ],
   "dependencies": {
-    "asn1-ts": "^1.5.0"
+    "asn1-ts": "^1.5.2"
   },
   "description": "X.509 certificate encoding and decoding in TypeScript",
   "devDependencies": {
@@ -63,5 +63,5 @@
     "test": "karma run"
   },
   "types": "./dist/types/index.d.ts",
-  "version": "0.7.0"
+  "version": "0.8.0"
 }

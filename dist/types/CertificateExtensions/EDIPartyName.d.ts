@@ -4,6 +4,7 @@ export default class EDIPartyName {
     readonly nameAssigner: UnboundedDirectoryString | undefined;
     readonly partyName: UnboundedDirectoryString;
     constructor(nameAssigner: UnboundedDirectoryString | undefined, partyName: UnboundedDirectoryString);
+    toString(): string;
     static fromElement(value: DERElement): EDIPartyName;
     toElement(): DERElement;
     static fromBytes(value: Uint8Array): EDIPartyName;
