@@ -358,7 +358,7 @@ class AttributeTypeAndValue {
 
         // "2.5.4.45": "x500UniqueIdentifier",
         "2.5.4.46": (element : DERElement) => element.printableString,
-        // "2.5.4.47": "enhancedSearchGuide",
+        // "2.5.4.47": "enhancedSearchGuide", // See http://www.faqs.org/rfcs/rfc2256.html
         // "2.5.4.48": "protocolInformation",
         // "2.5.4.50": "uniqueMember",
         // "2.5.4.51": "houseIdentifier",

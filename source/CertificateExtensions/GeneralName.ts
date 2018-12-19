@@ -1,6 +1,8 @@
-import { DERElement } from 'asn1-ts';
+import { DERElement, ASN1TagClass, ASN1Construction, ASN1UniversalType } from 'asn1-ts';
 import EDIPartyName from './EDIPartyName';
 import { RDNSequence } from '../InformationFramework';
+import * as errors from "../errors";
+
 // GeneralName ::= CHOICE {
 //   otherName                  [0]  INSTANCE OF OTHER-NAME,
 //   rfc822Name                 [1]  IA5String,
@@ -15,6 +17,17 @@ import { RDNSequence } from '../InformationFramework';
 // }
 
 // OTHER-NAME ::= TYPE-IDENTIFIER
+
+// From ITU X.681:
+// TYPE-IDENTIFIER ::= CLASS {
+//     &id OBJECT IDENTIFIER UNIQUE,
+//     &Type }
+//     WITH SYNTAX {&Type IDENTIFIED BY &id}
+
+// I had to go to WIKIPEDIA to get this freaking abbreviation, because I could
+// not find it in the X.400 specifications:
+// "An X.400 address is technically referred to as an Originator/Recipient (OR)
+// address."
 
 // ORAddress ::= SEQUENCE {
 //     built-in-standard-attributes        BuiltInStandardAttributes,
@@ -42,6 +55,33 @@ import { RDNSequence } from '../InformationFramework';
 //     -- see also teletex-organizational-unit-names
 //   }
 
+// BuiltInDomainDefinedAttributes ::=
+//   SEQUENCE SIZE (1..ub-domain-defined-attributes) OF
+//     BuiltInDomainDefinedAttribute
+
+// BuiltInDomainDefinedAttribute ::= SEQUENCE {
+//   type   PrintableString(SIZE (1..ub-domain-defined-attribute-type-length)),
+//   value  PrintableString(SIZE (1..ub-domain-defined-attribute-value-length))
+// }
+
+// ExtensionAttributes ::=
+//   SET SIZE (1..ub-extension-attributes) OF ExtensionAttribute
+
+// ExtensionAttribute ::= SEQUENCE {
+//   extension-attribute-type
+//     [0]  EXTENSION-ATTRIBUTE.&id({ExtensionAttributeTable}),
+//   extension-attribute-value
+//     [1]  EXTENSION-ATTRIBUTE.&Type
+//            ({ExtensionAttributeTable}{@extension-attribute-type})
+// }
+
+// EXTENSION-ATTRIBUTE ::= CLASS {
+//   &id    INTEGER(0..ub-extension-attributes) UNIQUE,
+//   &Type
+// }WITH SYNTAX {&Type
+//               IDENTIFIED BY &id
+// }
+
 // EDIPartyName ::= SEQUENCE {
 //     nameAssigner  [0]  UnboundedDirectoryString OPTIONAL,
 //     partyName     [1]  UnboundedDirectoryString,
@@ -61,9 +101,38 @@ export default GeneralName;
 
 export
 function printGeneralName (value : DERElement) : string {
+    if (value.tagClass !== ASN1TagClass.context) return "";
     switch (value.tagNumber) {
         case (0): { // otherName
-            return ""; // TODO:
+            switch (value.validateTag(
+                [ ASN1TagClass.universal ],
+                [ ASN1Construction.constructed ],
+                [ ASN1UniversalType.external ])
+            ) {
+                case 0: break;
+                case -1: throw new errors.X509Error("Invalid tag number on INSTANCE OF OTHER-NAME");
+                case -2: throw new errors.X509Error("Invalid construction on INSTANCE OF OTHER-NAME");
+                case -3: throw new errors.X509Error("Invalid tag number on INSTANCE OF OTHER-NAME");
+                default: throw new errors.X509Error("Undefined error when validating INSTANCE OF OTHER-NAME tag");
+            }
+
+            const otherNameElements : DERElement[] = value.sequence;
+            if (otherNameElements.length !== 2)
+                throw new errors.X509Error("Invalid number of elements in INSTANCE OF OTHER-NAME");
+
+            switch (otherNameElements[0].validateTag(
+                [ ASN1TagClass.universal ],
+                [ ASN1Construction.primitive ],
+                [ ASN1UniversalType.objectIdentifier ])
+            ) {
+                case 0: break;
+                case -1: throw new errors.X509Error("Invalid tag number on OTHER-NAME.id");
+                case -2: throw new errors.X509Error("Invalid construction on OTHER-NAME.id");
+                case -3: throw new errors.X509Error("Invalid tag number on OTHER-NAME.id");
+                default: throw new errors.X509Error("Undefined error when validating OTHER-NAME.id tag");
+            }
+
+            return `otherName:${otherNameElements[0].objectIdentifier}:${otherNameElements[1].value}`;
         }
         case (1): { // rfc822Name
             return `rfc822Name:${value.ia5String}`;
@@ -71,6 +140,15 @@ function printGeneralName (value : DERElement) : string {
         case (2): { // dNSName
             return `dnsName:${value.ia5String}`;
         }
+        /**
+         * From https://en.wikipedia.org/wiki/X.400:
+         * The standards themselves originally did not specify how these email
+         * addresses should be written (for instance on a business card) or
+         * even whether the field identifiers should be upper or lower case, or
+         * what character sets were allowed. RFC 1685 specified one encoding,
+         * based on a 1993 draft of ITU-T Recommendation F.401, which looked
+         * like: "G=Harald;S=Alvestrand;O=Uninett;PRMD=Uninett;A=;C=no"
+         */
         case (3): { // x400Address
             return ""; // TODO:
         }

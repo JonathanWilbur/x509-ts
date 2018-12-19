@@ -7,7 +7,7 @@ export { default as CertPolicyId } from "./CertPolicyId";
 export { default as CRLDistPointsSyntax } from "./CRLDistPointsSyntax";
 export { default as DistributionPoint } from "./DistributionPoint";
 export { default as DistributionPointName } from "./DistributionPointName";
-export { default as GeneralName } from "./GeneralName";
+export { default as GeneralName, printGeneralName } from "./GeneralName";
 export { default as GeneralNames } from "./GeneralNames";
 export { default as GeneralSubtree } from "./GeneralSubtree";
 export { default as GeneralSubtrees } from "./GeneralSubtrees";

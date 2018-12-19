@@ -2152,6 +2152,14 @@ class der_DERElement extends x690_X690Element {
     }
 }
 
+// CONCATENATED MODULE: ./source/types/typeidentifier.ts
+class TypeIdentifier {
+    constructor(id, type) {
+        this.id = id;
+        this.type = type;
+    }
+}
+
 // CONCATENATED MODULE: ./source/index.ts
 /* concated harmony reexport ASN1Element */__webpack_require__.d(__webpack_exports__, "ASN1Element", function() { return asn1_ASN1Element; });
 /* concated harmony reexport BERElement */__webpack_require__.d(__webpack_exports__, "BERElement", function() { return ber_BERElement; });
@@ -2167,6 +2175,7 @@ class der_DERElement extends x690_X690Element {
 /* concated harmony reexport ASN1CharactersError */__webpack_require__.d(__webpack_exports__, "ASN1CharactersError", function() { return ASN1CharactersError; });
 /* concated harmony reexport ASN1ConstructionError */__webpack_require__.d(__webpack_exports__, "ASN1ConstructionError", function() { return ASN1ConstructionError; });
 /* concated harmony reexport ObjectIdentifier */__webpack_require__.d(__webpack_exports__, "ObjectIdentifier", function() { return ObjectIdentifier; });
+/* concated harmony reexport TypeIdentifier */__webpack_require__.d(__webpack_exports__, "TypeIdentifier", function() { return TypeIdentifier; });
 /* concated harmony reexport MAX_UINT_32 */__webpack_require__.d(__webpack_exports__, "MAX_UINT_32", function() { return MAX_UINT_32; });
 /* concated harmony reexport MIN_UINT_32 */__webpack_require__.d(__webpack_exports__, "MIN_UINT_32", function() { return MIN_UINT_32; });
 /* concated harmony reexport MAX_SINT_32 */__webpack_require__.d(__webpack_exports__, "MAX_SINT_32", function() { return MAX_SINT_32; });
@@ -2189,6 +2198,7 @@ class der_DERElement extends x690_X690Element {
 /* concated harmony reexport canonicalNR3Regex */__webpack_require__.d(__webpack_exports__, "canonicalNR3Regex", function() { return canonicalNR3Regex; });
 /* concated harmony reexport distinguishedNR3Regex */__webpack_require__.d(__webpack_exports__, "distinguishedNR3Regex", function() { return distinguishedNR3Regex; });
 /* concated harmony reexport CANONICAL_TAG_CLASS_ORDERING */__webpack_require__.d(__webpack_exports__, "CANONICAL_TAG_CLASS_ORDERING", function() { return CANONICAL_TAG_CLASS_ORDERING; });
+
 
 
 
@@ -2961,21 +2971,11 @@ class TBSCertificate_TBSCertificate {
             }
             serialNumber = tbsCertificateElements[1].octetString;
         }
-        {
-            signature = AlgorithmIdentifier_AlgorithmIdentifier.fromElement(tbsCertificateElements[2]);
-        }
-        {
-            issuer = RDNSequence_RDNSequence.fromElement(tbsCertificateElements[3]);
-        }
-        {
-            validity = Validity_Validity.fromElement(tbsCertificateElements[4]);
-        }
-        {
-            subject = RDNSequence_RDNSequence.fromElement(tbsCertificateElements[5]);
-        }
-        {
-            subjectPublicKeyInfo = SubjectPublicKeyInfo_SubjectPublicKeyInfo.fromElement(tbsCertificateElements[6]);
-        }
+        signature = AlgorithmIdentifier_AlgorithmIdentifier.fromElement(tbsCertificateElements[2]);
+        issuer = RDNSequence_RDNSequence.fromElement(tbsCertificateElements[3]);
+        validity = Validity_Validity.fromElement(tbsCertificateElements[4]);
+        subject = RDNSequence_RDNSequence.fromElement(tbsCertificateElements[5]);
+        subjectPublicKeyInfo = SubjectPublicKeyInfo_SubjectPublicKeyInfo.fromElement(tbsCertificateElements[6]);
         if (tbsCertificateElements.length > 8) {
             for (let i = 8; i < tbsCertificateElements.length; i++) {
                 if (tbsCertificateElements[i].tagNumber <= tbsCertificateElements[i - 1].tagNumber)
@@ -3474,6 +3474,143 @@ class DistributionPoint_DistributionPoint {
     }
 }
 
+// CONCATENATED MODULE: ./source/CertificateExtensions/EDIPartyName.ts
+
+
+
+class EDIPartyName_EDIPartyName {
+    constructor(nameAssigner, partyName) {
+        this.nameAssigner = nameAssigner;
+        this.partyName = partyName;
+    }
+    toString() {
+        return this.partyName.toString();
+    }
+    static fromElement(value) {
+        switch (value.validateTag([0], [1], [16])) {
+            case 0: break;
+            case -1: throw new X509Error("Invalid tag number on EDIPartyName");
+            case -2: throw new X509Error("Invalid construction on EDIPartyName");
+            case -3: throw new X509Error("Invalid tag number on EDIPartyName");
+            default: throw new X509Error("Undefined error when validating EDIPartyName tag");
+        }
+        const ediPartNameElements = value.sequence;
+        if (!asn1["DERElement"].isUniquelyTagged(ediPartNameElements))
+            throw new X509Error("Elements of EDIPartyName were not uniquely tagged");
+        let nameAssigner;
+        let partyName;
+        let fixedPositionElementsEncountered = 0;
+        ediPartNameElements.forEach((element, index) => {
+            if (element.tagClass === 2) {
+                if (element.tagNumber === 0) {
+                    if (element.construction !== 0)
+                        throw new X509Error("EDIPartyName.nameAssigner was not primitively constructed");
+                    if (index !== 0)
+                        throw new X509Error("nameAssigner out of order in EDIPartyName");
+                    nameAssigner = UnboundedDirectoryString_UnboundedDirectoryString.fromElement(element);
+                    fixedPositionElementsEncountered++;
+                }
+                else if (element.tagNumber === 1) {
+                    if (element.construction !== 0)
+                        throw new X509Error("EDIPartyName.partyName was not primitively constructed");
+                    if (index > 1)
+                        throw new X509Error("partyName out of order in EDIPartyName");
+                    if (index === 1 &&
+                        (ediPartNameElements[0].tagClass !== 2 ||
+                            ediPartNameElements[0].construction !== 0 ||
+                            ediPartNameElements[0].tagNumber !== 1))
+                        throw new X509Error("EDIPartyName missing nameAssigner element before partyName when partyName was the second element");
+                    partyName = UnboundedDirectoryString_UnboundedDirectoryString.fromElement(element);
+                    fixedPositionElementsEncountered++;
+                }
+            }
+        });
+        if (!partyName)
+            throw new X509Error("EDIPartyName.partyName was not defined");
+        if (!asn1["DERElement"].isInCanonicalOrder(ediPartNameElements.slice(fixedPositionElementsEncountered)))
+            throw new X509Error("Extended elements of EDIPartyName were not in canonical order");
+        return new EDIPartyName_EDIPartyName(nameAssigner, partyName);
+    }
+    toElement() {
+        let ediPartNameElements = [];
+        if (this.nameAssigner) {
+            ediPartNameElements.push(this.nameAssigner.toElement());
+            ediPartNameElements[0].tagNumber = 0;
+        }
+        ediPartNameElements.push(this.partyName.toElement());
+        ediPartNameElements[(ediPartNameElements.length - 1)].tagNumber = 1;
+        const ediPartNameElement = new asn1["DERElement"](0, 1, 16);
+        ediPartNameElement.sequence = ediPartNameElements;
+        return ediPartNameElement;
+    }
+    static fromBytes(value) {
+        const el = new asn1["DERElement"]();
+        el.fromBytes(value);
+        return this.fromElement(el);
+    }
+    toBytes() {
+        return this.toElement().toBytes();
+    }
+}
+
+// CONCATENATED MODULE: ./source/CertificateExtensions/GeneralName.ts
+
+
+
+function printGeneralName(value) {
+    if (value.tagClass !== 2)
+        return "";
+    switch (value.tagNumber) {
+        case (0): {
+            switch (value.validateTag([0], [1], [8])) {
+                case 0: break;
+                case -1: throw new X509Error("Invalid tag number on INSTANCE OF OTHER-NAME");
+                case -2: throw new X509Error("Invalid construction on INSTANCE OF OTHER-NAME");
+                case -3: throw new X509Error("Invalid tag number on INSTANCE OF OTHER-NAME");
+                default: throw new X509Error("Undefined error when validating INSTANCE OF OTHER-NAME tag");
+            }
+            const otherNameElements = value.sequence;
+            if (otherNameElements.length !== 2)
+                throw new X509Error("Invalid number of elements in INSTANCE OF OTHER-NAME");
+            switch (otherNameElements[0].validateTag([0], [0], [6])) {
+                case 0: break;
+                case -1: throw new X509Error("Invalid tag number on OTHER-NAME.id");
+                case -2: throw new X509Error("Invalid construction on OTHER-NAME.id");
+                case -3: throw new X509Error("Invalid tag number on OTHER-NAME.id");
+                default: throw new X509Error("Undefined error when validating OTHER-NAME.id tag");
+            }
+            return `otherName:${otherNameElements[0].objectIdentifier}:${otherNameElements[1].value}`;
+        }
+        case (1): {
+            return `rfc822Name:${value.ia5String}`;
+        }
+        case (2): {
+            return `dnsName:${value.ia5String}`;
+        }
+        case (3): {
+            return "";
+        }
+        case (4): {
+            const rdn = RDNSequence_RDNSequence.fromElement(value);
+            return rdn.toString();
+        }
+        case (5): {
+            const epn = EDIPartyName_EDIPartyName.fromElement(value);
+            return `ediPartyName:${epn.partyName}`;
+        }
+        case (6): {
+            return `uniformResourceIdentifier:${value.ia5String}`;
+        }
+        case (7): {
+            return `iPAddress:${value.octetString}`;
+        }
+        case (8): {
+            return `registeredID:${value.objectIdentifier}`;
+        }
+        default: return "UNKNOWN NAME SYNTAX";
+    }
+}
+
 // CONCATENATED MODULE: ./source/CertificateExtensions/GeneralSubtree.ts
 
 
@@ -3752,6 +3889,7 @@ const certificateExtensionsOID = new asn1["ObjectIdentifier"]([2, 5, 1, 26]);
 
 
 
+
 // CONCATENATED MODULE: ./source/PkiPmiExternalDataTypes/Version8/AccessDescription.ts
 
 
@@ -3834,6 +3972,7 @@ const pkiPMIProtocolSpecificationsOID = new asn1["ObjectIdentifier"]([2, 5, 1, 4
 /* concated harmony reexport AuthorityKeyIdentifier */__webpack_require__.d(__webpack_exports__, "AuthorityKeyIdentifier", function() { return AuthorityKeyIdentifier_AuthorityKeyIdentifier; });
 /* concated harmony reexport BasicConstraintsSyntax */__webpack_require__.d(__webpack_exports__, "BasicConstraintsSyntax", function() { return BasicConstraintsSyntax_BasicConstraintsSyntax; });
 /* concated harmony reexport DistributionPoint */__webpack_require__.d(__webpack_exports__, "DistributionPoint", function() { return DistributionPoint_DistributionPoint; });
+/* concated harmony reexport printGeneralName */__webpack_require__.d(__webpack_exports__, "printGeneralName", function() { return printGeneralName; });
 /* concated harmony reexport GeneralSubtree */__webpack_require__.d(__webpack_exports__, "GeneralSubtree", function() { return GeneralSubtree_GeneralSubtree; });
 /* concated harmony reexport IssuingDistPointSyntax */__webpack_require__.d(__webpack_exports__, "IssuingDistPointSyntax", function() { return IssuingDistPointSyntax_IssuingDistPointSyntax; });
 /* concated harmony reexport NameConstraintsSyntax */__webpack_require__.d(__webpack_exports__, "NameConstraintsSyntax", function() { return NameConstraintsSyntax_NameConstraintsSyntax; });
