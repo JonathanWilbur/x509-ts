@@ -3799,6 +3799,57 @@ class IssuingDistPointSyntax_IssuingDistPointSyntax {
     }
 }
 
+// CONCATENATED MODULE: ./source/CertificateExtensions/KeyUsage.ts
+
+
+class KeyUsage_KeyUsage {
+    constructor(digitalSignature, contentCommitment, keyEncipherment, dataEncipherment, keyAgreement, keyCertSign, cRLSign, encipherOnly, decipherOnly) {
+        this.digitalSignature = digitalSignature;
+        this.contentCommitment = contentCommitment;
+        this.keyEncipherment = keyEncipherment;
+        this.dataEncipherment = dataEncipherment;
+        this.keyAgreement = keyAgreement;
+        this.keyCertSign = keyCertSign;
+        this.cRLSign = cRLSign;
+        this.encipherOnly = encipherOnly;
+        this.decipherOnly = decipherOnly;
+    }
+    static fromElement(value) {
+        switch (value.validateTag([0], [0], [3])) {
+            case 0: break;
+            case -1: throw new X509Error("Invalid tag number on KeyUsage");
+            case -2: throw new X509Error("Invalid construction on KeyUsage");
+            case -3: throw new X509Error("Invalid tag number on KeyUsage");
+            default: throw new X509Error("Undefined error when validating KeyUsage tag");
+        }
+        const bits = value.bitString;
+        return new KeyUsage_KeyUsage(((bits.length > 0) ? bits[0] : false), ((bits.length > 1) ? bits[1] : false), ((bits.length > 2) ? bits[2] : false), ((bits.length > 3) ? bits[3] : false), ((bits.length > 4) ? bits[4] : false), ((bits.length > 5) ? bits[5] : false), ((bits.length > 6) ? bits[6] : false), ((bits.length > 7) ? bits[7] : false), ((bits.length > 8) ? bits[8] : false));
+    }
+    toElement() {
+        const keyUsageElement = new asn1["DERElement"](0, 0, 3);
+        keyUsageElement.bitString = [
+            this.digitalSignature,
+            this.contentCommitment,
+            this.keyEncipherment,
+            this.dataEncipherment,
+            this.keyAgreement,
+            this.keyCertSign,
+            this.cRLSign,
+            this.encipherOnly,
+            this.decipherOnly
+        ];
+        return keyUsageElement;
+    }
+    static fromBytes(value) {
+        const el = new asn1["DERElement"]();
+        el.fromBytes(value);
+        return KeyUsage_KeyUsage.fromElement(el);
+    }
+    toBytes() {
+        return this.toElement().toBytes();
+    }
+}
+
 // CONCATENATED MODULE: ./source/CertificateExtensions/NameConstraintsSyntax.ts
 
 
@@ -3878,9 +3929,346 @@ class NameConstraintsSyntax_NameConstraintsSyntax {
     }
 }
 
+// CONCATENATED MODULE: ./source/CertificateExtensions/PolicyConstraintsSyntax.ts
+
+
+class PolicyConstraintsSyntax_PolicyConstraintsSyntax {
+    constructor(requireExplicitPolicy, inhibitPolicyMapping) {
+        this.requireExplicitPolicy = requireExplicitPolicy;
+        this.inhibitPolicyMapping = inhibitPolicyMapping;
+        if (!requireExplicitPolicy && !inhibitPolicyMapping)
+            throw new X509Error("PolicyConstraintsSyntax must have either requireExplicitPolicy or inhibitPolicyMapping set.");
+    }
+    static fromElement(value) {
+        switch (value.validateTag([0], [1], [16])) {
+            case 0: break;
+            case -1: throw new X509Error("Invalid tag number on PolicyConstraintsSyntax");
+            case -2: throw new X509Error("Invalid construction on PolicyConstraintsSyntax");
+            case -3: throw new X509Error("Invalid tag number on PolicyConstraintsSyntax");
+            default: throw new X509Error("Undefined error when validating PolicyConstraintsSyntax tag");
+        }
+        const policyConstraintsSyntaxElements = value.sequence;
+        if (policyConstraintsSyntaxElements.length === 0)
+            throw new X509Error("PolicyConstraintsSyntax SEQUENCE was constituted from zero elements");
+        let requireExplicitPolicy;
+        let inhibitPolicyMapping;
+        let fixedPositionElementsEncountered = 0;
+        policyConstraintsSyntaxElements.forEach((element, index) => {
+            if (element.tagClass === 2) {
+                if (element.tagNumber === 0) {
+                    if (element.construction !== 0)
+                        throw new X509Error("PolicyConstraintsSyntax.requireExplicitPolicy was not primitively constructed");
+                    if (requireExplicitPolicy)
+                        throw new X509Error("PolicyConstraintsSyntax.requireExplicitPolicy already defined");
+                    requireExplicitPolicy = element.integer;
+                    fixedPositionElementsEncountered++;
+                }
+                else if (element.tagNumber === 1) {
+                    if (element.construction !== 0)
+                        throw new X509Error("PolicyConstraintsSyntax.inhibitPolicyMapping was not primitively constructed");
+                    if (inhibitPolicyMapping)
+                        throw new X509Error("PolicyConstraintsSyntax.inhibitPolicyMapping already defined");
+                    if (index === 1 &&
+                        (policyConstraintsSyntaxElements[0].tagClass !== 0 ||
+                            policyConstraintsSyntaxElements[0].construction !== 0 ||
+                            policyConstraintsSyntaxElements[0].tagNumber !== 2))
+                        throw new X509Error("PolicyConstraintsSyntax missing requireExplicitPolicy element before inhibitPolicyMapping when inhibitPolicyMapping was the second element");
+                    inhibitPolicyMapping = element.integer;
+                    fixedPositionElementsEncountered++;
+                }
+            }
+        });
+        if (!asn1["DERElement"].isUniquelyTagged(policyConstraintsSyntaxElements.slice(fixedPositionElementsEncountered)))
+            throw new X509Error("Elements of PolicyConstraintsSyntax were not uniquely tagged");
+        if (!asn1["DERElement"].isInCanonicalOrder(policyConstraintsSyntaxElements.slice(fixedPositionElementsEncountered)))
+            throw new X509Error("Extended elements of PolicyConstraintsSyntax were not in canonical order");
+        return new PolicyConstraintsSyntax_PolicyConstraintsSyntax(requireExplicitPolicy, inhibitPolicyMapping);
+    }
+    toElement() {
+        let policyConstraintsSyntaxElements = [];
+        if (this.requireExplicitPolicy) {
+            const requireExplicitPolicyElement = new asn1["DERElement"](2, 0, 0);
+            requireExplicitPolicyElement.integer = this.requireExplicitPolicy;
+            policyConstraintsSyntaxElements.push(requireExplicitPolicyElement);
+        }
+        if (this.inhibitPolicyMapping) {
+            const inhibitPolicyMappingElement = new asn1["DERElement"](2, 0, 1);
+            inhibitPolicyMappingElement.integer = this.inhibitPolicyMapping;
+            policyConstraintsSyntaxElements.push(inhibitPolicyMappingElement);
+        }
+        const policyConstraintsSyntaxElement = new asn1["DERElement"](0, 1, 16);
+        policyConstraintsSyntaxElement.sequence = policyConstraintsSyntaxElements;
+        return policyConstraintsSyntaxElement;
+    }
+    static fromBytes(value) {
+        const el = new asn1["DERElement"]();
+        el.fromBytes(value);
+        return PolicyConstraintsSyntax_PolicyConstraintsSyntax.fromElement(el);
+    }
+    toBytes() {
+        return this.toElement().toBytes();
+    }
+}
+
+// CONCATENATED MODULE: ./source/CertificateExtensions/PolicyQualifierInfo.ts
+
+
+class PolicyQualifierInfo_PolicyQualifierInfo {
+    constructor(policyQualifierId, qualifier) {
+        this.policyQualifierId = policyQualifierId;
+        this.qualifier = qualifier;
+    }
+    static fromElement(value) {
+        switch (value.validateTag([0], [1], [16])) {
+            case 0: break;
+            case -1: throw new X509Error("Invalid tag number on PolicyQualifierInfo");
+            case -2: throw new X509Error("Invalid construction on PolicyQualifierInfo");
+            case -3: throw new X509Error("Invalid tag number on PolicyQualifierInfo");
+            default: throw new X509Error("Undefined error when validating PolicyQualifierInfo tag");
+        }
+        const policyQualifierInfoElements = value.sequence;
+        let policyQualifierId;
+        let qualifier;
+        if (policyQualifierInfoElements.length === 0)
+            throw new X509Error("PolicyQualifierInfo contained zero elements");
+        switch (policyQualifierInfoElements[0].validateTag([0], [0], [6])) {
+            case 0: break;
+            case -1: throw new X509Error("Invalid tag number on PolicyQualifierInfo.policyQualifierId");
+            case -2: throw new X509Error("Invalid construction on PolicyQualifierInfo.policyQualifierId");
+            case -3: throw new X509Error("Invalid tag number on PolicyQualifierInfo.policyQualifierId");
+            default: throw new X509Error("Undefined error when validating PolicyQualifierInfo.policyQualifierId tag");
+        }
+        policyQualifierId = policyQualifierInfoElements[0].objectIdentifier;
+        let fixedPositionElementsEncountered = 1;
+        if (policyQualifierInfoElements.length > 1) {
+            qualifier = policyQualifierInfoElements[1];
+            fixedPositionElementsEncountered++;
+        }
+        if (!asn1["DERElement"].isInCanonicalOrder(policyQualifierInfoElements.slice(fixedPositionElementsEncountered)))
+            throw new X509Error("Extended elements of PolicyQualifierInfo were not in canonical order");
+        return new PolicyQualifierInfo_PolicyQualifierInfo(policyQualifierId, qualifier);
+    }
+    toElement() {
+        let policyQualifierInfoElements = [
+            new asn1["DERElement"](0, 0, 6)
+        ];
+        if (this.qualifier)
+            policyQualifierInfoElements.push(this.qualifier);
+        const policyQualifierInfoElement = new asn1["DERElement"](0, 1, 16);
+        policyQualifierInfoElement.sequence = policyQualifierInfoElements;
+        return policyQualifierInfoElement;
+    }
+    static fromBytes(value) {
+        const el = new asn1["DERElement"]();
+        el.fromBytes(value);
+        return PolicyQualifierInfo_PolicyQualifierInfo.fromElement(el);
+    }
+    toBytes() {
+        return this.toElement().toBytes();
+    }
+}
+
+// CONCATENATED MODULE: ./source/CertificateExtensions/PolicyInformation.ts
+
+
+
+class PolicyInformation_PolicyInformation {
+    constructor(policyIdentifier, policyQualifiers) {
+        this.policyIdentifier = policyIdentifier;
+        this.policyQualifiers = policyQualifiers;
+    }
+    static fromElement(value) {
+        switch (value.validateTag([0], [1], [16])) {
+            case 0: break;
+            case -1: throw new X509Error("Invalid tag number on PolicyInformation");
+            case -2: throw new X509Error("Invalid construction on PolicyInformation");
+            case -3: throw new X509Error("Invalid tag number on PolicyInformation");
+            default: throw new X509Error("Undefined error when validating PolicyInformation tag");
+        }
+        const policyInformationElements = value.sequence;
+        let policyIdentifier;
+        let policyQualifiers;
+        switch (policyInformationElements[0].validateTag([0], [0], [6])) {
+            case 0: break;
+            case -1: throw new X509Error("Invalid tag number on PolicyInformation.policyIdentifier");
+            case -2: throw new X509Error("Invalid construction on PolicyInformation.policyIdentifier");
+            case -3: throw new X509Error("Invalid tag number on PolicyInformation.policyIdentifier");
+            default: throw new X509Error("Undefined error when validating PolicyInformation.policyIdentifier tag");
+        }
+        policyIdentifier = policyInformationElements[0].objectIdentifier;
+        let fixedPositionElementsEncountered = 1;
+        if (policyInformationElements.length > 1) {
+            policyQualifiers = policyInformationElements[1].sequence.map((element) => {
+                return PolicyQualifierInfo_PolicyQualifierInfo.fromElement(element);
+            });
+            fixedPositionElementsEncountered++;
+        }
+        if (!asn1["DERElement"].isInCanonicalOrder(policyInformationElements.slice(fixedPositionElementsEncountered)))
+            throw new X509Error("Extended elements of PolicyInformation were not in canonical order");
+        return new PolicyInformation_PolicyInformation(policyIdentifier, policyQualifiers);
+    }
+    toElement() {
+        let policyInformationElements = [
+            new asn1["DERElement"](0, 0, 6)
+        ];
+        if (this.policyQualifiers) {
+            const policyQualifiersElement = new asn1["DERElement"](0, 1, 16);
+            policyQualifiersElement.sequence = this.policyQualifiers.map((pqi) => {
+                return pqi.toElement();
+            });
+            policyInformationElements.push(policyQualifiersElement);
+        }
+        const policyInformationElement = new asn1["DERElement"](0, 1, 16);
+        policyInformationElement.sequence = policyInformationElements;
+        return policyInformationElement;
+    }
+    static fromBytes(value) {
+        const el = new asn1["DERElement"]();
+        el.fromBytes(value);
+        return PolicyInformation_PolicyInformation.fromElement(el);
+    }
+    toBytes() {
+        return this.toElement().toBytes();
+    }
+}
+
+// CONCATENATED MODULE: ./source/CertificateExtensions/PolicyMapping.ts
+
+
+class PolicyMapping_PolicyMapping {
+    constructor(issuerDomainPolicy, subjectDomainPolicy) {
+        this.issuerDomainPolicy = issuerDomainPolicy;
+        this.subjectDomainPolicy = subjectDomainPolicy;
+    }
+    static fromElement(value) {
+        switch (value.validateTag([0], [1], [16])) {
+            case 0: break;
+            case -1: throw new X509Error("Invalid tag number on inner sequence of PolicyMappingsSyntax");
+            case -2: throw new X509Error("Invalid construction on inner sequence of PolicyMappingsSyntax");
+            case -3: throw new X509Error("Invalid tag number on inner sequence of PolicyMappingsSyntax");
+            default: throw new X509Error("Undefined error when validating inner sequence of PolicyMappingsSyntax tag");
+        }
+        const policyMappingElements = value.sequence;
+        if (policyMappingElements.length < 2)
+            throw new X509Error("Too few elements in inner sequence of PolicyMappingsSyntax");
+        switch (policyMappingElements[0].validateTag([0], [0], [6])) {
+            case 0: break;
+            case -1: throw new X509Error("Invalid tag number on inner sequence of PolicyMappingsSyntax.SEQUENCE.SEQUENCE.subjectDomainPolicy");
+            case -2: throw new X509Error("Invalid construction on inner sequence of PolicyMappingsSyntax.SEQUENCE.SEQUENCE.subjectDomainPolicy");
+            case -3: throw new X509Error("Invalid tag number on inner sequence of PolicyMappingsSyntax.SEQUENCE.SEQUENCE.subjectDomainPolicy");
+            default: throw new X509Error("Undefined error when validating inner sequence of PolicyMappingsSyntax.SEQUENCE.SEQUENCE.subjectDomainPolicy tag");
+        }
+        switch (policyMappingElements[1].validateTag([0], [0], [6])) {
+            case 0: break;
+            case -1: throw new X509Error("Invalid tag number on inner sequence of PolicyMappingsSyntax.SEQUENCE.SEQUENCE.issuerDomainPolicy");
+            case -2: throw new X509Error("Invalid construction on inner sequence of PolicyMappingsSyntax.SEQUENCE.SEQUENCE.issuerDomainPolicy");
+            case -3: throw new X509Error("Invalid tag number on inner sequence of PolicyMappingsSyntax.SEQUENCE.SEQUENCE.issuerDomainPolicy");
+            default: throw new X509Error("Undefined error when validating inner sequence of PolicyMappingsSyntax.SEQUENCE.SEQUENCE.issuerDomainPolicy tag");
+        }
+        return new PolicyMapping_PolicyMapping(policyMappingElements[0].objectIdentifier, policyMappingElements[1].objectIdentifier);
+    }
+    toElement() {
+        const issuerDomainPolicyElement = new asn1["DERElement"](0, 0, 6);
+        issuerDomainPolicyElement.objectIdentifier = this.issuerDomainPolicy;
+        const subjectDomainPolicyElement = new asn1["DERElement"](0, 0, 6);
+        subjectDomainPolicyElement.objectIdentifier = this.subjectDomainPolicy;
+        const policyMappingElement = new asn1["DERElement"](0, 1, 16);
+        policyMappingElement.sequence = [
+            issuerDomainPolicyElement,
+            subjectDomainPolicyElement
+        ];
+        return policyMappingElement;
+    }
+    static fromBytes(value) {
+        const el = new asn1["DERElement"]();
+        el.fromBytes(value);
+        return PolicyMapping_PolicyMapping.fromElement(el);
+    }
+    toBytes() {
+        return this.toElement().toBytes();
+    }
+}
+
+// CONCATENATED MODULE: ./source/CertificateExtensions/PrivateKeyUsagePeriod.ts
+
+
+class PrivateKeyUsagePeriod_PrivateKeyUsagePeriod {
+    constructor(notBefore, notAfter) {
+        this.notBefore = notBefore;
+        this.notAfter = notAfter;
+        if (!notBefore && !notAfter)
+            throw new X509Error("Either notBefore or notAfter must be set in PrivateKeyUsagePeriod");
+    }
+    static fromElement(value) {
+        switch (value.validateTag([0], [1], [16])) {
+            case 0: break;
+            case -1: throw new X509Error("Invalid tag number on inner sequence of PrivateKeyUsagePeriod");
+            case -2: throw new X509Error("Invalid construction on inner sequence of PrivateKeyUsagePeriod");
+            case -3: throw new X509Error("Invalid tag number on inner sequence of PrivateKeyUsagePeriod");
+            default: throw new X509Error("Undefined error when validating inner sequence of PrivateKeyUsagePeriod tag");
+        }
+        const privateKeyUsagePeriodElements = value.sequence;
+        if (privateKeyUsagePeriodElements.length === 0)
+            throw new X509Error("PrivateKeyUsagePeriod must have at least one element in SEQUENCE");
+        let notBefore;
+        let notAfter;
+        let fixedPositionElementsEncountered = 0;
+        privateKeyUsagePeriodElements.forEach((element) => {
+            if (element.tagClass === 2) {
+                if (element.tagNumber === 0) {
+                    if (notBefore)
+                        throw new X509Error("PrivateKeyUsagePeriod.notBefore already defined");
+                    notBefore = element.generalizedTime;
+                    fixedPositionElementsEncountered++;
+                }
+                else if (element.tagNumber === 1) {
+                    if (notAfter)
+                        throw new X509Error("PrivateKeyUsagePeriod.notAfter already defined");
+                    notAfter = element.generalizedTime;
+                    fixedPositionElementsEncountered++;
+                }
+            }
+        });
+        if (!asn1["DERElement"].isInCanonicalOrder(privateKeyUsagePeriodElements.slice(fixedPositionElementsEncountered)))
+            throw new X509Error("Extended elements of PrivateKeyUsagePeriod were not in canonical order");
+        return new PrivateKeyUsagePeriod_PrivateKeyUsagePeriod(notBefore, notAfter);
+    }
+    toElement() {
+        let privateKeyUsagePeriodElements = [];
+        if (this.notBefore) {
+            const notBeforeElement = new asn1["DERElement"](0, 0, 24);
+            notBeforeElement.generalizedTime = this.notBefore;
+            privateKeyUsagePeriodElements.push(notBeforeElement);
+        }
+        if (this.notAfter) {
+            const notAfterElement = new asn1["DERElement"](0, 0, 24);
+            notAfterElement.generalizedTime = this.notAfter;
+            privateKeyUsagePeriodElements.push(notAfterElement);
+        }
+        const privateKeyUsagePeriodElement = new asn1["DERElement"](0, 1, 16);
+        privateKeyUsagePeriodElement.sequence = privateKeyUsagePeriodElements;
+        return privateKeyUsagePeriodElement;
+    }
+    static fromBytes(value) {
+        const el = new asn1["DERElement"]();
+        el.fromBytes(value);
+        return PrivateKeyUsagePeriod_PrivateKeyUsagePeriod.fromElement(el);
+    }
+    toBytes() {
+        return this.toElement().toBytes();
+    }
+}
+
 // CONCATENATED MODULE: ./source/CertificateExtensions/index.ts
 
 const certificateExtensionsOID = new asn1["ObjectIdentifier"]([2, 5, 1, 26]);
+
+
+
+
+
+
+
 
 
 
@@ -3972,10 +4360,17 @@ const pkiPMIProtocolSpecificationsOID = new asn1["ObjectIdentifier"]([2, 5, 1, 4
 /* concated harmony reexport AuthorityKeyIdentifier */__webpack_require__.d(__webpack_exports__, "AuthorityKeyIdentifier", function() { return AuthorityKeyIdentifier_AuthorityKeyIdentifier; });
 /* concated harmony reexport BasicConstraintsSyntax */__webpack_require__.d(__webpack_exports__, "BasicConstraintsSyntax", function() { return BasicConstraintsSyntax_BasicConstraintsSyntax; });
 /* concated harmony reexport DistributionPoint */__webpack_require__.d(__webpack_exports__, "DistributionPoint", function() { return DistributionPoint_DistributionPoint; });
+/* concated harmony reexport EDIPartyName */__webpack_require__.d(__webpack_exports__, "EDIPartyName", function() { return EDIPartyName_EDIPartyName; });
 /* concated harmony reexport printGeneralName */__webpack_require__.d(__webpack_exports__, "printGeneralName", function() { return printGeneralName; });
 /* concated harmony reexport GeneralSubtree */__webpack_require__.d(__webpack_exports__, "GeneralSubtree", function() { return GeneralSubtree_GeneralSubtree; });
 /* concated harmony reexport IssuingDistPointSyntax */__webpack_require__.d(__webpack_exports__, "IssuingDistPointSyntax", function() { return IssuingDistPointSyntax_IssuingDistPointSyntax; });
+/* concated harmony reexport KeyUsage */__webpack_require__.d(__webpack_exports__, "KeyUsage", function() { return KeyUsage_KeyUsage; });
 /* concated harmony reexport NameConstraintsSyntax */__webpack_require__.d(__webpack_exports__, "NameConstraintsSyntax", function() { return NameConstraintsSyntax_NameConstraintsSyntax; });
+/* concated harmony reexport PolicyConstraintsSyntax */__webpack_require__.d(__webpack_exports__, "PolicyConstraintsSyntax", function() { return PolicyConstraintsSyntax_PolicyConstraintsSyntax; });
+/* concated harmony reexport PolicyInformation */__webpack_require__.d(__webpack_exports__, "PolicyInformation", function() { return PolicyInformation_PolicyInformation; });
+/* concated harmony reexport PolicyMapping */__webpack_require__.d(__webpack_exports__, "PolicyMapping", function() { return PolicyMapping_PolicyMapping; });
+/* concated harmony reexport PolicyQualifierInfo */__webpack_require__.d(__webpack_exports__, "PolicyQualifierInfo", function() { return PolicyQualifierInfo_PolicyQualifierInfo; });
+/* concated harmony reexport PrivateKeyUsagePeriod */__webpack_require__.d(__webpack_exports__, "PrivateKeyUsagePeriod", function() { return PrivateKeyUsagePeriod_PrivateKeyUsagePeriod; });
 /* concated harmony reexport ReasonFlags */__webpack_require__.d(__webpack_exports__, "ReasonFlags", function() { return ReasonFlags_ReasonFlags; });
 /* concated harmony reexport informationFrameworkOID */__webpack_require__.d(__webpack_exports__, "informationFrameworkOID", function() { return informationFrameworkOID; });
 /* concated harmony reexport AttributeTypeAndValue */__webpack_require__.d(__webpack_exports__, "AttributeTypeAndValue", function() { return AttributeTypeAndValue_AttributeTypeAndValue; });
