@@ -4278,6 +4278,10 @@ const certificateExtensionsOID = new asn1["ObjectIdentifier"]([2, 5, 1, 26]);
 
 
 
+// CONCATENATED MODULE: ./source/MTSAbstractService/index.ts
+
+const mtsAbstractServiceOID = new asn1["ObjectIdentifier"]([2, 6, 3, 0, 1]);
+
 // CONCATENATED MODULE: ./source/PkiPmiExternalDataTypes/Version8/AccessDescription.ts
 
 
@@ -4345,6 +4349,25 @@ const pkiPMIProtocolSpecificationsVersion8OID = new asn1["ObjectIdentifier"]([2,
 const pkiPMIProtocolSpecificationsOID = new asn1["ObjectIdentifier"]([2, 5, 1, 43]);
 
 
+// CONCATENATED MODULE: ./source/PkiPmiWrapper/Version8/index.ts
+
+const pkiPMIWrapperVersion8OID = new asn1["ObjectIdentifier"]([2, 5, 1, 42, 8]);
+
+// CONCATENATED MODULE: ./source/PkiPmiWrapper/index.ts
+
+const pkiPMIWrapperOID = new asn1["ObjectIdentifier"]([2, 5, 1, 42]);
+
+
+// CONCATENATED MODULE: ./source/SelectedAttributeTypes/Version8/index.ts
+
+const selectedAttributeTypesVersion8OID = new asn1["ObjectIdentifier"]([2, 5, 1, 5, 8]);
+
+
+// CONCATENATED MODULE: ./source/SelectedAttributeTypes/index.ts
+
+const selectedAttributeTypesOID = new asn1["ObjectIdentifier"]([2, 5, 1, 5]);
+
+
 // CONCATENATED MODULE: ./source/index.ts
 /* concated harmony reexport X509Error */__webpack_require__.d(__webpack_exports__, "X509Error", function() { return X509Error; });
 /* concated harmony reexport attributeCertificateDefinitionsOID */__webpack_require__.d(__webpack_exports__, "attributeCertificateDefinitionsOID", function() { return attributeCertificateDefinitionsOID; });
@@ -4376,11 +4399,20 @@ const pkiPMIProtocolSpecificationsOID = new asn1["ObjectIdentifier"]([2, 5, 1, 4
 /* concated harmony reexport AttributeTypeAndValue */__webpack_require__.d(__webpack_exports__, "AttributeTypeAndValue", function() { return AttributeTypeAndValue_AttributeTypeAndValue; });
 /* concated harmony reexport RDNSequence */__webpack_require__.d(__webpack_exports__, "RDNSequence", function() { return RDNSequence_RDNSequence; });
 /* concated harmony reexport RelativeDistinguishedName */__webpack_require__.d(__webpack_exports__, "RelativeDistinguishedName", function() { return RelativeDistinguishedName_RelativeDistinguishedName; });
+/* concated harmony reexport mtsAbstractServiceOID */__webpack_require__.d(__webpack_exports__, "mtsAbstractServiceOID", function() { return mtsAbstractServiceOID; });
 /* concated harmony reexport pkiPmiExternalDataTypesOID */__webpack_require__.d(__webpack_exports__, "pkiPmiExternalDataTypesOID", function() { return pkiPmiExternalDataTypesOID; });
 /* concated harmony reexport pkiPmiExternalDataTypesVersion8OID */__webpack_require__.d(__webpack_exports__, "pkiPmiExternalDataTypesVersion8OID", function() { return pkiPmiExternalDataTypesVersion8OID; });
 /* concated harmony reexport AccessDescription */__webpack_require__.d(__webpack_exports__, "AccessDescription", function() { return AccessDescription_AccessDescription; });
 /* concated harmony reexport pkiPMIProtocolSpecificationsOID */__webpack_require__.d(__webpack_exports__, "pkiPMIProtocolSpecificationsOID", function() { return pkiPMIProtocolSpecificationsOID; });
 /* concated harmony reexport pkiPMIProtocolSpecificationsVersion8OID */__webpack_require__.d(__webpack_exports__, "pkiPMIProtocolSpecificationsVersion8OID", function() { return pkiPMIProtocolSpecificationsVersion8OID; });
+/* concated harmony reexport pkiPMIWrapperOID */__webpack_require__.d(__webpack_exports__, "pkiPMIWrapperOID", function() { return pkiPMIWrapperOID; });
+/* concated harmony reexport pkiPMIWrapperVersion8OID */__webpack_require__.d(__webpack_exports__, "pkiPMIWrapperVersion8OID", function() { return pkiPMIWrapperVersion8OID; });
+/* concated harmony reexport selectedAttributeTypesOID */__webpack_require__.d(__webpack_exports__, "selectedAttributeTypesOID", function() { return selectedAttributeTypesOID; });
+/* concated harmony reexport selectedAttributeTypesVersion8OID */__webpack_require__.d(__webpack_exports__, "selectedAttributeTypesVersion8OID", function() { return selectedAttributeTypesVersion8OID; });
+/* concated harmony reexport UnboundedDirectoryString */__webpack_require__.d(__webpack_exports__, "UnboundedDirectoryString", function() { return UnboundedDirectoryString_UnboundedDirectoryString; });
+
+
+
 
 
 
