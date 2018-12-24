@@ -61,9 +61,9 @@ class TBSCertificate {
 
         const tbsCertificateElements : DERElement[] = value.sequence;
         if (tbsCertificateElements.length > 10)
-            throw new errors.X509Error("");
-        else if (tbsCertificateElements.length < 7)
-            throw new errors.X509Error("");
+            throw new errors.X509Error(`TBSCertificate was too long. It contained ${tbsCertificateElements.length} elements.`);
+        else if (tbsCertificateElements.length < 6)
+            throw new errors.X509Error(`TBSCertificate was too short. It contained ${tbsCertificateElements.length} elements.`);
 
         let ver : Version = Version.v3;
         let serialNumber : CertificateSerialNumber;

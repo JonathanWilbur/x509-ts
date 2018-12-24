@@ -2909,9 +2909,9 @@ class TBSCertificate_TBSCertificate {
         }
         const tbsCertificateElements = value.sequence;
         if (tbsCertificateElements.length > 10)
-            throw new X509Error("");
-        else if (tbsCertificateElements.length < 7)
-            throw new X509Error("");
+            throw new X509Error(`TBSCertificate was too long. It contained ${tbsCertificateElements.length} elements.`);
+        else if (tbsCertificateElements.length < 6)
+            throw new X509Error(`TBSCertificate was too short. It contained ${tbsCertificateElements.length} elements.`);
         let ver = 2;
         let serialNumber;
         let signature;
