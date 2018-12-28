@@ -472,7 +472,7 @@ class AttributeTypeAndValue {
             [ ASN1UniversalType.objectIdentifier ])
         ) {
             case 0: break;
-            case -1: throw new errors.X509Error("Invalid tag number on AttributeTypeAndValue.type");
+            case -1: throw new errors.X509Error("Invalid tag class on AttributeTypeAndValue.type");
             case -2: throw new errors.X509Error("Invalid construction on AttributeTypeAndValue.type");
             case -3: throw new errors.X509Error("Invalid tag number on AttributeTypeAndValue.type");
             default: throw new errors.X509Error("Undefined error when validating AttributeTypeAndValue.type tag");

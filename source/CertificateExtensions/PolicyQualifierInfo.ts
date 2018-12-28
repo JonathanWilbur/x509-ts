@@ -25,7 +25,7 @@ class PolicyQualifierInfo {
             [ ASN1UniversalType.sequence ]
         )) {
             case 0: break;
-            case -1: throw new errors.X509Error("Invalid tag number on PolicyQualifierInfo");
+            case -1: throw new errors.X509Error("Invalid tag class on PolicyQualifierInfo");
             case -2: throw new errors.X509Error("Invalid construction on PolicyQualifierInfo");
             case -3: throw new errors.X509Error("Invalid tag number on PolicyQualifierInfo");
             default: throw new errors.X509Error("Undefined error when validating PolicyQualifierInfo tag");
@@ -44,7 +44,7 @@ class PolicyQualifierInfo {
             [ ASN1UniversalType.objectIdentifier ]
         )) {
             case 0: break;
-            case -1: throw new errors.X509Error("Invalid tag number on PolicyQualifierInfo.policyQualifierId");
+            case -1: throw new errors.X509Error("Invalid tag class on PolicyQualifierInfo.policyQualifierId");
             case -2: throw new errors.X509Error("Invalid construction on PolicyQualifierInfo.policyQualifierId");
             case -3: throw new errors.X509Error("Invalid tag number on PolicyQualifierInfo.policyQualifierId");
             default: throw new errors.X509Error("Undefined error when validating PolicyQualifierInfo.policyQualifierId tag");

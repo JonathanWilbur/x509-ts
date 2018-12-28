@@ -33,7 +33,7 @@ class DistributionPoint {
             [ ASN1UniversalType.sequence ]
         )) {
             case 0: break;
-            case -1: throw new errors.X509Error("Invalid tag number on DistributionPoint");
+            case -1: throw new errors.X509Error("Invalid tag class on DistributionPoint");
             case -2: throw new errors.X509Error("Invalid construction on DistributionPoint");
             case -3: throw new errors.X509Error("Invalid tag number on DistributionPoint");
             default: throw new errors.X509Error("Undefined error when validating DistributionPoint tag");

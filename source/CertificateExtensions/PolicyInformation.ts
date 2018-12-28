@@ -33,7 +33,7 @@ class PolicyInformation {
             [ ASN1UniversalType.sequence ]
         )) {
             case 0: break;
-            case -1: throw new errors.X509Error("Invalid tag number on PolicyInformation");
+            case -1: throw new errors.X509Error("Invalid tag class on PolicyInformation");
             case -2: throw new errors.X509Error("Invalid construction on PolicyInformation");
             case -3: throw new errors.X509Error("Invalid tag number on PolicyInformation");
             default: throw new errors.X509Error("Undefined error when validating PolicyInformation tag");
@@ -49,7 +49,7 @@ class PolicyInformation {
             [ ASN1UniversalType.objectIdentifier ]
         )) {
             case 0: break;
-            case -1: throw new errors.X509Error("Invalid tag number on PolicyInformation.policyIdentifier");
+            case -1: throw new errors.X509Error("Invalid tag class on PolicyInformation.policyIdentifier");
             case -2: throw new errors.X509Error("Invalid construction on PolicyInformation.policyIdentifier");
             case -3: throw new errors.X509Error("Invalid tag number on PolicyInformation.policyIdentifier");
             default: throw new errors.X509Error("Undefined error when validating PolicyInformation.policyIdentifier tag");

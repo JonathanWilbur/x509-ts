@@ -2258,7 +2258,7 @@ class AlgorithmIdentifier_AlgorithmIdentifier {
             throw new X509Error("Invalid number of elements in AlgorithmIdentifier");
         switch (algorithmIdentifierElements[0].validateTag([0], [0], [6])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on AlgorithmIdentifier.algorithm");
+            case -1: throw new X509Error("Invalid tag class on AlgorithmIdentifier.algorithm");
             case -2: throw new X509Error("Invalid construction on AlgorithmIdentifier.algorithm");
             case -3: throw new X509Error("Invalid tag number on AlgorithmIdentifier.algorithm");
             default: throw new X509Error("Undefined error when validating AlgorithmIdentifier.algorithm tag");
@@ -2304,7 +2304,7 @@ class Validity_Validity {
     static fromElement(value) {
         switch (value.validateTag([0], [1], [16])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on validity");
+            case -1: throw new X509Error("Invalid tag class on validity");
             case -2: throw new X509Error("Invalid construction on validity");
             case -3: throw new X509Error("Invalid tag number on validity");
             default: throw new X509Error("Undefined error when validating validity tag");
@@ -2314,14 +2314,14 @@ class Validity_Validity {
             throw new X509Error("validity contained more than two ASN.1 elements");
         switch (validityElements[0].validateTag([0], [0], [23, 24])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on validity.notBefore");
+            case -1: throw new X509Error("Invalid tag class on validity.notBefore");
             case -2: throw new X509Error("Invalid construction on validity.notBefore");
             case -3: throw new X509Error("Invalid tag number on validity.notBefore");
             default: throw new X509Error("Undefined error when validating validity.notBefore tag");
         }
         switch (validityElements[1].validateTag([0], [0], [23, 24])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on validity.notBefore");
+            case -1: throw new X509Error("Invalid tag class on validity.notBefore");
             case -2: throw new X509Error("Invalid construction on validity.notBefore");
             case -3: throw new X509Error("Invalid tag number on validity.notBefore");
             default: throw new X509Error("Undefined error when validating validity.notBefore tag");
@@ -2366,7 +2366,7 @@ class SubjectPublicKeyInfo_SubjectPublicKeyInfo {
     static fromElement(value) {
         switch (value.validateTag([0], [1], [16])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on SubjectPublicKeyInfo");
+            case -1: throw new X509Error("Invalid tag class on SubjectPublicKeyInfo");
             case -2: throw new X509Error("Invalid construction on SubjectPublicKeyInfo");
             case -3: throw new X509Error("Invalid tag number on SubjectPublicKeyInfo");
             default: throw new X509Error("Undefined error when validating SubjectPublicKeyInfo tag");
@@ -2374,7 +2374,7 @@ class SubjectPublicKeyInfo_SubjectPublicKeyInfo {
         const subjectPublicKeyElements = value.sequence;
         switch (subjectPublicKeyElements[1].validateTag([0], [0], [3])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on SubjectPublicKeyInfo.subjectPublicKey");
+            case -1: throw new X509Error("Invalid tag class on SubjectPublicKeyInfo.subjectPublicKey");
             case -2: throw new X509Error("Invalid construction on SubjectPublicKeyInfo.subjectPublicKey");
             case -3: throw new X509Error("Invalid tag number on SubjectPublicKeyInfo.subjectPublicKey");
             default: throw new X509Error("Undefined error when validating SubjectPublicKeyInfo.subjectPublicKey tag");
@@ -2418,7 +2418,7 @@ class Extension_Extension {
     static fromElement(value) {
         switch (value.validateTag([0], [1], [16])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on Extension");
+            case -1: throw new X509Error("Invalid tag class on Extension");
             case -2: throw new X509Error("Invalid construction on Extension");
             case -3: throw new X509Error("Invalid tag number on Extension");
             default: throw new X509Error("Undefined error when validating Extension tag");
@@ -2430,7 +2430,7 @@ class Extension_Extension {
             throw new X509Error("An Extension encoded fewer than two elements");
         switch (extensionElements[0].validateTag([0], [0], [6])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on Extension.identifier");
+            case -1: throw new X509Error("Invalid tag class on Extension.identifier");
             case -2: throw new X509Error("Invalid construction on Extension.identifier");
             case -3: throw new X509Error("Invalid tag number on Extension.identifier");
             default: throw new X509Error("Undefined error when validating Extension.identifier tag");
@@ -2439,7 +2439,7 @@ class Extension_Extension {
         if (extensionElements.length === 3) {
             switch (extensionElements[1].validateTag([0], [0], [1])) {
                 case 0: break;
-                case -1: throw new X509Error("Invalid tag number on Extension.critical");
+                case -1: throw new X509Error("Invalid tag class on Extension.critical");
                 case -2: throw new X509Error("Invalid construction on Extension.critical");
                 case -3: throw new X509Error("Invalid tag number on Extension.critical");
                 default: throw new X509Error("Undefined error when validating Extension.critical tag");
@@ -2448,7 +2448,7 @@ class Extension_Extension {
         }
         switch (extensionElements[extensionElements.length - 1].validateTag([0], [0, 1], [4])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on Extension.extnValue");
+            case -1: throw new X509Error("Invalid tag class on Extension.extnValue");
             case -2: throw new X509Error("Invalid construction on Extension.extnValue");
             case -3: throw new X509Error("Invalid tag number on Extension.extnValue");
             default: throw new X509Error("Undefined error when validating Extension.extnValue tag");
@@ -2573,7 +2573,7 @@ class AttributeTypeAndValue_AttributeTypeAndValue {
             throw new X509Error("Invalid number of elements in AttributeTypeAndValue");
         switch (attributeTypeAndValueElements[0].validateTag([0], [0], [6])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on AttributeTypeAndValue.type");
+            case -1: throw new X509Error("Invalid tag class on AttributeTypeAndValue.type");
             case -2: throw new X509Error("Invalid construction on AttributeTypeAndValue.type");
             case -3: throw new X509Error("Invalid tag number on AttributeTypeAndValue.type");
             default: throw new X509Error("Undefined error when validating AttributeTypeAndValue.type tag");
@@ -2801,7 +2801,7 @@ class RelativeDistinguishedName_RelativeDistinguishedName {
     static fromElement(value) {
         switch (value.validateTag([0], [1], [17])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on RelativeDistinguishedName");
+            case -1: throw new X509Error("Invalid tag class on RelativeDistinguishedName");
             case -2: throw new X509Error("Invalid construction on RelativeDistinguishedName");
             case -3: throw new X509Error("Invalid tag number on RelativeDistinguishedName");
             default: throw new X509Error("Undefined error when validating RelativeDistinguishedName tag");
@@ -2844,7 +2844,7 @@ class RDNSequence_RDNSequence {
     static fromElement(value) {
         switch (value.validateTag([0], [1], [16])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on RDNSequence");
+            case -1: throw new X509Error("Invalid tag class on RDNSequence");
             case -2: throw new X509Error("Invalid construction on RDNSequence");
             case -3: throw new X509Error("Invalid tag number on RDNSequence");
             default: throw new X509Error("Undefined error when validating RDNSequence tag");
@@ -2902,7 +2902,7 @@ class TBSCertificate_TBSCertificate {
     static fromElement(value) {
         switch (value.validateTag([0], [1], [16])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on TBSCertificate");
+            case -1: throw new X509Error("Invalid tag class on TBSCertificate");
             case -2: throw new X509Error("Invalid construction on TBSCertificate");
             case -3: throw new X509Error("Invalid tag number on TBSCertificate");
             default: throw new X509Error("Undefined error when validating TBSCertificate tag");
@@ -2930,7 +2930,7 @@ class TBSCertificate_TBSCertificate {
                     throw new X509Error("version can only contain one element.");
                 switch (versionElements[0].validateTag([0], [0], [2])) {
                     case 0: break;
-                    case -1: throw new X509Error("Invalid tag number on TBSCertificate.version inner element");
+                    case -1: throw new X509Error("Invalid tag class on TBSCertificate.version inner element");
                     case -2: throw new X509Error("Invalid construction on TBSCertificate.version inner element");
                     case -3: throw new X509Error("Invalid tag number on TBSCertificate.version inner element");
                     default: throw new X509Error("Undefined error when validating TBSCertificate.version inner element tag");
@@ -2954,7 +2954,7 @@ class TBSCertificate_TBSCertificate {
         {
             switch (tbsCertificateElements[encounteredElements].validateTag([0], [0], [2])) {
                 case 0: break;
-                case -1: throw new X509Error("Invalid tag number on TBSCertificate.serialNumber");
+                case -1: throw new X509Error("Invalid tag class on TBSCertificate.serialNumber");
                 case -2: throw new X509Error("Invalid construction on TBSCertificate.serialNumber");
                 case -3: throw new X509Error("Invalid tag number on TBSCertificate.serialNumber");
                 default: throw new X509Error("Undefined error when validating TBSCertificate.serialNumber tag");
@@ -3001,7 +3001,7 @@ class TBSCertificate_TBSCertificate {
                             throw new X509Error("extensions must be the last element in the TBSCertificate.");
                         switch (tbsCertificateElements[encounteredElements].validateTag([2], [1], [3])) {
                             case 0: break;
-                            case -1: throw new X509Error("Invalid tag number on a TBSCertificate.extensions outer element");
+                            case -1: throw new X509Error("Invalid tag class on a TBSCertificate.extensions outer element");
                             case -2: throw new X509Error("Invalid construction on a TBSCertificate.extensions outer element");
                             case -3: throw new X509Error("Invalid tag number on a TBSCertificate.extensions outer element");
                             default: throw new X509Error("Undefined error when validating a TBSCertificate.extensions outer element tag");
@@ -3121,7 +3121,7 @@ class Certificate_Certificate {
     static fromElement(value) {
         switch (value.validateTag([0], [1], [16])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on Certificate");
+            case -1: throw new X509Error("Invalid tag class on Certificate");
             case -2: throw new X509Error("Invalid construction on Certificate");
             case -3: throw new X509Error("Invalid tag number on Certificate");
             default: throw new X509Error("Undefined error when validating Certificate tag");
@@ -3131,7 +3131,7 @@ class Certificate_Certificate {
             throw new X509Error("Invalid number of elements in Certificate");
         switch (certificateElements[2].validateTag([0], [0], [3])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on Certificate.signatureValue");
+            case -1: throw new X509Error("Invalid tag class on Certificate.signatureValue");
             case -2: throw new X509Error("Invalid construction on Certificate.signatureValue");
             case -3: throw new X509Error("Invalid tag number on Certificate.signatureValue");
             default: throw new X509Error("Undefined error when validating Certificate.signatureValue tag");
@@ -3192,7 +3192,7 @@ class AuthorityKeyIdentifier_AuthorityKeyIdentifier {
     static fromElement(value) {
         switch (value.validateTag([0], [1], [16])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on AuthorityKeyIdentifier");
+            case -1: throw new X509Error("Invalid tag class on AuthorityKeyIdentifier");
             case -2: throw new X509Error("Invalid construction on AuthorityKeyIdentifier");
             case -3: throw new X509Error("Invalid tag number on AuthorityKeyIdentifier");
             default: throw new X509Error("Undefined error when validating AuthorityKeyIdentifier tag");
@@ -3203,7 +3203,7 @@ class AuthorityKeyIdentifier_AuthorityKeyIdentifier {
             throw new X509Error("Invalid number of elements in AuthorityKeyIdentifier");
         switch (authorityKeyIdentifierElements[0].validateTag([2], [0], [0])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on AuthorityKeyIdentifier.keyIdentifier");
+            case -1: throw new X509Error("Invalid tag class on AuthorityKeyIdentifier.keyIdentifier");
             case -2: throw new X509Error("Invalid construction on AuthorityKeyIdentifier.keyIdentifier");
             case -3: throw new X509Error("Invalid tag number on AuthorityKeyIdentifier.keyIdentifier");
             default: throw new X509Error("Undefined error when validating AuthorityKeyIdentifier.keyIdentifier tag");
@@ -3214,14 +3214,14 @@ class AuthorityKeyIdentifier_AuthorityKeyIdentifier {
         if (authorityKeyIdentifierElements.length === 3) {
             switch (authorityKeyIdentifierElements[1].validateTag([2], [1], [1])) {
                 case 0: break;
-                case -1: throw new X509Error("Invalid tag number on AuthorityKeyIdentifier.authorityCertIssuer");
+                case -1: throw new X509Error("Invalid tag class on AuthorityKeyIdentifier.authorityCertIssuer");
                 case -2: throw new X509Error("Invalid construction on AuthorityKeyIdentifier.authorityCertIssuer");
                 case -3: throw new X509Error("Invalid tag number on AuthorityKeyIdentifier.authorityCertIssuer");
                 default: throw new X509Error("Undefined error when validating AuthorityKeyIdentifier.authorityCertIssuer tag");
             }
             switch (authorityKeyIdentifierElements[2].validateTag([2], [0], [2])) {
                 case 0: break;
-                case -1: throw new X509Error("Invalid tag number on AuthorityKeyIdentifier.authorityCertSerialNumber");
+                case -1: throw new X509Error("Invalid tag class on AuthorityKeyIdentifier.authorityCertSerialNumber");
                 case -2: throw new X509Error("Invalid construction on AuthorityKeyIdentifier.authorityCertSerialNumber");
                 case -3: throw new X509Error("Invalid tag number on AuthorityKeyIdentifier.authorityCertSerialNumber");
                 default: throw new X509Error("Undefined error when validating AuthorityKeyIdentifier.authorityCertSerialNumber tag");
@@ -3270,7 +3270,7 @@ class BasicConstraintsSyntax_BasicConstraintsSyntax {
     static fromElement(value) {
         switch (value.validateTag([0], [1], [16])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on BasicConstraintsSyntax");
+            case -1: throw new X509Error("Invalid tag class on BasicConstraintsSyntax");
             case -2: throw new X509Error("Invalid construction on BasicConstraintsSyntax");
             case -3: throw new X509Error("Invalid tag number on BasicConstraintsSyntax");
             default: throw new X509Error("Undefined error when validating BasicConstraintsSyntax tag");
@@ -3359,7 +3359,7 @@ class ReasonFlags_ReasonFlags {
     static fromElement(value) {
         switch (value.validateTag([0], [0], [3])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on ReasonFlags");
+            case -1: throw new X509Error("Invalid tag class on ReasonFlags");
             case -2: throw new X509Error("Invalid construction on ReasonFlags");
             case -3: throw new X509Error("Invalid tag number on ReasonFlags");
             default: throw new X509Error("Undefined error when validating ReasonFlags tag");
@@ -3406,7 +3406,7 @@ class DistributionPoint_DistributionPoint {
     static fromElement(value) {
         switch (value.validateTag([0], [1], [16])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on DistributionPoint");
+            case -1: throw new X509Error("Invalid tag class on DistributionPoint");
             case -2: throw new X509Error("Invalid construction on DistributionPoint");
             case -3: throw new X509Error("Invalid tag number on DistributionPoint");
             default: throw new X509Error("Undefined error when validating DistributionPoint tag");
@@ -3478,7 +3478,7 @@ class EDIPartyName_EDIPartyName {
     static fromElement(value) {
         switch (value.validateTag([0], [1], [16])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on EDIPartyName");
+            case -1: throw new X509Error("Invalid tag class on EDIPartyName");
             case -2: throw new X509Error("Invalid construction on EDIPartyName");
             case -3: throw new X509Error("Invalid tag number on EDIPartyName");
             default: throw new X509Error("Undefined error when validating EDIPartyName tag");
@@ -3553,7 +3553,7 @@ function printGeneralName(value) {
         case (0): {
             switch (value.validateTag([0], [1], [8])) {
                 case 0: break;
-                case -1: throw new X509Error("Invalid tag number on INSTANCE OF OTHER-NAME");
+                case -1: throw new X509Error("Invalid tag class on INSTANCE OF OTHER-NAME");
                 case -2: throw new X509Error("Invalid construction on INSTANCE OF OTHER-NAME");
                 case -3: throw new X509Error("Invalid tag number on INSTANCE OF OTHER-NAME");
                 default: throw new X509Error("Undefined error when validating INSTANCE OF OTHER-NAME tag");
@@ -3563,7 +3563,7 @@ function printGeneralName(value) {
                 throw new X509Error("Invalid number of elements in INSTANCE OF OTHER-NAME");
             switch (otherNameElements[0].validateTag([0], [0], [6])) {
                 case 0: break;
-                case -1: throw new X509Error("Invalid tag number on OTHER-NAME.id");
+                case -1: throw new X509Error("Invalid tag class on OTHER-NAME.id");
                 case -2: throw new X509Error("Invalid construction on OTHER-NAME.id");
                 case -3: throw new X509Error("Invalid tag number on OTHER-NAME.id");
                 default: throw new X509Error("Undefined error when validating OTHER-NAME.id tag");
@@ -3612,7 +3612,7 @@ class GeneralSubtree_GeneralSubtree {
     static fromElement(value) {
         switch (value.validateTag([0], [1], [16])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on GeneralSubtree");
+            case -1: throw new X509Error("Invalid tag class on GeneralSubtree");
             case -2: throw new X509Error("Invalid construction on GeneralSubtree");
             case -3: throw new X509Error("Invalid tag number on GeneralSubtree");
             default: throw new X509Error("Undefined error when validating GeneralSubtree tag");
@@ -3695,7 +3695,7 @@ class IssuingDistPointSyntax_IssuingDistPointSyntax {
     static fromElement(value) {
         switch (value.validateTag([0], [1], [16])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on IssuingDistPointSyntax");
+            case -1: throw new X509Error("Invalid tag class on IssuingDistPointSyntax");
             case -2: throw new X509Error("Invalid construction on IssuingDistPointSyntax");
             case -3: throw new X509Error("Invalid tag number on IssuingDistPointSyntax");
             default: throw new X509Error("Undefined error when validating IssuingDistPointSyntax tag");
@@ -3806,7 +3806,7 @@ class KeyUsage_KeyUsage {
     static fromElement(value) {
         switch (value.validateTag([0], [0], [3])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on KeyUsage");
+            case -1: throw new X509Error("Invalid tag class on KeyUsage");
             case -2: throw new X509Error("Invalid construction on KeyUsage");
             case -3: throw new X509Error("Invalid tag number on KeyUsage");
             default: throw new X509Error("Undefined error when validating KeyUsage tag");
@@ -3853,7 +3853,7 @@ class NameConstraintsSyntax_NameConstraintsSyntax {
     static fromElement(value) {
         switch (value.validateTag([0], [1], [16])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on NameConstraintsSyntax");
+            case -1: throw new X509Error("Invalid tag class on NameConstraintsSyntax");
             case -2: throw new X509Error("Invalid construction on NameConstraintsSyntax");
             case -3: throw new X509Error("Invalid tag number on NameConstraintsSyntax");
             default: throw new X509Error("Undefined error when validating NameConstraintsSyntax tag");
@@ -3931,7 +3931,7 @@ class PolicyConstraintsSyntax_PolicyConstraintsSyntax {
     static fromElement(value) {
         switch (value.validateTag([0], [1], [16])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on PolicyConstraintsSyntax");
+            case -1: throw new X509Error("Invalid tag class on PolicyConstraintsSyntax");
             case -2: throw new X509Error("Invalid construction on PolicyConstraintsSyntax");
             case -3: throw new X509Error("Invalid tag number on PolicyConstraintsSyntax");
             default: throw new X509Error("Undefined error when validating PolicyConstraintsSyntax tag");
@@ -4010,7 +4010,7 @@ class PolicyQualifierInfo_PolicyQualifierInfo {
     static fromElement(value) {
         switch (value.validateTag([0], [1], [16])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on PolicyQualifierInfo");
+            case -1: throw new X509Error("Invalid tag class on PolicyQualifierInfo");
             case -2: throw new X509Error("Invalid construction on PolicyQualifierInfo");
             case -3: throw new X509Error("Invalid tag number on PolicyQualifierInfo");
             default: throw new X509Error("Undefined error when validating PolicyQualifierInfo tag");
@@ -4022,7 +4022,7 @@ class PolicyQualifierInfo_PolicyQualifierInfo {
             throw new X509Error("PolicyQualifierInfo contained zero elements");
         switch (policyQualifierInfoElements[0].validateTag([0], [0], [6])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on PolicyQualifierInfo.policyQualifierId");
+            case -1: throw new X509Error("Invalid tag class on PolicyQualifierInfo.policyQualifierId");
             case -2: throw new X509Error("Invalid construction on PolicyQualifierInfo.policyQualifierId");
             case -3: throw new X509Error("Invalid tag number on PolicyQualifierInfo.policyQualifierId");
             default: throw new X509Error("Undefined error when validating PolicyQualifierInfo.policyQualifierId tag");
@@ -4069,7 +4069,7 @@ class PolicyInformation_PolicyInformation {
     static fromElement(value) {
         switch (value.validateTag([0], [1], [16])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on PolicyInformation");
+            case -1: throw new X509Error("Invalid tag class on PolicyInformation");
             case -2: throw new X509Error("Invalid construction on PolicyInformation");
             case -3: throw new X509Error("Invalid tag number on PolicyInformation");
             default: throw new X509Error("Undefined error when validating PolicyInformation tag");
@@ -4079,7 +4079,7 @@ class PolicyInformation_PolicyInformation {
         let policyQualifiers;
         switch (policyInformationElements[0].validateTag([0], [0], [6])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on PolicyInformation.policyIdentifier");
+            case -1: throw new X509Error("Invalid tag class on PolicyInformation.policyIdentifier");
             case -2: throw new X509Error("Invalid construction on PolicyInformation.policyIdentifier");
             case -3: throw new X509Error("Invalid tag number on PolicyInformation.policyIdentifier");
             default: throw new X509Error("Undefined error when validating PolicyInformation.policyIdentifier tag");
@@ -4132,7 +4132,7 @@ class PolicyMapping_PolicyMapping {
     static fromElement(value) {
         switch (value.validateTag([0], [1], [16])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on inner sequence of PolicyMappingsSyntax");
+            case -1: throw new X509Error("Invalid tag class on inner sequence of PolicyMappingsSyntax");
             case -2: throw new X509Error("Invalid construction on inner sequence of PolicyMappingsSyntax");
             case -3: throw new X509Error("Invalid tag number on inner sequence of PolicyMappingsSyntax");
             default: throw new X509Error("Undefined error when validating inner sequence of PolicyMappingsSyntax tag");
@@ -4142,14 +4142,14 @@ class PolicyMapping_PolicyMapping {
             throw new X509Error("Too few elements in inner sequence of PolicyMappingsSyntax");
         switch (policyMappingElements[0].validateTag([0], [0], [6])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on inner sequence of PolicyMappingsSyntax.SEQUENCE.SEQUENCE.subjectDomainPolicy");
+            case -1: throw new X509Error("Invalid tag class on inner sequence of PolicyMappingsSyntax.SEQUENCE.SEQUENCE.subjectDomainPolicy");
             case -2: throw new X509Error("Invalid construction on inner sequence of PolicyMappingsSyntax.SEQUENCE.SEQUENCE.subjectDomainPolicy");
             case -3: throw new X509Error("Invalid tag number on inner sequence of PolicyMappingsSyntax.SEQUENCE.SEQUENCE.subjectDomainPolicy");
             default: throw new X509Error("Undefined error when validating inner sequence of PolicyMappingsSyntax.SEQUENCE.SEQUENCE.subjectDomainPolicy tag");
         }
         switch (policyMappingElements[1].validateTag([0], [0], [6])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on inner sequence of PolicyMappingsSyntax.SEQUENCE.SEQUENCE.issuerDomainPolicy");
+            case -1: throw new X509Error("Invalid tag class on inner sequence of PolicyMappingsSyntax.SEQUENCE.SEQUENCE.issuerDomainPolicy");
             case -2: throw new X509Error("Invalid construction on inner sequence of PolicyMappingsSyntax.SEQUENCE.SEQUENCE.issuerDomainPolicy");
             case -3: throw new X509Error("Invalid tag number on inner sequence of PolicyMappingsSyntax.SEQUENCE.SEQUENCE.issuerDomainPolicy");
             default: throw new X509Error("Undefined error when validating inner sequence of PolicyMappingsSyntax.SEQUENCE.SEQUENCE.issuerDomainPolicy tag");
@@ -4191,7 +4191,7 @@ class PrivateKeyUsagePeriod_PrivateKeyUsagePeriod {
     static fromElement(value) {
         switch (value.validateTag([0], [1], [16])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on inner sequence of PrivateKeyUsagePeriod");
+            case -1: throw new X509Error("Invalid tag class on inner sequence of PrivateKeyUsagePeriod");
             case -2: throw new X509Error("Invalid construction on inner sequence of PrivateKeyUsagePeriod");
             case -3: throw new X509Error("Invalid tag number on inner sequence of PrivateKeyUsagePeriod");
             default: throw new X509Error("Undefined error when validating inner sequence of PrivateKeyUsagePeriod tag");
@@ -4282,7 +4282,7 @@ class AccessDescription_AccessDescription {
     static fromElement(value) {
         switch (value.validateTag([0], [1], [16])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on AccessDescription");
+            case -1: throw new X509Error("Invalid tag class on AccessDescription");
             case -2: throw new X509Error("Invalid construction on AccessDescription");
             case -3: throw new X509Error("Invalid tag number on AccessDescription");
             default: throw new X509Error("Undefined error when validating AccessDescription tag");
@@ -4292,7 +4292,7 @@ class AccessDescription_AccessDescription {
             throw new X509Error("Invalid number of elements in AccessDescription.");
         switch (accessDescriptionElements[0].validateTag([0], [0], [6])) {
             case 0: break;
-            case -1: throw new X509Error("Invalid tag number on AccessDescription.accessMethod");
+            case -1: throw new X509Error("Invalid tag class on AccessDescription.accessMethod");
             case -2: throw new X509Error("Invalid construction on AccessDescription.accessMethod");
             case -3: throw new X509Error("Invalid tag number on AccessDescription.accessMethod");
             default: throw new X509Error("Undefined error when validating AccessDescription.accessMethod tag");

@@ -110,7 +110,7 @@ function printGeneralName (value : DERElement) : string {
                 [ ASN1UniversalType.external ])
             ) {
                 case 0: break;
-                case -1: throw new errors.X509Error("Invalid tag number on INSTANCE OF OTHER-NAME");
+                case -1: throw new errors.X509Error("Invalid tag class on INSTANCE OF OTHER-NAME");
                 case -2: throw new errors.X509Error("Invalid construction on INSTANCE OF OTHER-NAME");
                 case -3: throw new errors.X509Error("Invalid tag number on INSTANCE OF OTHER-NAME");
                 default: throw new errors.X509Error("Undefined error when validating INSTANCE OF OTHER-NAME tag");
@@ -126,7 +126,7 @@ function printGeneralName (value : DERElement) : string {
                 [ ASN1UniversalType.objectIdentifier ])
             ) {
                 case 0: break;
-                case -1: throw new errors.X509Error("Invalid tag number on OTHER-NAME.id");
+                case -1: throw new errors.X509Error("Invalid tag class on OTHER-NAME.id");
                 case -2: throw new errors.X509Error("Invalid construction on OTHER-NAME.id");
                 case -3: throw new errors.X509Error("Invalid tag number on OTHER-NAME.id");
                 default: throw new errors.X509Error("Undefined error when validating OTHER-NAME.id tag");

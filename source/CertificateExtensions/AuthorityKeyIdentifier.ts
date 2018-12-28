@@ -37,7 +37,7 @@ class AuthorityKeyIdentifier {
             [ ASN1UniversalType.sequence ]
         )) {
             case 0: break;
-            case -1: throw new errors.X509Error("Invalid tag number on AuthorityKeyIdentifier");
+            case -1: throw new errors.X509Error("Invalid tag class on AuthorityKeyIdentifier");
             case -2: throw new errors.X509Error("Invalid construction on AuthorityKeyIdentifier");
             case -3: throw new errors.X509Error("Invalid tag number on AuthorityKeyIdentifier");
             default: throw new errors.X509Error("Undefined error when validating AuthorityKeyIdentifier tag");
@@ -58,7 +58,7 @@ class AuthorityKeyIdentifier {
             [ 0 ])
         ) {
             case 0: break;
-            case -1: throw new errors.X509Error("Invalid tag number on AuthorityKeyIdentifier.keyIdentifier");
+            case -1: throw new errors.X509Error("Invalid tag class on AuthorityKeyIdentifier.keyIdentifier");
             case -2: throw new errors.X509Error("Invalid construction on AuthorityKeyIdentifier.keyIdentifier");
             case -3: throw new errors.X509Error("Invalid tag number on AuthorityKeyIdentifier.keyIdentifier");
             default: throw new errors.X509Error("Undefined error when validating AuthorityKeyIdentifier.keyIdentifier tag");
@@ -77,7 +77,7 @@ class AuthorityKeyIdentifier {
                 [ 1 ])
             ) {
                 case 0: break;
-                case -1: throw new errors.X509Error("Invalid tag number on AuthorityKeyIdentifier.authorityCertIssuer");
+                case -1: throw new errors.X509Error("Invalid tag class on AuthorityKeyIdentifier.authorityCertIssuer");
                 case -2: throw new errors.X509Error("Invalid construction on AuthorityKeyIdentifier.authorityCertIssuer");
                 case -3: throw new errors.X509Error("Invalid tag number on AuthorityKeyIdentifier.authorityCertIssuer");
                 default: throw new errors.X509Error("Undefined error when validating AuthorityKeyIdentifier.authorityCertIssuer tag");
@@ -90,7 +90,7 @@ class AuthorityKeyIdentifier {
                 [ 2 ])
             ) {
                 case 0: break;
-                case -1: throw new errors.X509Error("Invalid tag number on AuthorityKeyIdentifier.authorityCertSerialNumber");
+                case -1: throw new errors.X509Error("Invalid tag class on AuthorityKeyIdentifier.authorityCertSerialNumber");
                 case -2: throw new errors.X509Error("Invalid construction on AuthorityKeyIdentifier.authorityCertSerialNumber");
                 case -3: throw new errors.X509Error("Invalid tag number on AuthorityKeyIdentifier.authorityCertSerialNumber");
                 default: throw new errors.X509Error("Undefined error when validating AuthorityKeyIdentifier.authorityCertSerialNumber tag");

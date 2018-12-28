@@ -38,7 +38,7 @@ class Certificate {
             [ ASN1UniversalType.sequence ]
         )) {
             case 0: break;
-            case -1: throw new errors.X509Error("Invalid tag number on Certificate");
+            case -1: throw new errors.X509Error("Invalid tag class on Certificate");
             case -2: throw new errors.X509Error("Invalid construction on Certificate");
             case -3: throw new errors.X509Error("Invalid tag number on Certificate");
             default: throw new errors.X509Error("Undefined error when validating Certificate tag");
@@ -54,7 +54,7 @@ class Certificate {
             [ ASN1UniversalType.bitString ]
         )) {
             case 0: break;
-            case -1: throw new errors.X509Error("Invalid tag number on Certificate.signatureValue");
+            case -1: throw new errors.X509Error("Invalid tag class on Certificate.signatureValue");
             case -2: throw new errors.X509Error("Invalid construction on Certificate.signatureValue");
             case -3: throw new errors.X509Error("Invalid tag number on Certificate.signatureValue");
             default: throw new errors.X509Error("Undefined error when validating Certificate.signatureValue tag");

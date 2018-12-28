@@ -53,7 +53,7 @@ class TBSCertificate {
             [ ASN1UniversalType.sequence ]
         )) {
             case 0: break;
-            case -1: throw new errors.X509Error("Invalid tag number on TBSCertificate");
+            case -1: throw new errors.X509Error("Invalid tag class on TBSCertificate");
             case -2: throw new errors.X509Error("Invalid construction on TBSCertificate");
             case -3: throw new errors.X509Error("Invalid tag number on TBSCertificate");
             default: throw new errors.X509Error("Undefined error when validating TBSCertificate tag");
@@ -92,7 +92,7 @@ class TBSCertificate {
                     [ ASN1UniversalType.integer ]
                 )) {
                     case 0: break;
-                    case -1: throw new errors.X509Error("Invalid tag number on TBSCertificate.version inner element");
+                    case -1: throw new errors.X509Error("Invalid tag class on TBSCertificate.version inner element");
                     case -2: throw new errors.X509Error("Invalid construction on TBSCertificate.version inner element");
                     case -3: throw new errors.X509Error("Invalid tag number on TBSCertificate.version inner element");
                     default: throw new errors.X509Error("Undefined error when validating TBSCertificate.version inner element tag");
@@ -117,8 +117,7 @@ class TBSCertificate {
                 [ ASN1UniversalType.integer ]
             )) {
                 case 0: break;
-                // FIXME: I just realized I have duplicated error messages below... on all of these.
-                case -1: throw new errors.X509Error("Invalid tag number on TBSCertificate.serialNumber");
+                case -1: throw new errors.X509Error("Invalid tag class on TBSCertificate.serialNumber");
                 case -2: throw new errors.X509Error("Invalid construction on TBSCertificate.serialNumber");
                 case -3: throw new errors.X509Error("Invalid tag number on TBSCertificate.serialNumber");
                 default: throw new errors.X509Error("Undefined error when validating TBSCertificate.serialNumber tag");
@@ -208,7 +207,7 @@ class TBSCertificate {
                             [ 3 ]
                         )) {
                             case 0: break;
-                            case -1: throw new errors.X509Error("Invalid tag number on a TBSCertificate.extensions outer element");
+                            case -1: throw new errors.X509Error("Invalid tag class on a TBSCertificate.extensions outer element");
                             case -2: throw new errors.X509Error("Invalid construction on a TBSCertificate.extensions outer element");
                             case -3: throw new errors.X509Error("Invalid tag number on a TBSCertificate.extensions outer element");
                             default: throw new errors.X509Error("Undefined error when validating a TBSCertificate.extensions outer element tag");

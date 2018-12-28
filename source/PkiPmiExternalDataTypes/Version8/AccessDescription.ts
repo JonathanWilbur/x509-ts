@@ -20,7 +20,7 @@ class AccessDescription {
             [ ASN1UniversalType.sequence ]
         )) {
             case 0: break;
-            case -1: throw new errors.X509Error("Invalid tag number on AccessDescription");
+            case -1: throw new errors.X509Error("Invalid tag class on AccessDescription");
             case -2: throw new errors.X509Error("Invalid construction on AccessDescription");
             case -3: throw new errors.X509Error("Invalid tag number on AccessDescription");
             default: throw new errors.X509Error("Undefined error when validating AccessDescription tag");
@@ -36,7 +36,7 @@ class AccessDescription {
             [ ASN1UniversalType.objectIdentifier ]
         )) {
             case 0: break;
-            case -1: throw new errors.X509Error("Invalid tag number on AccessDescription.accessMethod");
+            case -1: throw new errors.X509Error("Invalid tag class on AccessDescription.accessMethod");
             case -2: throw new errors.X509Error("Invalid construction on AccessDescription.accessMethod");
             case -3: throw new errors.X509Error("Invalid tag number on AccessDescription.accessMethod");
             default: throw new errors.X509Error("Undefined error when validating AccessDescription.accessMethod tag");

@@ -28,7 +28,7 @@ class EDIPartyName {
             [ ASN1UniversalType.sequence ]
         )) {
             case 0: break;
-            case -1: throw new errors.X509Error("Invalid tag number on EDIPartyName");
+            case -1: throw new errors.X509Error("Invalid tag class on EDIPartyName");
             case -2: throw new errors.X509Error("Invalid construction on EDIPartyName");
             case -3: throw new errors.X509Error("Invalid tag number on EDIPartyName");
             default: throw new errors.X509Error("Undefined error when validating EDIPartyName tag");

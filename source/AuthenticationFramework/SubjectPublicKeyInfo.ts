@@ -27,7 +27,7 @@ class SubjectPublicKeyInfo {
             [ ASN1UniversalType.sequence ]
         )) {
             case 0: break;
-            case -1: throw new errors.X509Error("Invalid tag number on SubjectPublicKeyInfo");
+            case -1: throw new errors.X509Error("Invalid tag class on SubjectPublicKeyInfo");
             case -2: throw new errors.X509Error("Invalid construction on SubjectPublicKeyInfo");
             case -3: throw new errors.X509Error("Invalid tag number on SubjectPublicKeyInfo");
             default: throw new errors.X509Error("Undefined error when validating SubjectPublicKeyInfo tag");
@@ -40,7 +40,7 @@ class SubjectPublicKeyInfo {
             [ ASN1UniversalType.bitString ]
         )) {
             case 0: break;
-            case -1: throw new errors.X509Error("Invalid tag number on SubjectPublicKeyInfo.subjectPublicKey");
+            case -1: throw new errors.X509Error("Invalid tag class on SubjectPublicKeyInfo.subjectPublicKey");
             case -2: throw new errors.X509Error("Invalid construction on SubjectPublicKeyInfo.subjectPublicKey");
             case -3: throw new errors.X509Error("Invalid tag number on SubjectPublicKeyInfo.subjectPublicKey");
             default: throw new errors.X509Error("Undefined error when validating SubjectPublicKeyInfo.subjectPublicKey tag");

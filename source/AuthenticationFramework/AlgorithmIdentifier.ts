@@ -51,7 +51,7 @@ class AlgorithmIdentifier {
             [ ASN1UniversalType.objectIdentifier ])
         ) {
             case 0: break;
-            case -1: throw new errors.X509Error("Invalid tag number on AlgorithmIdentifier.algorithm");
+            case -1: throw new errors.X509Error("Invalid tag class on AlgorithmIdentifier.algorithm");
             case -2: throw new errors.X509Error("Invalid construction on AlgorithmIdentifier.algorithm");
             case -3: throw new errors.X509Error("Invalid tag number on AlgorithmIdentifier.algorithm");
             default: throw new errors.X509Error("Undefined error when validating AlgorithmIdentifier.algorithm tag");

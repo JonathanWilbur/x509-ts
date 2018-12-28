@@ -32,7 +32,7 @@ class Extension { // implements Byteable,Elementable {
             [ ASN1UniversalType.sequence ]
         )) {
             case 0: break;
-            case -1: throw new errors.X509Error("Invalid tag number on Extension");
+            case -1: throw new errors.X509Error("Invalid tag class on Extension");
             case -2: throw new errors.X509Error("Invalid construction on Extension");
             case -3: throw new errors.X509Error("Invalid tag number on Extension");
             default: throw new errors.X509Error("Undefined error when validating Extension tag");
@@ -50,7 +50,7 @@ class Extension { // implements Byteable,Elementable {
             [ ASN1UniversalType.objectIdentifier ]
         )) {
             case 0: break;
-            case -1: throw new errors.X509Error("Invalid tag number on Extension.identifier");
+            case -1: throw new errors.X509Error("Invalid tag class on Extension.identifier");
             case -2: throw new errors.X509Error("Invalid construction on Extension.identifier");
             case -3: throw new errors.X509Error("Invalid tag number on Extension.identifier");
             default: throw new errors.X509Error("Undefined error when validating Extension.identifier tag");
@@ -64,7 +64,7 @@ class Extension { // implements Byteable,Elementable {
                 [ ASN1UniversalType.boolean ]
             )) {
                 case 0: break;
-                case -1: throw new errors.X509Error("Invalid tag number on Extension.critical");
+                case -1: throw new errors.X509Error("Invalid tag class on Extension.critical");
                 case -2: throw new errors.X509Error("Invalid construction on Extension.critical");
                 case -3: throw new errors.X509Error("Invalid tag number on Extension.critical");
                 default: throw new errors.X509Error("Undefined error when validating Extension.critical tag");
@@ -78,7 +78,7 @@ class Extension { // implements Byteable,Elementable {
             [ ASN1UniversalType.octetString ]
         )) {
             case 0: break;
-            case -1: throw new errors.X509Error("Invalid tag number on Extension.extnValue");
+            case -1: throw new errors.X509Error("Invalid tag class on Extension.extnValue");
             case -2: throw new errors.X509Error("Invalid construction on Extension.extnValue");
             case -3: throw new errors.X509Error("Invalid tag number on Extension.extnValue");
             default: throw new errors.X509Error("Undefined error when validating Extension.extnValue tag");

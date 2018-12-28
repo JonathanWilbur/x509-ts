@@ -24,7 +24,7 @@ class RDNSequence {
             [ ASN1UniversalType.sequence ])
         ) {
             case 0: break;
-            case -1: throw new errors.X509Error("Invalid tag number on RDNSequence");
+            case -1: throw new errors.X509Error("Invalid tag class on RDNSequence");
             case -2: throw new errors.X509Error("Invalid construction on RDNSequence");
             case -3: throw new errors.X509Error("Invalid tag number on RDNSequence");
             default: throw new errors.X509Error("Undefined error when validating RDNSequence tag");

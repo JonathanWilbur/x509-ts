@@ -15,17 +15,17 @@
   },
   "description": "X.509 certificate encoding and decoding in TypeScript",
   "devDependencies": {
-    "@types/node": "^10.12.9",
-    "jasmine": "^3.3.0",
+    "@types/node": "^10.12.18",
+    "jasmine": "^3.3.1",
     "jasmine-core": "^3.3.0",
-    "karma": "^3.1.1",
+    "karma": "^3.1.4",
     "karma-chrome-launcher": "^2.2.0",
     "karma-firefox-launcher": "^1.1.0",
     "karma-jasmine": "^1.1.2",
     "karma-safari-launcher": "^1.0.0",
     "ts-loader": "^4.5.0",
-    "typescript": "^3.1.6",
-    "webpack": "^4.25.1",
+    "typescript": "^3.2.2",
+    "webpack": "^4.28.2",
     "webpack-cli": "^3.1.2",
     "webpack-command": "^0.4.2"
   },
@@ -63,5 +63,5 @@
     "test": "karma run"
   },
   "types": "./dist/types/index.d.ts",
-  "version": "0.11.3"
+  "version": "0.11.4"
 }

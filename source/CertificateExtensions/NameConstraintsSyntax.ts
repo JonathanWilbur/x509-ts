@@ -35,7 +35,7 @@ class NameConstraintsSyntax {
             [ ASN1UniversalType.sequence ]
         )) {
             case 0: break;
-            case -1: throw new errors.X509Error("Invalid tag number on NameConstraintsSyntax");
+            case -1: throw new errors.X509Error("Invalid tag class on NameConstraintsSyntax");
             case -2: throw new errors.X509Error("Invalid construction on NameConstraintsSyntax");
             case -3: throw new errors.X509Error("Invalid tag number on NameConstraintsSyntax");
             default: throw new errors.X509Error("Undefined error when validating NameConstraintsSyntax tag");

@@ -33,7 +33,7 @@ class PrivateKeyUsagePeriod {
             [ ASN1UniversalType.sequence ]
         )) {
             case 0: break;
-            case -1: throw new errors.X509Error("Invalid tag number on inner sequence of PrivateKeyUsagePeriod");
+            case -1: throw new errors.X509Error("Invalid tag class on inner sequence of PrivateKeyUsagePeriod");
             case -2: throw new errors.X509Error("Invalid construction on inner sequence of PrivateKeyUsagePeriod");
             case -3: throw new errors.X509Error("Invalid tag number on inner sequence of PrivateKeyUsagePeriod");
             default: throw new errors.X509Error("Undefined error when validating inner sequence of PrivateKeyUsagePeriod tag");

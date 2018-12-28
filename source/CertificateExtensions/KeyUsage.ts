@@ -29,7 +29,7 @@ class KeyUsage {
             [ ASN1UniversalType.bitString ]
         )) {
             case 0: break;
-            case -1: throw new errors.X509Error("Invalid tag number on KeyUsage");
+            case -1: throw new errors.X509Error("Invalid tag class on KeyUsage");
             case -2: throw new errors.X509Error("Invalid construction on KeyUsage");
             case -3: throw new errors.X509Error("Invalid tag number on KeyUsage");
             default: throw new errors.X509Error("Undefined error when validating KeyUsage tag");
