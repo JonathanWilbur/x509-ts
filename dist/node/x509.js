@@ -2887,7 +2887,7 @@ const informationFrameworkOID = new asn1["ObjectIdentifier"]([2, 5, 1, 1]);
 
 
 class TBSCertificate_TBSCertificate {
-    constructor(ver = 2, serialNumber, signature, issuer, validity, subject, subjectPublicKeyInfo, issuerUniqueID, subjectUniqueID, extensions) {
+    constructor(ver = 0, serialNumber, signature, issuer, validity, subject, subjectPublicKeyInfo, issuerUniqueID, subjectUniqueID, extensions) {
         this.ver = ver;
         this.serialNumber = serialNumber;
         this.signature = signature;
@@ -2908,11 +2908,9 @@ class TBSCertificate_TBSCertificate {
             default: throw new X509Error("Undefined error when validating TBSCertificate tag");
         }
         const tbsCertificateElements = value.sequence;
-        if (tbsCertificateElements.length > 10)
-            throw new X509Error(`TBSCertificate was too long. It contained ${tbsCertificateElements.length} elements.`);
-        else if (tbsCertificateElements.length < 6)
+        if (tbsCertificateElements.length < 6)
             throw new X509Error(`TBSCertificate was too short. It contained ${tbsCertificateElements.length} elements.`);
-        let ver = 2;
+        let ver = 0;
         let serialNumber;
         let signature;
         let issuer;
@@ -2921,86 +2919,87 @@ class TBSCertificate_TBSCertificate {
         let subjectPublicKeyInfo;
         let issuerUniqueID = undefined;
         let subjectUniqueID = undefined;
-        let extensions = [];
+        let extensions = undefined;
+        let encounteredElements = 0;
         {
-            switch (tbsCertificateElements[0].validateTag([2], [1], [0])) {
-                case 0: break;
-                case -1: throw new X509Error("Invalid tag number on TBSCertificate.version");
-                case -2: throw new X509Error("Invalid construction on TBSCertificate.version");
-                case -3: throw new X509Error("Invalid tag number on TBSCertificate.version");
-                default: throw new X509Error("Undefined error when validating TBSCertificate.version tag");
-            }
-            const versionElements = tbsCertificateElements[0].sequence;
-            if (versionElements.length !== 1)
-                throw new X509Error("version can only contain one element");
-            switch (versionElements[0].validateTag([0], [0], [2])) {
-                case 0: break;
-                case -1: throw new X509Error("Invalid tag number on TBSCertificate.version inner element");
-                case -2: throw new X509Error("Invalid construction on TBSCertificate.version inner element");
-                case -3: throw new X509Error("Invalid tag number on TBSCertificate.version inner element");
-                default: throw new X509Error("Undefined error when validating TBSCertificate.version inner element tag");
-            }
-            switch (versionElements[0].integer) {
-                case 0:
-                    ver = 0;
-                    break;
-                case 1:
-                    ver = 1;
-                    break;
-                case 2:
-                    ver = 2;
-                    break;
-                default:
-                    throw new X509Error("Invalid X.509 Certificate version.");
-            }
-            switch (tbsCertificateElements[1].validateTag([0], [0], [2])) {
-                case 0: break;
-                case -1: throw new X509Error("Invalid tag number on TBSCertificate.serialNumber");
-                case -2: throw new X509Error("Invalid construction on TBSCertificate.serialNumber");
-                case -3: throw new X509Error("Invalid tag number on TBSCertificate.serialNumber");
-                default: throw new X509Error("Undefined error when validating TBSCertificate.serialNumber tag");
-            }
-        }
-        {
-            switch (tbsCertificateElements[1].validateTag([0], [0], [2])) {
-                case 0: break;
-                case -1: throw new X509Error("Invalid tag number on TBSCertificate.serialNumber");
-                case -2: throw new X509Error("Invalid construction on TBSCertificate.serialNumber");
-                case -3: throw new X509Error("Invalid tag number on TBSCertificate.serialNumber");
-                default: throw new X509Error("Undefined error when validating TBSCertificate.serialNumber tag");
-            }
-            serialNumber = tbsCertificateElements[1].octetString;
-        }
-        signature = AlgorithmIdentifier_AlgorithmIdentifier.fromElement(tbsCertificateElements[2]);
-        issuer = RDNSequence_RDNSequence.fromElement(tbsCertificateElements[3]);
-        validity = Validity_Validity.fromElement(tbsCertificateElements[4]);
-        subject = RDNSequence_RDNSequence.fromElement(tbsCertificateElements[5]);
-        subjectPublicKeyInfo = SubjectPublicKeyInfo_SubjectPublicKeyInfo.fromElement(tbsCertificateElements[6]);
-        if (tbsCertificateElements.length > 8) {
-            for (let i = 8; i < tbsCertificateElements.length; i++) {
-                if (tbsCertificateElements[i].tagNumber <= tbsCertificateElements[i - 1].tagNumber)
-                    throw new X509Error("TBSCertificate sequence out of order.");
-            }
-        }
-        if (tbsCertificateElements.length > 7) {
-            for (let i = 7; i < tbsCertificateElements.length; i++) {
-                switch (tbsCertificateElements[i].tagNumber) {
-                    case (1): {
-                        if (ver === 0)
-                            throw new X509Error("issuerUniqueIdentifier not allowed in Version 1 X.509 certificate.");
-                        issuerUniqueID = tbsCertificateElements[i].bitString;
+            if (tbsCertificateElements[encounteredElements].tagClass === 2 &&
+                tbsCertificateElements[encounteredElements].construction === 1 &&
+                tbsCertificateElements[encounteredElements].tagNumber === 0) {
+                const versionElements = tbsCertificateElements[encounteredElements].sequence;
+                if (versionElements.length !== 1)
+                    throw new X509Error("version can only contain one element.");
+                switch (versionElements[0].validateTag([0], [0], [2])) {
+                    case 0: break;
+                    case -1: throw new X509Error("Invalid tag number on TBSCertificate.version inner element");
+                    case -2: throw new X509Error("Invalid construction on TBSCertificate.version inner element");
+                    case -3: throw new X509Error("Invalid tag number on TBSCertificate.version inner element");
+                    default: throw new X509Error("Undefined error when validating TBSCertificate.version inner element tag");
+                }
+                switch (versionElements[0].integer) {
+                    case 0:
+                        ver = 0;
                         break;
-                    }
+                    case 1:
+                        ver = 1;
+                        break;
+                    case 2:
+                        ver = 2;
+                        break;
+                    default:
+                        throw new X509Error("Invalid X.509 Certificate version.");
+                }
+                encounteredElements++;
+            }
+        }
+        {
+            switch (tbsCertificateElements[encounteredElements].validateTag([0], [0], [2])) {
+                case 0: break;
+                case -1: throw new X509Error("Invalid tag number on TBSCertificate.serialNumber");
+                case -2: throw new X509Error("Invalid construction on TBSCertificate.serialNumber");
+                case -3: throw new X509Error("Invalid tag number on TBSCertificate.serialNumber");
+                default: throw new X509Error("Undefined error when validating TBSCertificate.serialNumber tag");
+            }
+            serialNumber = tbsCertificateElements[encounteredElements++].octetString;
+        }
+        signature = AlgorithmIdentifier_AlgorithmIdentifier.fromElement(tbsCertificateElements[encounteredElements++]);
+        issuer = RDNSequence_RDNSequence.fromElement(tbsCertificateElements[encounteredElements++]);
+        validity = Validity_Validity.fromElement(tbsCertificateElements[encounteredElements++]);
+        subject = RDNSequence_RDNSequence.fromElement(tbsCertificateElements[encounteredElements++]);
+        subjectPublicKeyInfo = SubjectPublicKeyInfo_SubjectPublicKeyInfo.fromElement(tbsCertificateElements[encounteredElements++]);
+        if (encounteredElements < tbsCertificateElements.length &&
+            tbsCertificateElements[encounteredElements].tagClass === 2 &&
+            tbsCertificateElements[encounteredElements].construction === 0 &&
+            tbsCertificateElements[encounteredElements].tagNumber === 1) {
+            if (ver === 0)
+                throw new X509Error("issuerUniqueIdentifier not allowed in Version 1 X.509 certificate.");
+            issuerUniqueID = tbsCertificateElements[encounteredElements].bitString;
+            encounteredElements++;
+        }
+        let endOfTBSCertficateExtensionsIndex = encounteredElements;
+        while (endOfTBSCertficateExtensionsIndex < tbsCertificateElements.length &&
+            !(tbsCertificateElements[encounteredElements].tagClass === 2 &&
+                (tbsCertificateElements[encounteredElements].tagNumber === 2 ||
+                    tbsCertificateElements[encounteredElements].tagNumber === 3)))
+            endOfTBSCertficateExtensionsIndex++;
+        asn1["DERElement"].isInCanonicalOrder(tbsCertificateElements.slice(encounteredElements, endOfTBSCertficateExtensionsIndex));
+        asn1["DERElement"].isUniquelyTagged(tbsCertificateElements.slice(encounteredElements, endOfTBSCertficateExtensionsIndex));
+        while (encounteredElements < tbsCertificateElements.length) {
+            if (tbsCertificateElements[encounteredElements].tagClass === 2) {
+                switch (tbsCertificateElements[encounteredElements].tagNumber) {
                     case (2): {
                         if (ver === 0)
                             throw new X509Error("subjectUniqueIdentifier not allowed in Version 1 X.509 certificate.");
-                        subjectUniqueID = tbsCertificateElements[i].bitString;
+                        if ((tbsCertificateElements.length - encounteredElements) > 2)
+                            throw new X509Error("subjectUniqueIdentifier must be last or second to last in the TBSCertificate.");
+                        subjectUniqueID = tbsCertificateElements[encounteredElements].bitString;
                         break;
                     }
                     case (3): {
                         if (ver !== 2)
                             throw new X509Error("extensions not allowed in Version 1 or 2 X.509 certificate.");
-                        switch (tbsCertificateElements[i].validateTag([2], [1], [3])) {
+                        if ((tbsCertificateElements.length - encounteredElements) !== 1)
+                            throw new X509Error("extensions must be the last element in the TBSCertificate.");
+                        switch (tbsCertificateElements[encounteredElements].validateTag([2], [1], [3])) {
                             case 0: break;
                             case -1: throw new X509Error("Invalid tag number on a TBSCertificate.extensions outer element");
                             case -2: throw new X509Error("Invalid construction on a TBSCertificate.extensions outer element");
@@ -3008,33 +3007,23 @@ class TBSCertificate_TBSCertificate {
                             default: throw new X509Error("Undefined error when validating a TBSCertificate.extensions outer element tag");
                         }
                         const extensionsElement = new asn1["DERElement"]();
-                        extensionsElement.fromBytes(tbsCertificateElements[i].value);
+                        extensionsElement.fromBytes(tbsCertificateElements[encounteredElements].value);
                         const extensionElements = extensionsElement.sequence;
                         if (extensionElements.length === 0)
                             throw new X509Error("extensions element may not be present in X.509 TBSCertificate if there are no extensions in it.");
                         extensionElements.forEach((extensionElement) => {
+                            if (typeof extensions === "undefined")
+                                extensions = [];
                             extensions.push(Extension_Extension.fromElement(extensionElement));
                         });
                         break;
                     }
-                    default:
-                        throw new X509Error(`Invalid element with context-specific tag number ${tbsCertificateElements[i].tagNumber} in X.509 TBSCertificate.`);
+                    default: break;
                 }
             }
+            encounteredElements++;
         }
-        switch (ver) {
-            case 0: {
-                return new TBSCertificate_TBSCertificate(ver, serialNumber, signature, issuer, validity, subject, subjectPublicKeyInfo, undefined, undefined, undefined);
-            }
-            case 1: {
-                return new TBSCertificate_TBSCertificate(ver, serialNumber, signature, issuer, validity, subject, subjectPublicKeyInfo, issuerUniqueID, subjectUniqueID, undefined);
-            }
-            case 2: {
-                return new TBSCertificate_TBSCertificate(ver, serialNumber, signature, issuer, validity, subject, subjectPublicKeyInfo, issuerUniqueID, subjectUniqueID, extensions);
-            }
-            default:
-                throw new X509Error("Unrecognized X.509 Certificate version.");
-        }
+        return new TBSCertificate_TBSCertificate(ver, serialNumber, signature, issuer, validity, subject, subjectPublicKeyInfo, issuerUniqueID, subjectUniqueID, extensions);
     }
     toElement() {
         let retSequence = [];

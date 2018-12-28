@@ -1,5 +1,4 @@
 const x509 = require("../../dist/node/x509.js");
-const asn1 = require("../../node_modules/asn1-ts/dist/node/asn1.js");
 const fs = require("fs");
 
 fs.readFile("./test/data/jonathan@wilbur.space.cert.der", (err, data) => {
