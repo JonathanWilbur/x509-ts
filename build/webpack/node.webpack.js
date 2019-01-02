@@ -10,7 +10,7 @@ module.exports = {
         "strictModuleExceptionHandling": true
     },
     resolve: {
-        extensions: [ ".ts" ]
+        extensions: [ ".ts", ".js" ]
     },
     mode: "production",
     module: {

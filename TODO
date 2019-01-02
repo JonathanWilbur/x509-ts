@@ -1,5 +1,4 @@
 - I noticed that GeneralSubtree is not done...
-- Document `./node_modules/util/support/isBuffer` fix.
 - Add "platform" bullet point to ASN.1 library
 - Add toString to almost everything
 - Add static print to almost anything

@@ -10,7 +10,7 @@ module.exports = {
         libraryTarget: "var"
     },
     resolve: {
-        extensions: [ ".ts" ]
+        extensions: [ ".ts", ".js" ]
     },
     mode: "production",
     module: {
