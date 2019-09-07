@@ -301,6 +301,8 @@ class TBSCertificate {
                 });
                 return rdnElement;
             });
+
+            retSequence.push(issuerElement);
         }
 
         // validity
@@ -327,6 +329,8 @@ class TBSCertificate {
                 });
                 return rdnElement;
             });
+
+            retSequence.push(subjectElement);
         }
 
         // subjectPublicKeyInfo

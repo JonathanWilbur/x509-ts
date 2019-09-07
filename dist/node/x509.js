@@ -3051,6 +3051,7 @@ class TBSCertificate_TBSCertificate {
                 });
                 return rdnElement;
             });
+            retSequence.push(issuerElement);
         }
         {
             retSequence.push(this.validity.toElement());
@@ -3064,6 +3065,7 @@ class TBSCertificate_TBSCertificate {
                 });
                 return rdnElement;
             });
+            retSequence.push(subjectElement);
         }
         {
             retSequence.push(this.subjectPublicKeyInfo.toElement());
