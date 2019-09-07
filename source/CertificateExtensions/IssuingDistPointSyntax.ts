@@ -15,75 +15,86 @@ import * as errors from "../errors";
 
 export default
 class IssuingDistPointSyntax {
-
+    // eslint-disable-next-line max-params
     constructor (
         readonly distributionPoint? : DistributionPointName,
-        readonly onlyContainsUserPublicKeyCerts : boolean = false,
-        readonly onlyContainsCACerts : boolean = false,
+        readonly onlyContainsUserPublicKeyCerts: boolean = false,
+        readonly onlyContainsCACerts: boolean = false,
         readonly onlySomeReasons? : ReasonFlags,
-        readonly indirectCRL : boolean = false
+        readonly indirectCRL: boolean = false
     ) {}
 
-    public static fromElement (value : DERElement) : IssuingDistPointSyntax {
-
+    public static fromElement (value: DERElement): IssuingDistPointSyntax {
         switch (value.validateTag(
             [ ASN1TagClass.universal ],
             [ ASN1Construction.constructed ],
             [ ASN1UniversalType.sequence ]
         )) {
-            case 0: break;
-            case -1: throw new errors.X509Error("Invalid tag class on IssuingDistPointSyntax");
-            case -2: throw new errors.X509Error("Invalid construction on IssuingDistPointSyntax");
-            case -3: throw new errors.X509Error("Invalid tag number on IssuingDistPointSyntax");
-            default: throw new errors.X509Error("Undefined error when validating IssuingDistPointSyntax tag");
+        case 0: break;
+        case -1: throw new errors.X509Error("Invalid tag class on IssuingDistPointSyntax");
+        case -2: throw new errors.X509Error("Invalid construction on IssuingDistPointSyntax");
+        case -3: throw new errors.X509Error("Invalid tag number on IssuingDistPointSyntax");
+        default: throw new errors.X509Error("Undefined error when validating IssuingDistPointSyntax tag");
         }
 
-        let distributionPoint : DistributionPointName | undefined;
-        let onlyContainsUserPublicKeyCerts : boolean | undefined;
-        let onlyContainsCACerts : boolean | undefined;
-        let onlySomeReasons : ReasonFlags | undefined;
-        let indirectCRL : boolean | undefined;
+        let distributionPoint: DistributionPointName | undefined;
+        let onlyContainsUserPublicKeyCerts: boolean | undefined;
+        let onlyContainsCACerts: boolean | undefined;
+        let onlySomeReasons: ReasonFlags | undefined;
+        let indirectCRL: boolean | undefined;
 
-        const issuingDistPointSyntaxElements : DERElement[] = value.sequence;
-        let lastEncounteredTagNumber : number;
-        issuingDistPointSyntaxElements.forEach(element => {
+        const issuingDistPointSyntaxElements: DERElement[] = value.sequence;
+        let lastEncounteredTagNumber: number;
+        issuingDistPointSyntaxElements.forEach((element) => {
             if (!lastEncounteredTagNumber) {
                 lastEncounteredTagNumber = element.tagNumber;
             } else if (element.tagNumber <= lastEncounteredTagNumber) {
-                throw new errors.X509Error("Elements out of order in IssuingDistPointSyntax");
+                throw new errors.X509Error("Elements out of order in IssuingDistPointSyntax.");
             }
 
             if (element.tagClass === ASN1TagClass.context) {
                 switch (element.tagNumber) {
-                    case (0): { // distributionPoint
-                        distributionPoint = element;
-                        break;
+                case (0): { // distributionPoint
+                    distributionPoint = element;
+                    break;
+                }
+                case (1): { // onlyContainsUserPublicKeyCerts
+                    if (element.construction !== ASN1Construction.primitive) {
+                        throw new errors.X509Error(
+                            "Invalid construction for IssuingDistPointSyntax.onlyContainsUserPublicKeyCerts.",
+                        );
                     }
-                    case (1): { // onlyContainsUserPublicKeyCerts
-                        if (element.construction !== ASN1Construction.primitive)
-                            throw new errors.X509Error("Invalid construction for IssuingDistPointSyntax.onlyContainsUserPublicKeyCerts");
-                        onlyContainsUserPublicKeyCerts = element.boolean;
-                        break;
+                    onlyContainsUserPublicKeyCerts = element.boolean;
+                    break;
+                }
+                case (2): { // onlyContainsCACerts
+                    if (element.construction !== ASN1Construction.primitive) {
+                        throw new errors.X509Error(
+                            "Invalid construction for IssuingDistPointSyntax.onlyContainsCACerts.",
+                        );
                     }
-                    case (2): { // onlyContainsCACerts
-                        if (element.construction !== ASN1Construction.primitive)
-                            throw new errors.X509Error("Invalid construction for IssuingDistPointSyntax.onlyContainsCACerts");
-                        onlyContainsCACerts = element.boolean;
-                        break;
+                    onlyContainsCACerts = element.boolean;
+                    break;
+                }
+                case (3): { // onlySomeReasons
+                    if (element.construction !== ASN1Construction.constructed) {
+                        throw new errors.X509Error(
+                            "Invalid construction for IssuingDistPointSyntax.onlySomeReasons.",
+                        );
                     }
-                    case (3): { // onlySomeReasons
-                        if (element.construction !== ASN1Construction.constructed)
-                            throw new errors.X509Error("Invalid construction for IssuingDistPointSyntax.onlySomeReasons");
-                        onlySomeReasons = ReasonFlags.fromElement(element);
-                        break;
+                    onlySomeReasons = ReasonFlags.fromElement(element);
+                    break;
+                }
+                case (4): { // indirectCRL
+                    if (element.construction !== ASN1Construction.primitive) {
+                        throw new errors.X509Error(
+                            "Invalid construction for IssuingDistPointSyntax.indirectCRL.",
+                        );
                     }
-                    case (4): { // indirectCRL
-                        if (element.construction !== ASN1Construction.primitive)
-                            throw new errors.X509Error("Invalid construction for IssuingDistPointSyntax.indirectCRL");
-                        indirectCRL = element.boolean;
-                        break;
-                    }
-                    default: break;
+                    indirectCRL = element.boolean;
+                    break;
+                }
+                default: break;
                 }
             }
 
@@ -99,16 +110,15 @@ class IssuingDistPointSyntax {
         );
     }
 
-    public toElement () : DERElement {
-
-        let issuingDistPointSyntaxElements : DERElement[] = [];
+    public toElement (): DERElement {
+        const issuingDistPointSyntaxElements: DERElement[] = [];
 
         if (this.distributionPoint) {
             issuingDistPointSyntaxElements.push(this.distributionPoint);
         }
 
         if (this.onlyContainsUserPublicKeyCerts) {
-            const onlyContainsUserPublicKeyCertsElement : DERElement = new DERElement(
+            const onlyContainsUserPublicKeyCertsElement: DERElement = new DERElement(
                 ASN1TagClass.context,
                 ASN1Construction.primitive,
                 ASN1UniversalType.boolean
@@ -118,7 +128,7 @@ class IssuingDistPointSyntax {
         }
 
         if (this.onlyContainsCACerts) {
-            const onlyContainsCACertsElement : DERElement = new DERElement(
+            const onlyContainsCACertsElement: DERElement = new DERElement(
                 ASN1TagClass.context,
                 ASN1Construction.primitive,
                 ASN1UniversalType.boolean
@@ -132,7 +142,7 @@ class IssuingDistPointSyntax {
         }
 
         if (this.indirectCRL) {
-            const indirectCRLElement : DERElement = new DERElement(
+            const indirectCRLElement: DERElement = new DERElement(
                 ASN1TagClass.context,
                 ASN1Construction.primitive,
                 ASN1UniversalType.boolean
@@ -141,7 +151,7 @@ class IssuingDistPointSyntax {
             issuingDistPointSyntaxElements.push(indirectCRLElement);
         }
 
-        const issuingDistPointSyntaxElement : DERElement = new DERElement(
+        const issuingDistPointSyntaxElement: DERElement = new DERElement(
             ASN1TagClass.universal,
             ASN1Construction.constructed,
             ASN1UniversalType.sequence
@@ -150,14 +160,13 @@ class IssuingDistPointSyntax {
         return issuingDistPointSyntaxElement;
     }
 
-    public static fromBytes (value : Uint8Array) : IssuingDistPointSyntax {
-        const el : DERElement = new DERElement();
+    public static fromBytes (value: Uint8Array): IssuingDistPointSyntax {
+        const el: DERElement = new DERElement();
         el.fromBytes(value);
         return IssuingDistPointSyntax.fromElement(el);
     }
 
-    public toBytes () : Uint8Array {
+    public toBytes (): Uint8Array {
         return this.toElement().toBytes();
     }
-
 }

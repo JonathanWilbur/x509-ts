@@ -1,6 +1,6 @@
-import { DERElement, ASN1TagClass, ASN1Construction, ASN1UniversalType } from 'asn1-ts';
-import EDIPartyName from './EDIPartyName';
-import { RDNSequence } from '../InformationFramework';
+import { DERElement, ASN1TagClass, ASN1Construction, ASN1UniversalType } from "asn1-ts";
+import EDIPartyName from "./EDIPartyName";
+import { RDNSequence } from "../InformationFramework";
 import * as errors from "../errors";
 
 // GeneralName ::= CHOICE {
@@ -100,47 +100,48 @@ type GeneralName = DERElement;
 export default GeneralName;
 
 export
-function printGeneralName (value : DERElement) : string {
+function printGeneralName (value: DERElement): string {
     if (value.tagClass !== ASN1TagClass.context) return "";
     switch (value.tagNumber) {
-        case (0): { // otherName
-            switch (value.validateTag(
-                [ ASN1TagClass.universal ],
-                [ ASN1Construction.constructed ],
-                [ ASN1UniversalType.external ])
-            ) {
-                case 0: break;
-                case -1: throw new errors.X509Error("Invalid tag class on INSTANCE OF OTHER-NAME");
-                case -2: throw new errors.X509Error("Invalid construction on INSTANCE OF OTHER-NAME");
-                case -3: throw new errors.X509Error("Invalid tag number on INSTANCE OF OTHER-NAME");
-                default: throw new errors.X509Error("Undefined error when validating INSTANCE OF OTHER-NAME tag");
-            }
-
-            const otherNameElements : DERElement[] = value.sequence;
-            if (otherNameElements.length !== 2)
-                throw new errors.X509Error("Invalid number of elements in INSTANCE OF OTHER-NAME");
-
-            switch (otherNameElements[0].validateTag(
-                [ ASN1TagClass.universal ],
-                [ ASN1Construction.primitive ],
-                [ ASN1UniversalType.objectIdentifier ])
-            ) {
-                case 0: break;
-                case -1: throw new errors.X509Error("Invalid tag class on OTHER-NAME.id");
-                case -2: throw new errors.X509Error("Invalid construction on OTHER-NAME.id");
-                case -3: throw new errors.X509Error("Invalid tag number on OTHER-NAME.id");
-                default: throw new errors.X509Error("Undefined error when validating OTHER-NAME.id tag");
-            }
-
-            return `otherName:${otherNameElements[0].objectIdentifier}:${otherNameElements[1].value}`;
+    case (0): { // otherName
+        switch (value.validateTag(
+            [ ASN1TagClass.universal ],
+            [ ASN1Construction.constructed ],
+            [ ASN1UniversalType.external ])
+        ) {
+        case 0: break;
+        case -1: throw new errors.X509Error("Invalid tag class on INSTANCE OF OTHER-NAME");
+        case -2: throw new errors.X509Error("Invalid construction on INSTANCE OF OTHER-NAME");
+        case -3: throw new errors.X509Error("Invalid tag number on INSTANCE OF OTHER-NAME");
+        default: throw new errors.X509Error("Undefined error when validating INSTANCE OF OTHER-NAME tag");
         }
-        case (1): { // rfc822Name
-            return `rfc822Name:${value.ia5String}`;
+
+        const otherNameElements: DERElement[] = value.sequence;
+        if (otherNameElements.length !== 2) {
+            throw new errors.X509Error("Invalid number of elements in INSTANCE OF OTHER-NAME");
         }
-        case (2): { // dNSName
-            return `dnsName:${value.ia5String}`;
+
+        switch (otherNameElements[0].validateTag(
+            [ ASN1TagClass.universal ],
+            [ ASN1Construction.primitive ],
+            [ ASN1UniversalType.objectIdentifier ])
+        ) {
+        case 0: break;
+        case -1: throw new errors.X509Error("Invalid tag class on OTHER-NAME.id");
+        case -2: throw new errors.X509Error("Invalid construction on OTHER-NAME.id");
+        case -3: throw new errors.X509Error("Invalid tag number on OTHER-NAME.id");
+        default: throw new errors.X509Error("Undefined error when validating OTHER-NAME.id tag");
         }
-        /**
+
+        return `otherName:${otherNameElements[0].objectIdentifier}:${otherNameElements[1].value}`;
+    }
+    case (1): { // rfc822Name
+        return `rfc822Name:${value.ia5String}`;
+    }
+    case (2): { // dNSName
+        return `dnsName:${value.ia5String}`;
+    }
+    /**
          * From https://en.wikipedia.org/wiki/X.400:
          * The standards themselves originally did not specify how these email
          * addresses should be written (for instance on a business card) or
@@ -149,26 +150,26 @@ function printGeneralName (value : DERElement) : string {
          * based on a 1993 draft of ITU-T Recommendation F.401, which looked
          * like: "G=Harald;S=Alvestrand;O=Uninett;PRMD=Uninett;A=;C=no"
          */
-        case (3): { // x400Address
-            return ""; // TODO:
-        }
-        case (4): { // directoryName
-            const rdn : RDNSequence = RDNSequence.fromElement(value);
-            return rdn.toString();
-        }
-        case (5): { // ediPartyName
-            const epn : EDIPartyName = EDIPartyName.fromElement(value);
-            return `ediPartyName:${epn.partyName}`;
-        }
-        case (6): { // uniformResourceIdentifier
-            return `uniformResourceIdentifier:${value.ia5String}`;
-        }
-        case (7): { // iPAddress
-            return `iPAddress:${value.octetString}`;
-        }
-        case (8): { // registeredID
-            return `registeredID:${value.objectIdentifier}`;
-        }
-        default: return "UNKNOWN NAME SYNTAX";
+    case (3): { // x400Address
+        return ""; // TODO:
+    }
+    case (4): { // directoryName
+        const rdn: RDNSequence = RDNSequence.fromElement(value);
+        return rdn.toString();
+    }
+    case (5): { // ediPartyName
+        const epn: EDIPartyName = EDIPartyName.fromElement(value);
+        return `ediPartyName:${epn.partyName}`;
+    }
+    case (6): { // uniformResourceIdentifier
+        return `uniformResourceIdentifier:${value.ia5String}`;
+    }
+    case (7): { // iPAddress
+        return `iPAddress:${value.octetString}`;
+    }
+    case (8): { // registeredID
+        return `registeredID:${value.objectIdentifier}`;
+    }
+    default: return "UNKNOWN NAME SYNTAX";
     }
 }

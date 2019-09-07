@@ -16,8 +16,9 @@ class AlgorithmIdentifier {
     }
     static fromElement(value) {
         const algorithmIdentifierElements = value.sequence;
-        if (algorithmIdentifierElements.length !== 2)
+        if (algorithmIdentifierElements.length !== 2) {
             throw new errors.X509Error("Invalid number of elements in AlgorithmIdentifier");
+        }
         switch (algorithmIdentifierElements[0].validateTag([0], [0], [6])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on AlgorithmIdentifier.algorithm");

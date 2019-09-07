@@ -26,43 +26,55 @@ class BasicConstraintsSyntax {
         let pathLenConstraint;
         let fixedPositionElementsEncountered = 0;
         const basicConstraintsSyntaxElements = value.sequence;
-        if (!asn1_ts_1.DERElement.isUniquelyTagged(basicConstraintsSyntaxElements))
+        if (!asn1_ts_1.DERElement.isUniquelyTagged(basicConstraintsSyntaxElements)) {
             throw new errors.X509Error("Elements of BasicConstraintsSyntax were not uniquely tagged");
+        }
         basicConstraintsSyntaxElements.forEach((element, index) => {
             if (element.tagClass === 0) {
                 if (element.tagNumber === 1) {
-                    if (element.construction !== 0)
+                    if (element.construction !== 0) {
                         throw new errors.X509Error("BasicConstraintsSyntax.ca was not primitively constructed");
-                    if (index !== 0)
+                    }
+                    if (index !== 0) {
                         throw new errors.X509Error("BasicConstraintsSyntax.ca was not the first element");
+                    }
                     ca = element.boolean;
                     fixedPositionElementsEncountered++;
                 }
                 else if (element.tagNumber === 2) {
-                    if (element.construction !== 0)
+                    if (element.construction !== 0) {
                         throw new errors.X509Error("BasicConstraintsSyntax.pathLenConstraint was not primitively constructed");
-                    if (index > 1)
+                    }
+                    if (index > 1) {
                         throw new errors.X509Error("BasicConstraintsSyntax.pathLenConstraint was not the first or second element");
-                    if (index === 1 &&
-                        (basicConstraintsSyntaxElements[0].tagClass !== 0 ||
-                            basicConstraintsSyntaxElements[0].construction !== 0 ||
-                            basicConstraintsSyntaxElements[0].tagNumber !== 1))
-                        throw new errors.X509Error("BasicConstraintsSyntax missing ca element before pathLenConstraint when pathLenConstraint was the second element");
+                    }
+                    if (index === 1
+                        && (basicConstraintsSyntaxElements[0].tagClass !== 0
+                            || basicConstraintsSyntaxElements[0].construction !== 0
+                            || basicConstraintsSyntaxElements[0].tagNumber !== 1)) {
+                        throw new errors.X509Error("BasicConstraintsSyntax missing ca element before "
+                            + "pathLenConstraint when pathLenConstraint was "
+                            + "the second element.");
+                    }
                     pathLenConstraint = element.integer;
                     fixedPositionElementsEncountered++;
                 }
             }
         });
-        if (!asn1_ts_1.DERElement.isInCanonicalOrder(basicConstraintsSyntaxElements.slice(fixedPositionElementsEncountered)))
+        if (!asn1_ts_1.DERElement.isInCanonicalOrder(basicConstraintsSyntaxElements.slice(fixedPositionElementsEncountered))) {
             throw new errors.X509Error("Extended elements of BasicConstraintsSyntax were not in canonical order");
-        if (ca === false)
-            throw new errors.X509Error("BasicConstraintsSyntax.cA was encoded with the default value, which is prohibited by the Distinguished Encoding Rules.");
+        }
+        if (ca === false) {
+            throw new errors.X509Error("BasicConstraintsSyntax.cA was encoded with the default "
+                + "value, which is prohibited by the Distinguished Encoding "
+                + "Rules.");
+        }
         if (ca === undefined)
             ca = false;
         return new BasicConstraintsSyntax(ca, pathLenConstraint);
     }
     toElement() {
-        let basicConstraintsSyntaxElements = [];
+        const basicConstraintsSyntaxElements = [];
         if (this.ca === true) {
             const caElement = new asn1_ts_1.DERElement(0, 0, 1);
             caElement.boolean = true;

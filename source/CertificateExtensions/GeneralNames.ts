@@ -1,4 +1,4 @@
-import GeneralName from './GeneralName';
+import GeneralName from "./GeneralName";
 
 // GeneralNames ::= SEQUENCE SIZE (1..MAX) OF GeneralName
 

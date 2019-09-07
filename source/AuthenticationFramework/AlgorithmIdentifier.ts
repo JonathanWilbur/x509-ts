@@ -35,26 +35,26 @@ import * as errors from "../errors";
 
 export default
 class AlgorithmIdentifier {
-
     constructor (
-        readonly algorithm : ObjectIdentifier,
-        readonly parameters : DERElement
+        readonly algorithm: ObjectIdentifier,
+        readonly parameters: DERElement
     ) {}
 
-    public static fromElement (value : DERElement) : AlgorithmIdentifier {
-        const algorithmIdentifierElements : DERElement[] = value.sequence;
-        if (algorithmIdentifierElements.length !== 2)
+    public static fromElement (value: DERElement): AlgorithmIdentifier {
+        const algorithmIdentifierElements: DERElement[] = value.sequence;
+        if (algorithmIdentifierElements.length !== 2) {
             throw new errors.X509Error("Invalid number of elements in AlgorithmIdentifier");
+        }
         switch(algorithmIdentifierElements[0].validateTag(
             [ ASN1TagClass.universal ],
             [ ASN1Construction.primitive ],
             [ ASN1UniversalType.objectIdentifier ])
         ) {
-            case 0: break;
-            case -1: throw new errors.X509Error("Invalid tag class on AlgorithmIdentifier.algorithm");
-            case -2: throw new errors.X509Error("Invalid construction on AlgorithmIdentifier.algorithm");
-            case -3: throw new errors.X509Error("Invalid tag number on AlgorithmIdentifier.algorithm");
-            default: throw new errors.X509Error("Undefined error when validating AlgorithmIdentifier.algorithm tag");
+        case 0: break;
+        case -1: throw new errors.X509Error("Invalid tag class on AlgorithmIdentifier.algorithm");
+        case -2: throw new errors.X509Error("Invalid construction on AlgorithmIdentifier.algorithm");
+        case -3: throw new errors.X509Error("Invalid tag number on AlgorithmIdentifier.algorithm");
+        default: throw new errors.X509Error("Undefined error when validating AlgorithmIdentifier.algorithm tag");
         }
         return new AlgorithmIdentifier(
             algorithmIdentifierElements[0].objectIdentifier,
@@ -62,13 +62,12 @@ class AlgorithmIdentifier {
         );
     }
 
-    public toElement () : DERElement {
-        if (this.algorithm === undefined)
-            throw new errors.X509Error("Algorithm is undefined");
-        const algorithmElement : DERElement = new DERElement();
+    public toElement (): DERElement {
+        if (this.algorithm === undefined) throw new errors.X509Error("Algorithm is undefined");
+        const algorithmElement: DERElement = new DERElement();
         algorithmElement.tagNumber = ASN1UniversalType.objectIdentifier;
         algorithmElement.objectIdentifier = this.algorithm;
-        const algorithmIdentifierElement : DERElement = new DERElement();
+        const algorithmIdentifierElement: DERElement = new DERElement();
         algorithmIdentifierElement.tagClass = ASN1TagClass.universal;
         algorithmIdentifierElement.construction = ASN1Construction.constructed;
         algorithmIdentifierElement.tagNumber = ASN1UniversalType.sequence;
@@ -80,13 +79,13 @@ class AlgorithmIdentifier {
         return algorithmIdentifierElement;
     }
 
-    public static fromBytes (value : Uint8Array) : AlgorithmIdentifier {
-        const el : DERElement = new DERElement();
+    public static fromBytes (value: Uint8Array): AlgorithmIdentifier {
+        const el: DERElement = new DERElement();
         el.fromBytes(value);
         return AlgorithmIdentifier.fromElement(el);
     }
 
-    public toBytes () : Uint8Array {
+    public toBytes (): Uint8Array {
         return this.toElement().toBytes();
     }
 }

@@ -20,24 +20,53 @@ class PolicyMapping {
             case -1: throw new errors.X509Error("Invalid tag class on inner sequence of PolicyMappingsSyntax");
             case -2: throw new errors.X509Error("Invalid construction on inner sequence of PolicyMappingsSyntax");
             case -3: throw new errors.X509Error("Invalid tag number on inner sequence of PolicyMappingsSyntax");
-            default: throw new errors.X509Error("Undefined error when validating inner sequence of PolicyMappingsSyntax tag");
+            default: {
+                throw new errors.X509Error("Undefined error when validating inner sequence of PolicyMappingsSyntax tag");
+            }
         }
         const policyMappingElements = value.sequence;
-        if (policyMappingElements.length < 2)
+        if (policyMappingElements.length < 2) {
             throw new errors.X509Error("Too few elements in inner sequence of PolicyMappingsSyntax");
+        }
         switch (policyMappingElements[0].validateTag([0], [0], [6])) {
             case 0: break;
-            case -1: throw new errors.X509Error("Invalid tag class on inner sequence of PolicyMappingsSyntax.SEQUENCE.SEQUENCE.subjectDomainPolicy");
-            case -2: throw new errors.X509Error("Invalid construction on inner sequence of PolicyMappingsSyntax.SEQUENCE.SEQUENCE.subjectDomainPolicy");
-            case -3: throw new errors.X509Error("Invalid tag number on inner sequence of PolicyMappingsSyntax.SEQUENCE.SEQUENCE.subjectDomainPolicy");
-            default: throw new errors.X509Error("Undefined error when validating inner sequence of PolicyMappingsSyntax.SEQUENCE.SEQUENCE.subjectDomainPolicy tag");
+            case -1: {
+                throw new errors.X509Error("Invalid tag class on inner sequence of PolicyMappingsSyntax."
+                    + "SEQUENCE.SEQUENCE.subjectDomainPolicy.");
+            }
+            case -2: {
+                throw new errors.X509Error("Invalid construction on inner sequence of "
+                    + "PolicyMappingsSyntax.SEQUENCE.SEQUENCE.subjectDomainPolicy.");
+            }
+            case -3: {
+                throw new errors.X509Error("Invalid tag number on inner sequence of PolicyMappingsSyntax"
+                    + ".SEQUENCE.SEQUENCE.subjectDomainPolicy.");
+            }
+            default: {
+                throw new errors.X509Error("Undefined error when validating inner sequence of "
+                    + "PolicyMappingsSyntax.SEQUENCE.SEQUENCE.subjectDomainPolicy "
+                    + "tag.");
+            }
         }
         switch (policyMappingElements[1].validateTag([0], [0], [6])) {
             case 0: break;
-            case -1: throw new errors.X509Error("Invalid tag class on inner sequence of PolicyMappingsSyntax.SEQUENCE.SEQUENCE.issuerDomainPolicy");
-            case -2: throw new errors.X509Error("Invalid construction on inner sequence of PolicyMappingsSyntax.SEQUENCE.SEQUENCE.issuerDomainPolicy");
-            case -3: throw new errors.X509Error("Invalid tag number on inner sequence of PolicyMappingsSyntax.SEQUENCE.SEQUENCE.issuerDomainPolicy");
-            default: throw new errors.X509Error("Undefined error when validating inner sequence of PolicyMappingsSyntax.SEQUENCE.SEQUENCE.issuerDomainPolicy tag");
+            case -1: {
+                throw new errors.X509Error("Invalid tag class on inner sequence of PolicyMappingsSyntax"
+                    + ".SEQUENCE.SEQUENCE.issuerDomainPolicy.");
+            }
+            case -2: {
+                throw new errors.X509Error("Invalid construction on inner sequence of "
+                    + "PolicyMappingsSyntax.SEQUENCE.SEQUENCE.issuerDomainPolicy.");
+            }
+            case -3: {
+                throw new errors.X509Error("Invalid tag number on inner sequence of "
+                    + "PolicyMappingsSyntax.SEQUENCE.SEQUENCE.issuerDomainPolicy.");
+            }
+            default: {
+                throw new errors.X509Error("Undefined error when validating inner sequence of "
+                    + "PolicyMappingsSyntax.SEQUENCE.SEQUENCE.issuerDomainPolicy "
+                    + "tag.");
+            }
         }
         return new PolicyMapping(policyMappingElements[0].objectIdentifier, policyMappingElements[1].objectIdentifier);
     }
@@ -49,7 +78,7 @@ class PolicyMapping {
         const policyMappingElement = new asn1_ts_1.DERElement(0, 1, 16);
         policyMappingElement.sequence = [
             issuerDomainPolicyElement,
-            subjectDomainPolicyElement
+            subjectDomainPolicyElement,
         ];
         return policyMappingElement;
     }

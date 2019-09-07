@@ -24,25 +24,28 @@ class GeneralSubtree {
             default: throw new errors.X509Error("Undefined error when validating GeneralSubtree tag");
         }
         const generalSubtreeElements = value.sequence;
-        if (generalSubtreeElements.length === 0)
+        if (generalSubtreeElements.length === 0) {
             throw new errors.X509Error("Invalid number of elements in GeneralSubtree");
-        let base = generalSubtreeElements[0];
+        }
+        const base = generalSubtreeElements[0];
         let minimum;
         let maximum;
         let fixedPositionElementsEncountered = 1;
         generalSubtreeElements.slice(1).forEach((element) => {
             if (element.tagClass === 2) {
                 if (element.tagNumber === 0) {
-                    if (element.construction !== 0)
+                    if (element.construction !== 0) {
                         throw new errors.X509Error("GeneralSubtree.minimum was not primitively constructed");
+                    }
                     if (minimum)
                         throw new errors.X509Error("GeneralSubtree.minimum already defined");
                     minimum = element.integer;
                     fixedPositionElementsEncountered++;
                 }
                 else if (element.tagNumber === 1) {
-                    if (element.construction !== 0)
+                    if (element.construction !== 0) {
                         throw new errors.X509Error("GeneralSubtree.maximum was not primitively constructed");
+                    }
                     if (maximum)
                         throw new errors.X509Error("GeneralSubtree.maximum already defined");
                     maximum = element.integer;
@@ -50,18 +53,22 @@ class GeneralSubtree {
                 }
             }
         });
-        if (!asn1_ts_1.DERElement.isUniquelyTagged(generalSubtreeElements.slice(fixedPositionElementsEncountered)))
+        if (!asn1_ts_1.DERElement.isUniquelyTagged(generalSubtreeElements.slice(fixedPositionElementsEncountered))) {
             throw new errors.X509Error("Elements of GeneralSubtree were not uniquely tagged");
-        if (!asn1_ts_1.DERElement.isInCanonicalOrder(generalSubtreeElements.slice(fixedPositionElementsEncountered)))
+        }
+        if (!asn1_ts_1.DERElement.isInCanonicalOrder(generalSubtreeElements.slice(fixedPositionElementsEncountered))) {
             throw new errors.X509Error("Extended elements of GeneralSubtree were not in canonical order");
-        if (minimum === 0)
-            throw new errors.X509Error("GeneralSubtree.minimum was encoded with the default value, which is prohibited by the Distinguished Encoding Rules.");
+        }
+        if (minimum === 0) {
+            throw new errors.X509Error("GeneralSubtree.minimum was encoded with the default value, "
+                + "which is prohibited by the Distinguished Encoding Rules.");
+        }
         if (minimum === undefined)
             minimum = 0;
         return new GeneralSubtree(base, minimum, maximum);
     }
     toElement() {
-        let generalSubtreeElements = [this.base];
+        const generalSubtreeElements = [this.base];
         if (this.minimum) {
             const minimumElement = new asn1_ts_1.DERElement(2, 0, 0);
             minimumElement.integer = this.minimum;

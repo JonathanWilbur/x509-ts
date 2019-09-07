@@ -24,10 +24,12 @@ class Extension {
             default: throw new errors.X509Error("Undefined error when validating Extension tag");
         }
         const extensionElements = value.sequence;
-        if (extensionElements.length > 3)
+        if (extensionElements.length > 3) {
             throw new errors.X509Error("An Extension encoded more than three elements");
-        else if (extensionElements.length < 2)
+        }
+        else if (extensionElements.length < 2) {
             throw new errors.X509Error("An Extension encoded fewer than two elements");
+        }
         switch (extensionElements[0].validateTag([0], [0], [6])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on Extension.identifier");

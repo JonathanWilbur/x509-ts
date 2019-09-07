@@ -91,7 +91,7 @@ rules:
   no-loop-func:
     - error
   no-magic-numbers:
-    - warn
+    - off
   no-multi-str:
     - error
   no-new:

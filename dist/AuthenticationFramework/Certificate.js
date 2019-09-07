@@ -47,7 +47,7 @@ class Certificate {
         ret.sequence = [
             this.tbsCertificate.toElement(),
             this.signatureAlgorithm.toElement(),
-            signatureValueElement
+            signatureValueElement,
         ];
         return ret;
     }

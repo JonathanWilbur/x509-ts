@@ -23,30 +23,33 @@ class PolicyQualifierInfo {
             default: throw new errors.X509Error("Undefined error when validating PolicyQualifierInfo tag");
         }
         const policyQualifierInfoElements = value.sequence;
-        let policyQualifierId;
         let qualifier;
-        if (policyQualifierInfoElements.length === 0)
+        if (policyQualifierInfoElements.length === 0) {
             throw new errors.X509Error("PolicyQualifierInfo contained zero elements");
+        }
         switch (policyQualifierInfoElements[0].validateTag([0], [0], [6])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on PolicyQualifierInfo.policyQualifierId");
             case -2: throw new errors.X509Error("Invalid construction on PolicyQualifierInfo.policyQualifierId");
             case -3: throw new errors.X509Error("Invalid tag number on PolicyQualifierInfo.policyQualifierId");
-            default: throw new errors.X509Error("Undefined error when validating PolicyQualifierInfo.policyQualifierId tag");
+            default: {
+                throw new errors.X509Error("Undefined error when validating PolicyQualifierInfo.policyQualifierId tag");
+            }
         }
-        policyQualifierId = policyQualifierInfoElements[0].objectIdentifier;
+        const policyQualifierId = policyQualifierInfoElements[0].objectIdentifier;
         let fixedPositionElementsEncountered = 1;
         if (policyQualifierInfoElements.length > 1) {
             qualifier = policyQualifierInfoElements[1];
             fixedPositionElementsEncountered++;
         }
-        if (!asn1_ts_1.DERElement.isInCanonicalOrder(policyQualifierInfoElements.slice(fixedPositionElementsEncountered)))
+        if (!asn1_ts_1.DERElement.isInCanonicalOrder(policyQualifierInfoElements.slice(fixedPositionElementsEncountered))) {
             throw new errors.X509Error("Extended elements of PolicyQualifierInfo were not in canonical order");
+        }
         return new PolicyQualifierInfo(policyQualifierId, qualifier);
     }
     toElement() {
-        let policyQualifierInfoElements = [
-            new asn1_ts_1.DERElement(0, 0, 6)
+        const policyQualifierInfoElements = [
+            new asn1_ts_1.DERElement(0, 0, 6),
         ];
         if (this.qualifier)
             policyQualifierInfoElements.push(this.qualifier);

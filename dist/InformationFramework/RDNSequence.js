@@ -18,9 +18,7 @@ class RDNSequence {
         this.value = value;
     }
     toString() {
-        return this.value.map((rdn) => {
-            return rdn.toString();
-        }).join(",");
+        return this.value.map((rdn) => rdn.toString()).join(",");
     }
     static fromElement(value) {
         switch (value.validateTag([0], [1], [16])) {
@@ -31,15 +29,11 @@ class RDNSequence {
             default: throw new errors.X509Error("Undefined error when validating RDNSequence tag");
         }
         const rdnSequenceElements = value.set;
-        return new RDNSequence(rdnSequenceElements.map((element) => {
-            return RelativeDistinguishedName_1.default.fromElement(element);
-        }));
+        return new RDNSequence(rdnSequenceElements.map(RelativeDistinguishedName_1.default.fromElement));
     }
     toElement() {
         const rdnSequenceElement = new asn1_ts_1.DERElement(0, 1, 16);
-        rdnSequenceElement.set = this.value.map((rdn) => {
-            return rdn.toElement();
-        });
+        rdnSequenceElement.set = this.value.map((rdn) => rdn.toElement());
         return rdnSequenceElement;
     }
     static fromBytes(value) {

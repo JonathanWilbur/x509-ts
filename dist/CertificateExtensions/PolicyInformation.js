@@ -27,7 +27,6 @@ class PolicyInformation {
             default: throw new errors.X509Error("Undefined error when validating PolicyInformation tag");
         }
         const policyInformationElements = value.sequence;
-        let policyIdentifier;
         let policyQualifiers;
         switch (policyInformationElements[0].validateTag([0], [0], [6])) {
             case 0: break;
@@ -36,27 +35,24 @@ class PolicyInformation {
             case -3: throw new errors.X509Error("Invalid tag number on PolicyInformation.policyIdentifier");
             default: throw new errors.X509Error("Undefined error when validating PolicyInformation.policyIdentifier tag");
         }
-        policyIdentifier = policyInformationElements[0].objectIdentifier;
+        const policyIdentifier = policyInformationElements[0].objectIdentifier;
         let fixedPositionElementsEncountered = 1;
         if (policyInformationElements.length > 1) {
-            policyQualifiers = policyInformationElements[1].sequence.map((element) => {
-                return PolicyQualifierInfo_1.default.fromElement(element);
-            });
+            policyQualifiers = policyInformationElements[1].sequence.map((element) => PolicyQualifierInfo_1.default.fromElement(element));
             fixedPositionElementsEncountered++;
         }
-        if (!asn1_ts_1.DERElement.isInCanonicalOrder(policyInformationElements.slice(fixedPositionElementsEncountered)))
+        if (!asn1_ts_1.DERElement.isInCanonicalOrder(policyInformationElements.slice(fixedPositionElementsEncountered))) {
             throw new errors.X509Error("Extended elements of PolicyInformation were not in canonical order");
+        }
         return new PolicyInformation(policyIdentifier, policyQualifiers);
     }
     toElement() {
-        let policyInformationElements = [
-            new asn1_ts_1.DERElement(0, 0, 6)
+        const policyInformationElements = [
+            new asn1_ts_1.DERElement(0, 0, 6),
         ];
         if (this.policyQualifiers) {
             const policyQualifiersElement = new asn1_ts_1.DERElement(0, 1, 16);
-            policyQualifiersElement.sequence = this.policyQualifiers.map((pqi) => {
-                return pqi.toElement();
-            });
+            policyQualifiersElement.sequence = this.policyQualifiers.map((pqi) => pqi.toElement());
             policyInformationElements.push(policyQualifiersElement);
         }
         const policyInformationElement = new asn1_ts_1.DERElement(0, 1, 16);

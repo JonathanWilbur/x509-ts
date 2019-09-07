@@ -26,8 +26,9 @@ function printGeneralName(value) {
                 default: throw new errors.X509Error("Undefined error when validating INSTANCE OF OTHER-NAME tag");
             }
             const otherNameElements = value.sequence;
-            if (otherNameElements.length !== 2)
+            if (otherNameElements.length !== 2) {
                 throw new errors.X509Error("Invalid number of elements in INSTANCE OF OTHER-NAME");
+            }
             switch (otherNameElements[0].validateTag([0], [0], [6])) {
                 case 0: break;
                 case -1: throw new errors.X509Error("Invalid tag class on OTHER-NAME.id");

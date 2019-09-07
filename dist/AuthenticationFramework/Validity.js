@@ -23,8 +23,9 @@ class Validity {
             default: throw new errors.X509Error("Undefined error when validating validity tag");
         }
         const validityElements = value.sequence;
-        if (validityElements.length !== 2)
+        if (validityElements.length !== 2) {
             throw new errors.X509Error("validity contained more than two ASN.1 elements");
+        }
         switch (validityElements[0].validateTag([0], [0], [23, 24])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on validity.notBefore");
@@ -39,9 +40,9 @@ class Validity {
             case -3: throw new errors.X509Error("Invalid tag number on validity.notBefore");
             default: throw new errors.X509Error("Undefined error when validating validity.notBefore tag");
         }
-        return new Validity((validityElements[0].tagNumber === 24) ?
-            validityElements[0].generalizedTime : validityElements[0].utcTime, (validityElements[1].tagNumber === 24) ?
-            validityElements[1].generalizedTime : validityElements[1].utcTime);
+        return new Validity((validityElements[0].tagNumber === 24)
+            ? validityElements[0].generalizedTime : validityElements[0].utcTime, (validityElements[1].tagNumber === 24)
+            ? validityElements[1].generalizedTime : validityElements[1].utcTime);
     }
     toElement() {
         const notBeforeElement = new asn1_ts_1.DERElement();

@@ -69,25 +69,25 @@ import * as errors from "../errors";
 
 export default
 class AttributeTypeAndValue {
-    constructor(
-        readonly type : ObjectIdentifier,
-        readonly value : DERElement
+    constructor (
+        readonly type: ObjectIdentifier,
+        readonly value: DERElement
     ) {}
 
-    public static escapeDirectoryCharacters (unescaped : string) : string {
+    public static escapeDirectoryCharacters (unescaped: string): string {
         // REVIEW: Will this replace all occurences?
-        return unescaped.replace(",", "\,").replace("+", "\+");
+        return unescaped.replace(",", "\\,").replace("+", "\\+");
     }
 
-    public toString() : string {
-        const oidString : string = this.type.toString();
+    public toString (): string {
+        const oidString: string = this.type.toString();
         if (
-            oidString in AttributeTypeAndValue.attributeToNameMapping &&
-            oidString in AttributeTypeAndValue.attributeToValuePrinterMapping
+            oidString in AttributeTypeAndValue.attributeToNameMapping
+            && oidString in AttributeTypeAndValue.attributeToValuePrinterMapping
         ) {
-            const attributeNameString : string = AttributeTypeAndValue.attributeToNameMapping[oidString];
-            const valueString : string =
-                AttributeTypeAndValue.escapeDirectoryCharacters(
+            const attributeNameString: string = AttributeTypeAndValue.attributeToNameMapping[oidString];
+            const valueString: string
+                = AttributeTypeAndValue.escapeDirectoryCharacters(
                     AttributeTypeAndValue.attributeToValuePrinterMapping[oidString](this.value)
                 );
             return `${attributeNameString}=${valueString}`;
@@ -97,7 +97,7 @@ class AttributeTypeAndValue {
         }
     }
 
-    public static attributeToNameMapping : { [ oid : string ] : string }= {
+    public static attributeToNameMapping: { [ oid: string ]: string }= {
         "2.5.4.3": "cn",
         "2.5.4.7.1": "c-l",
         "2.5.4.8.1": "c-st",
@@ -253,13 +253,13 @@ class AttributeTypeAndValue {
         "2.5.4.73": "delegationPath",
         "2.5.4.71": "privPolicy",
         "2.5.4.74": "protPrivPolicy",
-        "2.5.4.76": "xmlPrivPolicy"
+        "2.5.4.76": "xmlPrivPolicy",
     };
 
-    public static attributeToValuePrinterMapping : { [ oid : string ] : (element : DERElement) => string }= {
+    public static attributeToValuePrinterMapping: { [ oid: string ]: (element: DERElement) => string }= {
 
         // commonName, cn
-        "2.5.4.3": (element : DERElement) => UnboundedDirectoryString.print(element),
+        "2.5.4.3": (element: DERElement) => UnboundedDirectoryString.print(element),
         // "2.5.4.7.1": "c-l",
         // "2.5.4.8.1": "c-st",
         // "2.5.4.9.1": "c-street",
@@ -276,64 +276,64 @@ class AttributeTypeAndValue {
         // "2.5.4.2": "knowledgeInformation",
 
         // surName, sn
-        "2.5.4.4": (element : DERElement) => UnboundedDirectoryString.print(element),
+        "2.5.4.4": (element: DERElement) => UnboundedDirectoryString.print(element),
 
         // serialNumber
-        "2.5.4.5": (element : DERElement) => element.printableString,
+        "2.5.4.5": (element: DERElement) => element.printableString,
 
         // countryName
-        "2.5.4.6": (element : DERElement) => element.printableString,
+        "2.5.4.6": (element: DERElement) => element.printableString,
 
         // localityName, l
-        "2.5.4.7": (element : DERElement) => UnboundedDirectoryString.print(element),
+        "2.5.4.7": (element: DERElement) => UnboundedDirectoryString.print(element),
 
         // stateOrProvinceName, st
-        "2.5.4.8": (element : DERElement) => UnboundedDirectoryString.print(element),
+        "2.5.4.8": (element: DERElement) => UnboundedDirectoryString.print(element),
 
         // streetAddress
-        "2.5.4.9": (element : DERElement) => UnboundedDirectoryString.print(element),
+        "2.5.4.9": (element: DERElement) => UnboundedDirectoryString.print(element),
 
         // organizationName, o
-        "2.5.4.10": (element : DERElement) => UnboundedDirectoryString.print(element),
+        "2.5.4.10": (element: DERElement) => UnboundedDirectoryString.print(element),
 
         // organizationalUnit, ou
-        "2.5.4.11": (element : DERElement) => UnboundedDirectoryString.print(element),
+        "2.5.4.11": (element: DERElement) => UnboundedDirectoryString.print(element),
 
         // title
-        "2.5.4.12": (element : DERElement) => UnboundedDirectoryString.print(element),
+        "2.5.4.12": (element: DERElement) => UnboundedDirectoryString.print(element),
         // "2.5.4.14": "searchGuide",
 
         // businessCategory
-        "2.5.4.15": (element : DERElement) => UnboundedDirectoryString.print(element),
+        "2.5.4.15": (element: DERElement) => UnboundedDirectoryString.print(element),
 
         // "2.5.4.16": "postalAddress", // SEQUENCE
 
         // postalCode
-        "2.5.4.17": (element : DERElement) => UnboundedDirectoryString.print(element),
+        "2.5.4.17": (element: DERElement) => UnboundedDirectoryString.print(element),
 
         // postOfficeBox
-        "2.5.4.18": (element : DERElement) => UnboundedDirectoryString.print(element),
+        "2.5.4.18": (element: DERElement) => UnboundedDirectoryString.print(element),
 
         // physicalDeliveryOfficeName
-        "2.5.4.19": (element : DERElement) => UnboundedDirectoryString.print(element),
+        "2.5.4.19": (element: DERElement) => UnboundedDirectoryString.print(element),
 
         // telephoneNumber
-        "2.5.4.20": (element : DERElement) => element.printableString,
+        "2.5.4.20": (element: DERElement) => element.printableString,
 
         // "2.5.4.21": "telexNumber", // SEQUENCE
         // "2.5.4.22": "teletexTerminalIdentifier",
         // "2.5.4.23": "facsimileTelephoneNumber", // SEQUENCE
 
         // x121Address
-        "2.5.4.24": (element : DERElement) => element.numericString,
+        "2.5.4.24": (element: DERElement) => element.numericString,
 
         // internationaliSDNNumber
-        "2.5.4.25": (element : DERElement) => element.numericString,
+        "2.5.4.25": (element: DERElement) => element.numericString,
 
         // "2.5.4.26": "registeredAddress", // SEQUENCE
 
         // destinationIndicator
-        "2.5.4.27": (element : DERElement) => element.printableString,
+        "2.5.4.27": (element: DERElement) => element.printableString,
 
         // "2.5.4.28": "preferredDeliveryMethod",
         // "2.5.4.29": "presentationAddress",
@@ -348,16 +348,16 @@ class AttributeTypeAndValue {
         // "2.5.4.40": "crossCertificatePair",
 
         // givenName, gn
-        "2.5.4.42": (element : DERElement) => UnboundedDirectoryString.print(element),
+        "2.5.4.42": (element: DERElement) => UnboundedDirectoryString.print(element),
 
         // initials
-        "2.5.4.43": (element : DERElement) => UnboundedDirectoryString.print(element),
+        "2.5.4.43": (element: DERElement) => UnboundedDirectoryString.print(element),
 
         // generationQualifier
-        "2.5.4.44": (element : DERElement) => UnboundedDirectoryString.print(element),
+        "2.5.4.44": (element: DERElement) => UnboundedDirectoryString.print(element),
 
         // "2.5.4.45": "x500UniqueIdentifier",
-        "2.5.4.46": (element : DERElement) => element.printableString,
+        "2.5.4.46": (element: DERElement) => element.printableString,
         // "2.5.4.47": "enhancedSearchGuide", // See http://www.faqs.org/rfcs/rfc2256.html
         // "2.5.4.48": "protocolInformation",
         // "2.5.4.50": "uniqueMember",
@@ -462,20 +462,21 @@ class AttributeTypeAndValue {
         // "2.5.4.76": "xmlPrivPolicy"
     };
 
-    public static fromElement (value : DERElement) : AttributeTypeAndValue {
-        const attributeTypeAndValueElements : DERElement[] = value.sequence;
-        if (attributeTypeAndValueElements.length !== 2)
+    public static fromElement (value: DERElement): AttributeTypeAndValue {
+        const attributeTypeAndValueElements: DERElement[] = value.sequence;
+        if (attributeTypeAndValueElements.length !== 2) {
             throw new errors.X509Error("Invalid number of elements in AttributeTypeAndValue");
+        }
         switch (attributeTypeAndValueElements[0].validateTag(
             [ ASN1TagClass.universal ],
             [ ASN1Construction.primitive ],
             [ ASN1UniversalType.objectIdentifier ])
         ) {
-            case 0: break;
-            case -1: throw new errors.X509Error("Invalid tag class on AttributeTypeAndValue.type");
-            case -2: throw new errors.X509Error("Invalid construction on AttributeTypeAndValue.type");
-            case -3: throw new errors.X509Error("Invalid tag number on AttributeTypeAndValue.type");
-            default: throw new errors.X509Error("Undefined error when validating AttributeTypeAndValue.type tag");
+        case 0: break;
+        case -1: throw new errors.X509Error("Invalid tag class on AttributeTypeAndValue.type");
+        case -2: throw new errors.X509Error("Invalid construction on AttributeTypeAndValue.type");
+        case -3: throw new errors.X509Error("Invalid tag number on AttributeTypeAndValue.type");
+        default: throw new errors.X509Error("Undefined error when validating AttributeTypeAndValue.type tag");
         }
         return new AttributeTypeAndValue(
             attributeTypeAndValueElements[0].objectIdentifier,
@@ -483,11 +484,11 @@ class AttributeTypeAndValue {
         );
     }
 
-    public toElement() : DERElement {
-        const typeElement : DERElement = new DERElement();
+    public toElement (): DERElement {
+        const typeElement: DERElement = new DERElement();
         typeElement.tagNumber = ASN1UniversalType.objectIdentifier;
         typeElement.objectIdentifier = this.type;
-        const attributeTypeAndValueElement : DERElement = new DERElement();
+        const attributeTypeAndValueElement: DERElement = new DERElement();
         attributeTypeAndValueElement.tagClass = ASN1TagClass.universal;
         attributeTypeAndValueElement.construction = ASN1Construction.constructed;
         attributeTypeAndValueElement.tagNumber = ASN1UniversalType.sequence;
@@ -495,13 +496,13 @@ class AttributeTypeAndValue {
         return attributeTypeAndValueElement;
     }
 
-    public static fromBytes (value : Uint8Array) : AttributeTypeAndValue {
-        const el : DERElement = new DERElement();
+    public static fromBytes (value: Uint8Array): AttributeTypeAndValue {
+        const el: DERElement = new DERElement();
         el.fromBytes(value);
         return AttributeTypeAndValue.fromElement(el);
     }
 
-    public toBytes () : Uint8Array {
+    public toBytes (): Uint8Array {
         return this.toElement().toBytes();
     }
 }

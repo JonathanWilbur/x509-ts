@@ -36,12 +36,12 @@ class IssuingDistPointSyntax {
         let indirectCRL;
         const issuingDistPointSyntaxElements = value.sequence;
         let lastEncounteredTagNumber;
-        issuingDistPointSyntaxElements.forEach(element => {
+        issuingDistPointSyntaxElements.forEach((element) => {
             if (!lastEncounteredTagNumber) {
                 lastEncounteredTagNumber = element.tagNumber;
             }
             else if (element.tagNumber <= lastEncounteredTagNumber) {
-                throw new errors.X509Error("Elements out of order in IssuingDistPointSyntax");
+                throw new errors.X509Error("Elements out of order in IssuingDistPointSyntax.");
             }
             if (element.tagClass === 2) {
                 switch (element.tagNumber) {
@@ -50,26 +50,30 @@ class IssuingDistPointSyntax {
                         break;
                     }
                     case (1): {
-                        if (element.construction !== 0)
-                            throw new errors.X509Error("Invalid construction for IssuingDistPointSyntax.onlyContainsUserPublicKeyCerts");
+                        if (element.construction !== 0) {
+                            throw new errors.X509Error("Invalid construction for IssuingDistPointSyntax.onlyContainsUserPublicKeyCerts.");
+                        }
                         onlyContainsUserPublicKeyCerts = element.boolean;
                         break;
                     }
                     case (2): {
-                        if (element.construction !== 0)
-                            throw new errors.X509Error("Invalid construction for IssuingDistPointSyntax.onlyContainsCACerts");
+                        if (element.construction !== 0) {
+                            throw new errors.X509Error("Invalid construction for IssuingDistPointSyntax.onlyContainsCACerts.");
+                        }
                         onlyContainsCACerts = element.boolean;
                         break;
                     }
                     case (3): {
-                        if (element.construction !== 1)
-                            throw new errors.X509Error("Invalid construction for IssuingDistPointSyntax.onlySomeReasons");
+                        if (element.construction !== 1) {
+                            throw new errors.X509Error("Invalid construction for IssuingDistPointSyntax.onlySomeReasons.");
+                        }
                         onlySomeReasons = ReasonFlags_1.default.fromElement(element);
                         break;
                     }
                     case (4): {
-                        if (element.construction !== 0)
-                            throw new errors.X509Error("Invalid construction for IssuingDistPointSyntax.indirectCRL");
+                        if (element.construction !== 0) {
+                            throw new errors.X509Error("Invalid construction for IssuingDistPointSyntax.indirectCRL.");
+                        }
                         indirectCRL = element.boolean;
                         break;
                     }
@@ -81,7 +85,7 @@ class IssuingDistPointSyntax {
         return new IssuingDistPointSyntax(distributionPoint, onlyContainsUserPublicKeyCerts, onlyContainsCACerts, onlySomeReasons, indirectCRL);
     }
     toElement() {
-        let issuingDistPointSyntaxElements = [];
+        const issuingDistPointSyntaxElements = [];
         if (this.distributionPoint) {
             issuingDistPointSyntaxElements.push(this.distributionPoint);
         }

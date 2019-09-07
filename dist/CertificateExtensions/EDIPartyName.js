@@ -30,31 +30,38 @@ class EDIPartyName {
             default: throw new errors.X509Error("Undefined error when validating EDIPartyName tag");
         }
         const ediPartNameElements = value.sequence;
-        if (!asn1_ts_1.DERElement.isUniquelyTagged(ediPartNameElements))
+        if (!asn1_ts_1.DERElement.isUniquelyTagged(ediPartNameElements)) {
             throw new errors.X509Error("Elements of EDIPartyName were not uniquely tagged");
+        }
         let nameAssigner;
         let partyName;
         let fixedPositionElementsEncountered = 0;
         ediPartNameElements.forEach((element, index) => {
             if (element.tagClass === 2) {
                 if (element.tagNumber === 0) {
-                    if (element.construction !== 0)
+                    if (element.construction !== 0) {
                         throw new errors.X509Error("EDIPartyName.nameAssigner was not primitively constructed");
+                    }
                     if (index !== 0)
                         throw new errors.X509Error("nameAssigner out of order in EDIPartyName");
                     nameAssigner = UnboundedDirectoryString_1.default.fromElement(element);
                     fixedPositionElementsEncountered++;
                 }
                 else if (element.tagNumber === 1) {
-                    if (element.construction !== 0)
+                    if (element.construction !== 0) {
                         throw new errors.X509Error("EDIPartyName.partyName was not primitively constructed");
-                    if (index > 1)
+                    }
+                    if (index > 1) {
                         throw new errors.X509Error("partyName out of order in EDIPartyName");
-                    if (index === 1 &&
-                        (ediPartNameElements[0].tagClass !== 2 ||
-                            ediPartNameElements[0].construction !== 0 ||
-                            ediPartNameElements[0].tagNumber !== 1))
-                        throw new errors.X509Error("EDIPartyName missing nameAssigner element before partyName when partyName was the second element");
+                    }
+                    if (index === 1
+                        && (ediPartNameElements[0].tagClass !== 2
+                            || ediPartNameElements[0].construction !== 0
+                            || ediPartNameElements[0].tagNumber !== 1)) {
+                        throw new errors.X509Error("EDIPartyName missing nameAssigner element before "
+                            + "partyName when partyName was the second "
+                            + "element.");
+                    }
                     partyName = UnboundedDirectoryString_1.default.fromElement(element);
                     fixedPositionElementsEncountered++;
                 }
@@ -62,12 +69,13 @@ class EDIPartyName {
         });
         if (!partyName)
             throw new errors.X509Error("EDIPartyName.partyName was not defined");
-        if (!asn1_ts_1.DERElement.isInCanonicalOrder(ediPartNameElements.slice(fixedPositionElementsEncountered)))
+        if (!asn1_ts_1.DERElement.isInCanonicalOrder(ediPartNameElements.slice(fixedPositionElementsEncountered))) {
             throw new errors.X509Error("Extended elements of EDIPartyName were not in canonical order");
+        }
         return new EDIPartyName(nameAssigner, partyName);
     }
     toElement() {
-        let ediPartNameElements = [];
+        const ediPartNameElements = [];
         if (this.nameAssigner) {
             ediPartNameElements.push(this.nameAssigner.toElement());
             ediPartNameElements[0].tagNumber = 0;

@@ -31,15 +31,16 @@ class DistributionPoint {
         let distributionPoint;
         let reasons;
         let cRLIssuer;
-        distributionPointElements.forEach(element => {
+        distributionPointElements.forEach((element) => {
             switch (element.tagNumber) {
                 case (0): {
                     distributionPoint = element;
                     break;
                 }
                 case (1): {
-                    if (element.construction !== 0)
+                    if (element.construction !== 0) {
                         throw new errors.X509Error("DistributionPoint.reasons may not be constructed.");
+                    }
                     reasons = ReasonFlags_1.default.fromElement(element);
                     break;
                 }
@@ -53,7 +54,7 @@ class DistributionPoint {
         return new DistributionPoint(distributionPoint, reasons, cRLIssuer);
     }
     toElement() {
-        let distributionPointElements = [];
+        const distributionPointElements = [];
         if (this.distributionPoint) {
             distributionPointElements.push(this.distributionPoint);
         }

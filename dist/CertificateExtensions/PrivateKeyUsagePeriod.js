@@ -13,8 +13,9 @@ class PrivateKeyUsagePeriod {
     constructor(notBefore, notAfter) {
         this.notBefore = notBefore;
         this.notAfter = notAfter;
-        if (!notBefore && !notAfter)
+        if (!notBefore && !notAfter) {
             throw new errors.X509Error("Either notBefore or notAfter must be set in PrivateKeyUsagePeriod");
+        }
     }
     static fromElement(value) {
         switch (value.validateTag([0], [1], [16])) {
@@ -22,11 +23,14 @@ class PrivateKeyUsagePeriod {
             case -1: throw new errors.X509Error("Invalid tag class on inner sequence of PrivateKeyUsagePeriod");
             case -2: throw new errors.X509Error("Invalid construction on inner sequence of PrivateKeyUsagePeriod");
             case -3: throw new errors.X509Error("Invalid tag number on inner sequence of PrivateKeyUsagePeriod");
-            default: throw new errors.X509Error("Undefined error when validating inner sequence of PrivateKeyUsagePeriod tag");
+            default: {
+                throw new errors.X509Error("Undefined error when validating inner sequence of PrivateKeyUsagePeriod tag");
+            }
         }
         const privateKeyUsagePeriodElements = value.sequence;
-        if (privateKeyUsagePeriodElements.length === 0)
+        if (privateKeyUsagePeriodElements.length === 0) {
             throw new errors.X509Error("PrivateKeyUsagePeriod must have at least one element in SEQUENCE");
+        }
         let notBefore;
         let notAfter;
         let fixedPositionElementsEncountered = 0;
@@ -46,12 +50,13 @@ class PrivateKeyUsagePeriod {
                 }
             }
         });
-        if (!asn1_ts_1.DERElement.isInCanonicalOrder(privateKeyUsagePeriodElements.slice(fixedPositionElementsEncountered)))
+        if (!asn1_ts_1.DERElement.isInCanonicalOrder(privateKeyUsagePeriodElements.slice(fixedPositionElementsEncountered))) {
             throw new errors.X509Error("Extended elements of PrivateKeyUsagePeriod were not in canonical order");
+        }
         return new PrivateKeyUsagePeriod(notBefore, notAfter);
     }
     toElement() {
-        let privateKeyUsagePeriodElements = [];
+        const privateKeyUsagePeriodElements = [];
         if (this.notBefore) {
             const notBeforeElement = new asn1_ts_1.DERElement(0, 0, 24);
             notBeforeElement.generalizedTime = this.notBefore;

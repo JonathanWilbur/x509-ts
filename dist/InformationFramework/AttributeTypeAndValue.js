@@ -19,12 +19,12 @@ class AttributeTypeAndValue {
         this.value = value;
     }
     static escapeDirectoryCharacters(unescaped) {
-        return unescaped.replace(",", "\,").replace("+", "\+");
+        return unescaped.replace(",", "\\,").replace("+", "\\+");
     }
     toString() {
         const oidString = this.type.toString();
-        if (oidString in AttributeTypeAndValue.attributeToNameMapping &&
-            oidString in AttributeTypeAndValue.attributeToValuePrinterMapping) {
+        if (oidString in AttributeTypeAndValue.attributeToNameMapping
+            && oidString in AttributeTypeAndValue.attributeToValuePrinterMapping) {
             const attributeNameString = AttributeTypeAndValue.attributeToNameMapping[oidString];
             const valueString = AttributeTypeAndValue.escapeDirectoryCharacters(AttributeTypeAndValue.attributeToValuePrinterMapping[oidString](this.value));
             return `${attributeNameString}=${valueString}`;
@@ -35,8 +35,9 @@ class AttributeTypeAndValue {
     }
     static fromElement(value) {
         const attributeTypeAndValueElements = value.sequence;
-        if (attributeTypeAndValueElements.length !== 2)
+        if (attributeTypeAndValueElements.length !== 2) {
             throw new errors.X509Error("Invalid number of elements in AttributeTypeAndValue");
+        }
         switch (attributeTypeAndValueElements[0].validateTag([0], [0], [6])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on AttributeTypeAndValue.type");
@@ -223,7 +224,7 @@ AttributeTypeAndValue.attributeToNameMapping = {
     "2.5.4.73": "delegationPath",
     "2.5.4.71": "privPolicy",
     "2.5.4.74": "protPrivPolicy",
-    "2.5.4.76": "xmlPrivPolicy"
+    "2.5.4.76": "xmlPrivPolicy",
 };
 AttributeTypeAndValue.attributeToValuePrinterMapping = {
     "2.5.4.3": (element) => UnboundedDirectoryString_1.default.print(element),

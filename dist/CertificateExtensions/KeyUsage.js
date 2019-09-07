@@ -43,7 +43,7 @@ class KeyUsage {
             this.keyCertSign,
             this.cRLSign,
             this.encipherOnly,
-            this.decipherOnly
+            this.decipherOnly,
         ];
         return keyUsageElement;
     }

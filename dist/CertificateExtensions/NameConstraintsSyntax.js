@@ -17,8 +17,9 @@ class NameConstraintsSyntax {
     constructor(permittedSubtrees, excludedSubtrees) {
         this.permittedSubtrees = permittedSubtrees;
         this.excludedSubtrees = excludedSubtrees;
-        if (!permittedSubtrees && !excludedSubtrees)
-            throw new errors.X509Error("NameConstraintsSyntax requires either permittedSubtrees or excludedSubtrees to be defined");
+        if (!permittedSubtrees && !excludedSubtrees) {
+            throw new errors.X509Error("NameConstraintsSyntax requires either permittedSubtrees or excludedSubtrees to be defined.");
+        }
     }
     static fromElement(value) {
         switch (value.validateTag([0], [1], [16])) {
@@ -29,49 +30,56 @@ class NameConstraintsSyntax {
             default: throw new errors.X509Error("Undefined error when validating NameConstraintsSyntax tag");
         }
         const nameConstraintsSyntaxElements = value.sequence;
-        if (nameConstraintsSyntaxElements.length === 0)
+        if (nameConstraintsSyntaxElements.length === 0) {
             throw new errors.X509Error("NameConstraintsSyntax SEQUENCE was constituted from zero elements");
+        }
         let permittedSubtrees;
         let excludedSubtrees;
         let fixedPositionElementsEncountered = 0;
         nameConstraintsSyntaxElements.forEach((element) => {
             if (element.tagClass === 2) {
                 if (element.tagNumber === 0) {
-                    if (element.construction !== 0)
+                    if (element.construction !== 0) {
                         throw new errors.X509Error("NameConstraintsSyntax.permittedSubtrees was not primitively constructed");
-                    if (permittedSubtrees)
+                    }
+                    if (permittedSubtrees) {
                         throw new errors.X509Error("NameConstraintsSyntax.permittedSubtrees already defined");
-                    permittedSubtrees = element.sequence.map((psub) => GeneralSubtree_1.default.fromElement(psub));
+                    }
+                    permittedSubtrees = element.sequence.map(GeneralSubtree_1.default.fromElement);
                     fixedPositionElementsEncountered++;
                 }
                 else if (element.tagNumber === 1) {
-                    if (element.construction !== 0)
+                    if (element.construction !== 0) {
                         throw new errors.X509Error("NameConstraintsSyntax.excludedSubtrees was not primitively constructed");
-                    if (excludedSubtrees)
+                    }
+                    if (excludedSubtrees) {
                         throw new errors.X509Error("NameConstraintsSyntax.excludedSubtrees already defined");
+                    }
                     excludedSubtrees = element.sequence.map((xsub) => GeneralSubtree_1.default.fromElement(xsub));
                     fixedPositionElementsEncountered++;
                 }
             }
         });
-        if (!asn1_ts_1.DERElement.isUniquelyTagged(nameConstraintsSyntaxElements.slice(fixedPositionElementsEncountered)))
+        if (!asn1_ts_1.DERElement.isUniquelyTagged(nameConstraintsSyntaxElements.slice(fixedPositionElementsEncountered))) {
             throw new errors.X509Error("Elements of GeneralSubtree were not uniquely tagged");
-        if (!asn1_ts_1.DERElement.isInCanonicalOrder(nameConstraintsSyntaxElements.slice(fixedPositionElementsEncountered)))
+        }
+        if (!asn1_ts_1.DERElement.isInCanonicalOrder(nameConstraintsSyntaxElements.slice(fixedPositionElementsEncountered))) {
             throw new errors.X509Error("Extended elements of GeneralSubtree were not in canonical order");
+        }
         return new NameConstraintsSyntax(permittedSubtrees, excludedSubtrees);
     }
     toElement() {
-        let nameConstraintsSyntaxElements = [];
+        const nameConstraintsSyntaxElements = [];
         if (this.permittedSubtrees) {
             const permittedSubtreesElement = new asn1_ts_1.DERElement(2, 1, 0);
-            permittedSubtreesElement.sequence =
-                this.permittedSubtrees.map((psub) => psub.toElement());
+            permittedSubtreesElement.sequence
+                = this.permittedSubtrees.map((psub) => psub.toElement());
             nameConstraintsSyntaxElements.push(permittedSubtreesElement);
         }
         if (this.excludedSubtrees) {
             const excludedSubtreesElement = new asn1_ts_1.DERElement(2, 1, 1);
-            excludedSubtreesElement.sequence =
-                this.excludedSubtrees.map((xsub) => xsub.toElement());
+            excludedSubtreesElement.sequence
+                = this.excludedSubtrees.map((xsub) => xsub.toElement());
             nameConstraintsSyntaxElements.push(excludedSubtreesElement);
         }
         const nameConstraintsSyntaxElement = new asn1_ts_1.DERElement(0, 1, 16);

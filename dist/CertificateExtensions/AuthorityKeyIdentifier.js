@@ -24,8 +24,8 @@ class AuthorityKeyIdentifier {
             default: throw new errors.X509Error("Undefined error when validating AuthorityKeyIdentifier tag");
         }
         const authorityKeyIdentifierElements = value.sequence;
-        if (authorityKeyIdentifierElements.length !== 1 &&
-            authorityKeyIdentifierElements.length !== 3)
+        if (authorityKeyIdentifierElements.length !== 1
+            && authorityKeyIdentifierElements.length !== 3)
             throw new errors.X509Error("Invalid number of elements in AuthorityKeyIdentifier");
         switch (authorityKeyIdentifierElements[0].validateTag([2], [0], [0])) {
             case 0: break;
@@ -43,14 +43,24 @@ class AuthorityKeyIdentifier {
                 case -1: throw new errors.X509Error("Invalid tag class on AuthorityKeyIdentifier.authorityCertIssuer");
                 case -2: throw new errors.X509Error("Invalid construction on AuthorityKeyIdentifier.authorityCertIssuer");
                 case -3: throw new errors.X509Error("Invalid tag number on AuthorityKeyIdentifier.authorityCertIssuer");
-                default: throw new errors.X509Error("Undefined error when validating AuthorityKeyIdentifier.authorityCertIssuer tag");
+                default: {
+                    throw new errors.X509Error("Undefined error when validating AuthorityKeyIdentifier.authorityCertIssuer tag");
+                }
             }
             switch (authorityKeyIdentifierElements[2].validateTag([2], [0], [2])) {
                 case 0: break;
-                case -1: throw new errors.X509Error("Invalid tag class on AuthorityKeyIdentifier.authorityCertSerialNumber");
-                case -2: throw new errors.X509Error("Invalid construction on AuthorityKeyIdentifier.authorityCertSerialNumber");
-                case -3: throw new errors.X509Error("Invalid tag number on AuthorityKeyIdentifier.authorityCertSerialNumber");
-                default: throw new errors.X509Error("Undefined error when validating AuthorityKeyIdentifier.authorityCertSerialNumber tag");
+                case -1: {
+                    throw new errors.X509Error("Invalid tag class on AuthorityKeyIdentifier.authorityCertSerialNumber");
+                }
+                case -2: {
+                    throw new errors.X509Error("Invalid construction on AuthorityKeyIdentifier.authorityCertSerialNumber");
+                }
+                case -3: {
+                    throw new errors.X509Error("Invalid tag number on AuthorityKeyIdentifier.authorityCertSerialNumber");
+                }
+                default: {
+                    throw new errors.X509Error("Undefined error when validating AuthorityKeyIdentifier.authorityCertSerialNumber tag");
+                }
             }
             authorityCertIssuer = authorityKeyIdentifierElements[1].sequence;
             authorityCertSerialNumber = authorityKeyIdentifierElements[2].octetString;
@@ -58,12 +68,13 @@ class AuthorityKeyIdentifier {
         return new AuthorityKeyIdentifier(keyIdentifier, authorityCertIssuer, authorityCertSerialNumber);
     }
     toElement() {
-        let authorityKeyIdentifierElements = [];
+        const authorityKeyIdentifierElements = [];
         const keyIdentifierElement = new asn1_ts_1.DERElement(2, 0, 0);
         authorityKeyIdentifierElements.push(keyIdentifierElement);
-        if ((this.authorityCertIssuer && !this.authorityCertSerialNumber) ||
-            (!this.authorityCertIssuer && this.authorityCertSerialNumber)) {
-            throw new errors.X509Error("AuthorityKeyIdentifer must have both authorityCertIssuer and authorityCertSerialNumber PRESENT or ABSENT");
+        if ((this.authorityCertIssuer && !this.authorityCertSerialNumber)
+            || (!this.authorityCertIssuer && this.authorityCertSerialNumber)) {
+            throw new errors.X509Error("AuthorityKeyIdentifer must have both authorityCertIssuer and "
+                + "authorityCertSerialNumber PRESENT or ABSENT.");
         }
         else if (this.authorityCertIssuer && this.authorityCertSerialNumber) {
             const authorityCertIssuer = new asn1_ts_1.DERElement(2, 1, 1);

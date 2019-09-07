@@ -16,13 +16,12 @@ const errors = __importStar(require("../errors"));
 class RelativeDistinguishedName {
     constructor(value) {
         this.value = value;
-        if (value.length < 1)
+        if (value.length < 1) {
             throw new errors.X509Error("RelativeDistinguishedName must contain at least one AttributeTypeAndValue.");
+        }
     }
     toString() {
-        return this.value.map((atav) => {
-            return atav.toString();
-        }).join("+");
+        return this.value.map((atav) => atav.toString()).join("+");
     }
     static fromElement(value) {
         switch (value.validateTag([0], [1], [17])) {
@@ -33,15 +32,11 @@ class RelativeDistinguishedName {
             default: throw new errors.X509Error("Undefined error when validating RelativeDistinguishedName tag");
         }
         const relativeDistinguishedNameElements = value.set;
-        return new RelativeDistinguishedName(relativeDistinguishedNameElements.map((element) => {
-            return AttributeTypeAndValue_1.default.fromElement(element);
-        }));
+        return new RelativeDistinguishedName(relativeDistinguishedNameElements.map(AttributeTypeAndValue_1.default.fromElement));
     }
     toElement() {
         const relativeDistinguishedNameElement = new asn1_ts_1.DERElement(0, 1, 17);
-        relativeDistinguishedNameElement.set = this.value.map((atav) => {
-            return atav.toElement();
-        });
+        relativeDistinguishedNameElement.set = this.value.map((atav) => atav.toElement());
         return relativeDistinguishedNameElement;
     }
     static fromBytes(value) {

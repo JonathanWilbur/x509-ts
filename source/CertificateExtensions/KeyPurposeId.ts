@@ -1,4 +1,4 @@
-import { ObjectIdentifier } from 'asn1-ts';
+import { ObjectIdentifier } from "asn1-ts";
 
 // KeyPurposeId ::= OBJECT IDENTIFIER
 

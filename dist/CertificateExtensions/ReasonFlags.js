@@ -45,7 +45,7 @@ class ReasonFlags {
             this.certificateHold,
             this.privilegeWithdrawn,
             this.aACompromise,
-            this.weakAlgorithmOrKeySize
+            this.weakAlgorithmOrKeySize,
         ];
         return ret;
     }

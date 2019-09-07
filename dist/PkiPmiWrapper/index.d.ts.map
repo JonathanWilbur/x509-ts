@@ -1,1 +1,1 @@
-{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../../source/PkiPmiWrapper/index.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,gBAAgB,EAAE,MAAM,SAAS,CAAC;AAC3C,eAAO,MAAM,gBAAgB,EAAG,gBAAwD,CAAC;AAEzF,cAAc,kBAAkB,CAAC"}
+{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../../source/PkiPmiWrapper/index.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,gBAAgB,EAAE,MAAM,SAAS,CAAC;AAC3C,eAAO,MAAM,gBAAgB,EAAE,gBAAwD,CAAC;AAExF,cAAc,kBAAkB,CAAC"}
