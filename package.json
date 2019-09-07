@@ -1,44 +1,43 @@
 {
   "bugs": {
-    "email": "jonathan@wilbur.space",
-    "url": "https://github.com/JonathanWilbur/x509-ts/issues"
+    "email": "jonathan@wilbur.space"
   },
   "contributors": [
     {
       "email": "jonathan@wilbur.space",
       "name": "Jonathan M. Wilbur",
-      "url": "https://jonathan.wilbur.space/"
+      "url": "https://github.com/JonathanWilbur"
     }
   ],
-  "dependencies": {
-    "asn1-ts": "^1.6.1"
-  },
-  "description": "X.509 certificate encoding and decoding in TypeScript",
+  "description": "",
   "devDependencies": {
-    "@types/node": "^10.14.17",
-    "jasmine": "^3.4.0",
-    "jasmine-core": "^3.4.0",
-    "karma": "^4.3.0",
-    "karma-chrome-launcher": "^2.2.0",
-    "karma-firefox-launcher": "^1.2.0",
-    "karma-jasmine": "^1.1.2",
-    "karma-safari-launcher": "^1.0.0",
-    "ts-loader": "^4.5.0",
+    "@babel/core": "^7.6.0",
+    "@babel/preset-env": "^7.6.0",
+    "@babel/preset-typescript": "^7.6.0",
+    "@types/node": "^12.7.4",
+    "@typescript-eslint/eslint-plugin": "^2.1.0",
+    "@typescript-eslint/parser": "^2.1.0",
+    "babel-jest": "^24.9.0",
+    "eslint": "^6.3.0",
+    "jest": "^24.9.0",
+    "jest-junit": "^7.0.0",
+    "serverless": "^1.51.0",
+    "ts-loader": "^6.0.4",
     "typescript": "^3.6.2",
     "webpack": "^4.39.3",
-    "webpack-cli": "^3.3.8",
-    "webpack-command": "^0.4.2"
+    "webpack-cli": "^3.3.8"
   },
   "directories": {
+    "doc": "documentation",
     "test": "test"
   },
+  "files": [
+    "dist/**/*"
+  ],
   "engines": {
     "node": ">=10.3.0"
   },
   "homepage": "https://github.com/JonathanWilbur/x509-ts#readme",
-  "files": [
-    "dist"
-  ],
   "keywords": [
     "X.509",
     "x509",
@@ -50,18 +49,23 @@
     "typescript"
   ],
   "license": "MIT",
-  "main": "./dist/node/x509.js",
+  "main": "./dist/index.js",
   "name": "x509-ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/JonathanWilbur/x509-ts.git"
   },
   "scripts": {
-    "build": "make -f build/Makefile",
-    "build-node": "webpack --config build/webpack/node/node.webpack.js",
-    "build-web": "webpack --config build/webpack/web/web.webpack.js",
-    "test": "karma run"
+    "build": "npx tsc && npx webpack",
+    "clean": "rm -rf dist; mkdir -p dist",
+    "deploy-functions": "npx sls deploy",
+    "lint": "npx eslint --config .eslintrc.yml ./source/**/*.ts || true",
+    "remove-functions": "npx sls remove",
+    "test": "npx jest --ci --reporters=default --reporters=jest-junit"
   },
-  "types": "./dist/types/index.d.ts",
-  "version": "0.11.6"
+  "types": "./dist/index.d.ts",
+  "version": "0.12.0",
+  "dependencies": {
+    "asn1-ts": "^1.6.1"
+  }
 }

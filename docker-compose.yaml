@@ -1,0 +1,18 @@
+version: '3.7'
+
+networks:
+
+  # <network name>:
+  #   external: false
+
+services:
+
+  # <service name>:
+  #   build: .
+  #   container_name: ''
+  #   depends_on: []
+  #   environment: []
+  #   hostname: 'imaphost'
+  #   networks: []
+  #   ports: []
+  #   volumes: []

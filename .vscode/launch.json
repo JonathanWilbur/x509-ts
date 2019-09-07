@@ -7,8 +7,12 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Decode",
-            "program": "${workspaceFolder}/test/node/decode.js"
+            "name": "Default",
+            "program": "${workspaceFolder}/dist/index.js",
+            "args": [],
+            "outFiles": [
+                "${workspaceFolder}/**/*.js"
+            ]
         }
     ]
 }

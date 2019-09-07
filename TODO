@@ -1,95 +1,95 @@
-- I noticed that GeneralSubtree is not done...
-- Add "platform" bullet point to ASN.1 library
-- Add toString to almost everything
-- Add static print to almost anything
-- Make sure that each root constructed element is validated
-- Create ASN1Element.serialize
-  - Encode undefined as EOC
-  - Encode boolean as BOOLEAN
-  - Encode integer as INTEGER
-  - Encode Int8Array as BIT STRING
-  - Encode Uint8ClampedArray or Uint8Array as OCTET STRING
-  - Encode float as REAL
-  - Encode null as NULL
-  - Encode Uint32Array as OBJECT IDENTIFIER
-  - Encode Uint16Array as RELATIVE OBJECT IDENTIFIER
-  - Encode object as SEQUENCE
-  - Encode array as SET
-  - Encode string as UTF8String
-  - Encode Date as GeneralizedTime
-- PolicyQualifierInfo.qualified
-- Put these in an x501 library:
-  - PkiPMIProtocolSpecifications
-  - PkiPmiWrapper
-- Make fromBytes static
-- Find some interface you can implement
-- See if you can implement methods on type aliases or implement them as classes gracefully.
-- Certificate Extensions
-  - authorityKeyIdentifier (Done)
-  - keyAttributes
-  - certificatePolicies (Too complicated)
-  - keyUsageRestriction (Cannot find)
-  - policyMapping (Too complicated)
-  - subtreesConstraint
-  - subjectAltName
-  - issuerAltName
-  - subjectDirectoryAttributes
-  - basicConstraints (Done)
-  - subjectKeyIdentifier
-  - keyUsage
-  - privateKeyUsagePeriod
-  - subjectAltName (Done)
-  - issuerAltName (Done)
-  - basicConstraints (Done)
-  - cRLNumber
-  - reasonCode
-  - expirationDate
-  - instructionCode
-  - invalidityDate
-  - cRLDistributionPoints (Done)
-  - issuingDistributionPoint (Done)
-  - deltaCRLIndicator
-  - issuingDistributionPoint (Done)
-  - certificateIssuer
-  - nameConstraints
-  - cRLDistributionPoints (Done)
-  - certificatePolicies
-  - policyMappings
-  - policyConstraints
-  - authorityKeyIdentifier
-  - policyConstraints
-  - extKeyUsage
-  - authorityAttributeIdentifier
-  - roleSpecCertIdentifier
-  - cRLStreamIdentifier
-  - basicAttConstraints
-  - delegatedNameConstraints
-  - timeSpecification
-  - cRLScope
-  - statusReferrals
-  - freshestCRL
-  - orderedList
-  - attributeDescriptor
-  - userNotice
-  - sOAIdentifier
-  - baseUpdateTime
-  - acceptableCertPolicies
-  - deltaInfo
-  - inhibitAnyPolicy
-  - targetInformation
-  - noRevAvail
-  - acceptablePrivilegePolicies
-  - id-ce-toBeRevoked
-  - id-ce-RevokedGroups
-  - id-ce-expiredCertsOnCRL
-  - indirectIssuer
-  - id-ce-noAssertion
-  - id-ce-aAissuingDistributionPoint
-  - id-ce-issuedOnBehaIFOF
-  - id-ce-singleUse
-  - id-ce-groupAC
-  - id-ce-allowedAttAss
-  - id-ce-attributeMappings
-  - id-ce-holderNameConstraints
-  - oCSPNocheck
-  - authorityInfoAccess
+- [ ] I noticed that GeneralSubtree is not done...
+- [ ] Add "platform" bullet point to ASN.1 library
+- [ ] Add toString to almost everything
+- [ ] Add static print to almost anything
+- [ ] Make sure that each root constructed element is validated
+- [ ] Create ASN1Element.serialize
+  - [ ] Encode undefined as EOC
+  - [ ] Encode boolean as BOOLEAN
+  - [ ] Encode integer as INTEGER
+  - [ ] Encode Int8Array as BIT STRING
+  - [ ] Encode Uint8ClampedArray or Uint8Array as OCTET STRING
+  - [ ] Encode float as REAL
+  - [ ] Encode null as NULL
+  - [ ] Encode Uint32Array as OBJECT IDENTIFIER
+  - [ ] Encode Uint16Array as RELATIVE OBJECT IDENTIFIER
+  - [ ] Encode object as SEQUENCE
+  - [ ] Encode array as SET
+  - [ ] Encode string as UTF8String
+  - [ ] Encode Date as GeneralizedTime
+- [ ] PolicyQualifierInfo.qualified
+- [ ] Put these in an x501 library:
+  - [ ] PkiPMIProtocolSpecifications
+  - [ ] PkiPmiWrapper
+- [ ] Make fromBytes static
+- [ ] Find some interface you can implement
+- [ ] See if you can implement methods on type aliases or implement them as classes gracefully.
+- [ ] Certificate Extensions
+  - [ ] authorityKeyIdentifier (Done)
+  - [ ] keyAttributes
+  - [ ] certificatePolicies (Too complicated)
+  - [ ] keyUsageRestriction (Cannot find)
+  - [ ] policyMapping (Too complicated)
+  - [ ] subtreesConstraint
+  - [ ] subjectAltName
+  - [ ] issuerAltName
+  - [ ] subjectDirectoryAttributes
+  - [ ] basicConstraints (Done)
+  - [ ] subjectKeyIdentifier
+  - [ ] keyUsage
+  - [ ] privateKeyUsagePeriod
+  - [ ] subjectAltName (Done)
+  - [ ] issuerAltName (Done)
+  - [ ] basicConstraints (Done)
+  - [ ] cRLNumber
+  - [ ] reasonCode
+  - [ ] expirationDate
+  - [ ] instructionCode
+  - [ ] invalidityDate
+  - [ ] cRLDistributionPoints (Done)
+  - [ ] issuingDistributionPoint (Done)
+  - [ ] deltaCRLIndicator
+  - [ ] issuingDistributionPoint (Done)
+  - [ ] certificateIssuer
+  - [ ] nameConstraints
+  - [ ] cRLDistributionPoints (Done)
+  - [ ] certificatePolicies
+  - [ ] policyMappings
+  - [ ] policyConstraints
+  - [ ] authorityKeyIdentifier
+  - [ ] policyConstraints
+  - [ ] extKeyUsage
+  - [ ] authorityAttributeIdentifier
+  - [ ] roleSpecCertIdentifier
+  - [ ] cRLStreamIdentifier
+  - [ ] basicAttConstraints
+  - [ ] delegatedNameConstraints
+  - [ ] timeSpecification
+  - [ ] cRLScope
+  - [ ] statusReferrals
+  - [ ] freshestCRL
+  - [ ] orderedList
+  - [ ] attributeDescriptor
+  - [ ] userNotice
+  - [ ] sOAIdentifier
+  - [ ] baseUpdateTime
+  - [ ] acceptableCertPolicies
+  - [ ] deltaInfo
+  - [ ] inhibitAnyPolicy
+  - [ ] targetInformation
+  - [ ] noRevAvail
+  - [ ] acceptablePrivilegePolicies
+  - [ ] id-ce-toBeRevoked
+  - [ ] id-ce-RevokedGroups
+  - [ ] id-ce-expiredCertsOnCRL
+  - [ ] indirectIssuer
+  - [ ] id-ce-noAssertion
+  - [ ] id-ce-aAissuingDistributionPoint
+  - [ ] id-ce-issuedOnBehaIFOF
+  - [ ] id-ce-singleUse
+  - [ ] id-ce-groupAC
+  - [ ] id-ce-allowedAttAss
+  - [ ] id-ce-attributeMappings
+  - [ ] id-ce-holderNameConstraints
+  - [ ] oCSPNocheck
+  - [ ] authorityInfoAccess
