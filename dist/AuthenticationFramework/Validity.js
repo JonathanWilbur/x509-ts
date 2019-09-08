@@ -46,11 +46,23 @@ class Validity {
     }
     toElement() {
         const notBeforeElement = new asn1_ts_1.DERElement();
-        notBeforeElement.tagNumber = 24;
-        notBeforeElement.generalizedTime = this.notBefore;
+        if (this.notBefore.getFullYear() >= 2050) {
+            notBeforeElement.tagNumber = 24;
+            notBeforeElement.generalizedTime = this.notBefore;
+        }
+        else {
+            notBeforeElement.tagNumber = 23;
+            notBeforeElement.utcTime = this.notBefore;
+        }
         const notAfterElement = new asn1_ts_1.DERElement();
-        notAfterElement.tagNumber = 24;
-        notAfterElement.generalizedTime = this.notBefore;
+        if (this.notAfter.getFullYear() >= 2050) {
+            notAfterElement.tagNumber = 24;
+            notAfterElement.generalizedTime = this.notAfter;
+        }
+        else {
+            notAfterElement.tagNumber = 23;
+            notAfterElement.utcTime = this.notAfter;
+        }
         const validityElement = new asn1_ts_1.DERElement();
         validityElement.tagClass = 0;
         validityElement.construction = 1;

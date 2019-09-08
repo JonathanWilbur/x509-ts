@@ -69,12 +69,32 @@ class Validity {
     }
 
     public toElement (): DERElement {
+        /* From RFC 5280, Section 4.1.2.5:
+            CAs conforming to this profile MUST always encode certificate
+            validity dates through the year 2049 as UTCTime; certificate
+            validity dates in 2050 or later MUST be encoded as
+            GeneralizedTime. Conforming applications MUST be able to
+            process validity dates that are encoded in either UTCTime or
+            GeneralizedTime.
+        */
         const notBeforeElement: DERElement = new DERElement();
-        notBeforeElement.tagNumber = ASN1UniversalType.generalizedTime;
-        notBeforeElement.generalizedTime = this.notBefore;
+        if (this.notBefore.getFullYear() >= 2050) {
+            notBeforeElement.tagNumber = ASN1UniversalType.generalizedTime;
+            notBeforeElement.generalizedTime = this.notBefore;
+        } else {
+            notBeforeElement.tagNumber = ASN1UniversalType.utcTime;
+            notBeforeElement.utcTime = this.notBefore;
+        }
+
         const notAfterElement: DERElement = new DERElement();
-        notAfterElement.tagNumber = ASN1UniversalType.generalizedTime;
-        notAfterElement.generalizedTime = this.notBefore;
+        if (this.notAfter.getFullYear() >= 2050) {
+            notAfterElement.tagNumber = ASN1UniversalType.generalizedTime;
+            notAfterElement.generalizedTime = this.notAfter;
+        } else {
+            notAfterElement.tagNumber = ASN1UniversalType.utcTime;
+            notAfterElement.utcTime = this.notAfter;
+        }
+
         const validityElement: DERElement = new DERElement();
         validityElement.tagClass = ASN1TagClass.universal;
         validityElement.construction = ASN1Construction.constructed;

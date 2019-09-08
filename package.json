@@ -64,7 +64,7 @@
     "test": "npx jest --ci --reporters=default --reporters=jest-junit"
   },
   "types": "./dist/index.d.ts",
-  "version": "0.11.7",
+  "version": "0.11.8",
   "dependencies": {
     "asn1-ts": "^1.6.1"
   }

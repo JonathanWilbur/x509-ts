@@ -101,3 +101,42 @@ describe("Issue #2 - AlgorithmIdentifier.fromElement() accepting lack of paramet
         x509.AlgorithmIdentifier.fromElement(ai.toElement())
     }).not.toThrow();
 });
+
+describe("Issue #3 - Validity.toElement() encoding with the right time type", () => {
+    // Both dates under 2050.
+    const v1 = (new x509.Validity(
+        new Date(2017, 10, 15),
+        new Date(2019, 10, 15),
+    )).toElement();
+    // One date under 2050, and one at 2050.
+    const v2 = (new x509.Validity(
+        new Date(2017, 10, 15),
+        new Date(2050, 10, 15),
+    )).toElement();
+    // Both dates at or above 2050.
+    const v3 = (new x509.Validity(
+        new Date(2050, 10, 15),
+        new Date(2069, 10, 15),
+    )).toElement();
+
+    test("Validity with both dates under 2050 encodes both as UTCTime", () => {
+        expect(v1.sequence[0].tagNumber).toBe(asn1.ASN1UniversalType.utcTime);
+        expect(v1.sequence[1].tagNumber).toBe(asn1.ASN1UniversalType.utcTime);
+        expect(v1.sequence[0].printableString).toContain("171115");
+        expect(v1.sequence[1].printableString).toContain("191115");
+    });
+
+    test("Validity with one date under 2050 and another above encodes both as correct time types", () => {
+        expect(v2.sequence[0].tagNumber).toBe(asn1.ASN1UniversalType.utcTime);
+        expect(v2.sequence[1].tagNumber).toBe(asn1.ASN1UniversalType.generalizedTime);
+        expect(v2.sequence[0].printableString).toContain("171115");
+        expect(v2.sequence[1].printableString).toContain("20501115");
+    });
+
+    test("Validity with both dates above 2050 encodes both as GeneralizedTime", () => {
+        expect(v3.sequence[0].tagNumber).toBe(asn1.ASN1UniversalType.generalizedTime);
+        expect(v3.sequence[1].tagNumber).toBe(asn1.ASN1UniversalType.generalizedTime);
+        expect(v3.sequence[0].printableString).toContain("20501115");
+        expect(v3.sequence[1].printableString).toContain("20691115");
+    });
+});
