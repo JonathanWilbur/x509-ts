@@ -16,8 +16,11 @@ class AlgorithmIdentifier {
     }
     static fromElement(value) {
         const algorithmIdentifierElements = value.sequence;
-        if (algorithmIdentifierElements.length !== 2) {
-            throw new errors.X509Error("Invalid number of elements in AlgorithmIdentifier");
+        if (algorithmIdentifierElements.length === 0) {
+            throw new errors.X509Error("AlgorithmIdentifier may not contain zero elements.");
+        }
+        if (algorithmIdentifierElements.length > 2) {
+            throw new errors.X509Error("Too many elements in AlgorithmIdentifier.");
         }
         switch (algorithmIdentifierElements[0].validateTag([0], [0], [6])) {
             case 0: break;
@@ -26,7 +29,7 @@ class AlgorithmIdentifier {
             case -3: throw new errors.X509Error("Invalid tag number on AlgorithmIdentifier.algorithm");
             default: throw new errors.X509Error("Undefined error when validating AlgorithmIdentifier.algorithm tag");
         }
-        return new AlgorithmIdentifier(algorithmIdentifierElements[0].objectIdentifier, algorithmIdentifierElements[1]);
+        return new AlgorithmIdentifier(algorithmIdentifierElements[0].objectIdentifier, algorithmIdentifierElements.length === 2 ? algorithmIdentifierElements[1] : undefined);
     }
     toElement() {
         if (this.algorithm === undefined)

@@ -37,15 +37,18 @@ export default
 class AlgorithmIdentifier {
     constructor (
         readonly algorithm: ObjectIdentifier,
-        readonly parameters: DERElement
+        readonly parameters?: DERElement,
     ) {}
 
     public static fromElement (value: DERElement): AlgorithmIdentifier {
         const algorithmIdentifierElements: DERElement[] = value.sequence;
-        if (algorithmIdentifierElements.length !== 2) {
-            throw new errors.X509Error("Invalid number of elements in AlgorithmIdentifier");
+        if (algorithmIdentifierElements.length === 0) {
+            throw new errors.X509Error("AlgorithmIdentifier may not contain zero elements.");
         }
-        switch(algorithmIdentifierElements[0].validateTag(
+        if (algorithmIdentifierElements.length > 2) {
+            throw new errors.X509Error("Too many elements in AlgorithmIdentifier.");
+        }
+        switch (algorithmIdentifierElements[0].validateTag(
             [ ASN1TagClass.universal ],
             [ ASN1Construction.primitive ],
             [ ASN1UniversalType.objectIdentifier ])
@@ -58,7 +61,7 @@ class AlgorithmIdentifier {
         }
         return new AlgorithmIdentifier(
             algorithmIdentifierElements[0].objectIdentifier,
-            algorithmIdentifierElements[1]
+            algorithmIdentifierElements.length === 2 ? algorithmIdentifierElements[1] : undefined,
         );
     }
 

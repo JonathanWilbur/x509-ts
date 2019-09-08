@@ -92,3 +92,12 @@ describe("Issue #1 - TBSCertificate.toElement() adding subject and issuer", () =
         ).toBeGreaterThan(20);
     });
 });
+
+describe("Issue #2 - AlgorithmIdentifier.fromElement() accepting lack of parameters", () => {
+    const ai = new x509.AlgorithmIdentifier(
+        new asn1.ObjectIdentifier([ 1, 2, 3, 4 ]),
+    );
+    expect(() => {
+        x509.AlgorithmIdentifier.fromElement(ai.toElement())
+    }).not.toThrow();
+});
