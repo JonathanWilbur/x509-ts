@@ -66,19 +66,27 @@ class Extension {
         extnIDElement.tagClass = 0;
         extnIDElement.construction = 0;
         extnIDElement.tagNumber = 6;
-        const criticalElement = new asn1_ts_1.DERElement();
-        criticalElement.tagClass = 0;
-        criticalElement.construction = 0;
-        criticalElement.tagNumber = 1;
+        extnIDElement.objectIdentifier = this.extnID;
         const extnValueElement = new asn1_ts_1.DERElement();
         extnValueElement.tagClass = 0;
         extnValueElement.construction = 0;
         extnValueElement.tagNumber = 4;
+        extnValueElement.octetString = this.extnValue;
         const ret = new asn1_ts_1.DERElement();
         ret.tagClass = 0;
         ret.construction = 1;
         ret.tagNumber = 16;
-        ret.sequence = [extnIDElement, criticalElement, extnValueElement];
+        if (this.critical) {
+            const criticalElement = new asn1_ts_1.DERElement();
+            criticalElement.tagClass = 0;
+            criticalElement.construction = 0;
+            criticalElement.tagNumber = 1;
+            criticalElement.boolean = this.critical;
+            ret.sequence = [extnIDElement, criticalElement, extnValueElement];
+        }
+        else {
+            ret.sequence = [extnIDElement, extnValueElement];
+        }
         return ret;
     }
     fromBytes(value) {

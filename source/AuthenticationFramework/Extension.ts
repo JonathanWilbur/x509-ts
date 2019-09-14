@@ -96,22 +96,29 @@ class Extension { // implements Byteable,Elementable {
         extnIDElement.tagClass = ASN1TagClass.universal;
         extnIDElement.construction = ASN1Construction.primitive;
         extnIDElement.tagNumber = ASN1UniversalType.objectIdentifier;
-
-        const criticalElement: DERElement = new DERElement();
-        criticalElement.tagClass = ASN1TagClass.universal;
-        criticalElement.construction = ASN1Construction.primitive;
-        criticalElement.tagNumber = ASN1UniversalType.boolean;
+        extnIDElement.objectIdentifier = this.extnID;
 
         const extnValueElement: DERElement = new DERElement();
         extnValueElement.tagClass = ASN1TagClass.universal;
         extnValueElement.construction = ASN1Construction.primitive;
         extnValueElement.tagNumber = ASN1UniversalType.octetString;
+        extnValueElement.octetString = this.extnValue;
 
         const ret: DERElement = new DERElement();
         ret.tagClass = ASN1TagClass.universal;
         ret.construction = ASN1Construction.constructed;
         ret.tagNumber = ASN1UniversalType.sequence;
-        ret.sequence = [ extnIDElement, criticalElement, extnValueElement ];
+
+        if (this.critical) {
+            const criticalElement: DERElement = new DERElement();
+            criticalElement.tagClass = ASN1TagClass.universal;
+            criticalElement.construction = ASN1Construction.primitive;
+            criticalElement.tagNumber = ASN1UniversalType.boolean;
+            criticalElement.boolean = this.critical;
+            ret.sequence = [ extnIDElement, criticalElement, extnValueElement ];
+        } else {
+            ret.sequence = [ extnIDElement, extnValueElement ];
+        }
         return ret;
     }
 

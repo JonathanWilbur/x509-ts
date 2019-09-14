@@ -140,3 +140,17 @@ describe("Issue #3 - Validity.toElement() encoding with the right time type", ()
         expect(v3.sequence[1].printableString).toContain("20691115");
     });
 });
+
+describe("Issue #4 - Extension.toElement() actually encodes something", () => {
+    const ext = new x509.Extension(
+        new asn1.ObjectIdentifier([ 1, 2, 3, 4 ]),
+        false,
+        new Uint8Array([ 65, 65, 65, 65 ]),
+    );
+
+    expect(
+        Buffer
+            .from(ext.toElement().toBytes())
+            .indexOf(Buffer.from("AAAA"))
+    ).toBeGreaterThan(0);
+});
