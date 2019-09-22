@@ -7,39 +7,39 @@ import * as errors from "../../errors";
 
 export default
 class AccessDescription {
-
     constructor (
-        readonly accessMethod : ObjectIdentifier,
-        readonly accessLocation : DERElement
+        readonly accessMethod: ObjectIdentifier,
+        readonly accessLocation: DERElement,
     ) {}
 
-    public static fromElement (value : DERElement) : AccessDescription {
+    public static fromElement (value: DERElement): AccessDescription {
         switch (value.validateTag(
             [ ASN1TagClass.universal ],
             [ ASN1Construction.constructed ],
             [ ASN1UniversalType.sequence ]
         )) {
-            case 0: break;
-            case -1: throw new errors.X509Error("Invalid tag class on AccessDescription");
-            case -2: throw new errors.X509Error("Invalid construction on AccessDescription");
-            case -3: throw new errors.X509Error("Invalid tag number on AccessDescription");
-            default: throw new errors.X509Error("Undefined error when validating AccessDescription tag");
+        case 0: break;
+        case -1: throw new errors.X509Error("Invalid tag class on AccessDescription");
+        case -2: throw new errors.X509Error("Invalid construction on AccessDescription");
+        case -3: throw new errors.X509Error("Invalid tag number on AccessDescription");
+        default: throw new errors.X509Error("Undefined error when validating AccessDescription tag");
         }
 
-        const accessDescriptionElements : DERElement[] = value.sequence;
-        if (accessDescriptionElements.length !== 2)
+        const accessDescriptionElements: DERElement[] = value.sequence;
+        if (accessDescriptionElements.length !== 2) {
             throw new errors.X509Error("Invalid number of elements in AccessDescription.");
+        }
 
         switch (accessDescriptionElements[0].validateTag(
             [ ASN1TagClass.universal ],
             [ ASN1Construction.primitive ],
             [ ASN1UniversalType.objectIdentifier ]
         )) {
-            case 0: break;
-            case -1: throw new errors.X509Error("Invalid tag class on AccessDescription.accessMethod");
-            case -2: throw new errors.X509Error("Invalid construction on AccessDescription.accessMethod");
-            case -3: throw new errors.X509Error("Invalid tag number on AccessDescription.accessMethod");
-            default: throw new errors.X509Error("Undefined error when validating AccessDescription.accessMethod tag");
+        case 0: break;
+        case -1: throw new errors.X509Error("Invalid tag class on AccessDescription.accessMethod");
+        case -2: throw new errors.X509Error("Invalid construction on AccessDescription.accessMethod");
+        case -3: throw new errors.X509Error("Invalid tag number on AccessDescription.accessMethod");
+        default: throw new errors.X509Error("Undefined error when validating AccessDescription.accessMethod tag");
         }
 
         return new AccessDescription(
@@ -48,32 +48,32 @@ class AccessDescription {
         );
     }
 
-    public toElement () : DERElement {
-        const accessMethodElement : DERElement = new DERElement(
+    public toElement (): DERElement {
+        const accessMethodElement: DERElement = new DERElement(
             ASN1TagClass.universal,
             ASN1Construction.primitive,
             ASN1UniversalType.objectIdentifier
         );
         accessMethodElement.objectIdentifier = this.accessMethod;
-        const accessDescriptionElement : DERElement = new DERElement(
+        const accessDescriptionElement: DERElement = new DERElement(
             ASN1TagClass.universal,
             ASN1Construction.constructed,
             ASN1UniversalType.sequence
         );
         accessDescriptionElement.sequence = [
             accessMethodElement,
-            this.accessLocation
+            this.accessLocation,
         ];
         return accessDescriptionElement;
     }
 
-    public static fromBytes (value : Uint8Array) : AccessDescription {
-        const el : DERElement = new DERElement();
+    public static fromBytes (value: Uint8Array): AccessDescription {
+        const el: DERElement = new DERElement();
         el.fromBytes(value);
         return AccessDescription.fromElement(el);
     }
 
-    public toBytes () : Uint8Array {
+    public toBytes (): Uint8Array {
         return this.toElement().toBytes();
     }
 }

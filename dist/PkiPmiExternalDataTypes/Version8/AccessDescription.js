@@ -23,8 +23,9 @@ class AccessDescription {
             default: throw new errors.X509Error("Undefined error when validating AccessDescription tag");
         }
         const accessDescriptionElements = value.sequence;
-        if (accessDescriptionElements.length !== 2)
+        if (accessDescriptionElements.length !== 2) {
             throw new errors.X509Error("Invalid number of elements in AccessDescription.");
+        }
         switch (accessDescriptionElements[0].validateTag([0], [0], [6])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on AccessDescription.accessMethod");
@@ -40,7 +41,7 @@ class AccessDescription {
         const accessDescriptionElement = new asn1_ts_1.DERElement(0, 1, 16);
         accessDescriptionElement.sequence = [
             accessMethodElement,
-            this.accessLocation
+            this.accessLocation,
         ];
         return accessDescriptionElement;
     }

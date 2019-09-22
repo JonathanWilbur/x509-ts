@@ -1,26 +1,18 @@
 import { DERElement } from "asn1-ts";
-export interface enByteable {
+export interface Enbyteable {
     toBytes(): Uint8Array;
 }
-export interface deByteable {
+export interface Debyteable {
     fromBytes(value: Uint8Array): void;
 }
-export interface Byteable extends enByteable, deByteable {
+export interface Byteable extends Enbyteable, Debyteable {
 }
-export interface enElementable {
+export interface Enelementable {
     toElement(): DERElement;
 }
-export interface deElementable {
+export interface Deelementable {
     fromElement(value: DERElement): void;
 }
-export interface Elementable extends enElementable, deElementable {
-}
-export interface Byteable2 {
-    new (): any;
-    fromBytes(): enByteable;
-}
-export interface Elementable2 {
-    new (): any;
-    fromElement(): enElementable;
+export interface Elementable extends Enelementable, Deelementable {
 }
 //# sourceMappingURL=interfaces.d.ts.map

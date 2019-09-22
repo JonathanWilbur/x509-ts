@@ -21,10 +21,12 @@ class UnboundedDirectoryString {
         return uds.toString();
     }
     static fromElement(value) {
-        if (value.tagClass !== 0)
+        if (value.tagClass !== 0) {
             throw new errors.X509Error("UnboundedDirectoryString must be of universal class");
-        if (value.construction !== 0)
+        }
+        if (value.construction !== 0) {
             throw new errors.X509Error("UnboundedDirectoryString must be of primitive construction");
+        }
         switch (value.tagNumber) {
             case (20): {
                 return new UnboundedDirectoryString("");
