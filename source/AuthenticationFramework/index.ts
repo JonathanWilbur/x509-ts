@@ -7,6 +7,7 @@ export { default as CertificateSerialNumber } from "./CertificateSerialNumber";
 // export { default as Encrypted } from "./Encrypted";
 // export { default as EncryptedHash } from "./EncryptedHash";
 export { default as Extension } from "./Extension";
+export { default as Extensions } from "./Extensions";
 // export { default as Hash } from "./Hash";
 export { default as PublicKey } from "./PublicKey";
 // export { default as Signature } from "./Signature";
