@@ -15,7 +15,7 @@ class PolicyMapping {
         this.subjectDomainPolicy = subjectDomainPolicy;
     }
     static fromElement(value) {
-        switch (value.validateTag([0], [1], [16])) {
+        switch (value.validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.constructed], [asn1_ts_1.ASN1UniversalType.sequence])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on inner sequence of PolicyMappingsSyntax");
             case -2: throw new errors.X509Error("Invalid construction on inner sequence of PolicyMappingsSyntax");
@@ -28,7 +28,7 @@ class PolicyMapping {
         if (policyMappingElements.length < 2) {
             throw new errors.X509Error("Too few elements in inner sequence of PolicyMappingsSyntax");
         }
-        switch (policyMappingElements[0].validateTag([0], [0], [6])) {
+        switch (policyMappingElements[0].validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.primitive], [asn1_ts_1.ASN1UniversalType.objectIdentifier])) {
             case 0: break;
             case -1: {
                 throw new errors.X509Error("Invalid tag class on inner sequence of PolicyMappingsSyntax."
@@ -48,7 +48,7 @@ class PolicyMapping {
                     + "tag.");
             }
         }
-        switch (policyMappingElements[1].validateTag([0], [0], [6])) {
+        switch (policyMappingElements[1].validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.primitive], [asn1_ts_1.ASN1UniversalType.objectIdentifier])) {
             case 0: break;
             case -1: {
                 throw new errors.X509Error("Invalid tag class on inner sequence of PolicyMappingsSyntax"
@@ -71,11 +71,11 @@ class PolicyMapping {
         return new PolicyMapping(policyMappingElements[0].objectIdentifier, policyMappingElements[1].objectIdentifier);
     }
     toElement() {
-        const issuerDomainPolicyElement = new asn1_ts_1.DERElement(0, 0, 6);
+        const issuerDomainPolicyElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.primitive, asn1_ts_1.ASN1UniversalType.objectIdentifier);
         issuerDomainPolicyElement.objectIdentifier = this.issuerDomainPolicy;
-        const subjectDomainPolicyElement = new asn1_ts_1.DERElement(0, 0, 6);
+        const subjectDomainPolicyElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.primitive, asn1_ts_1.ASN1UniversalType.objectIdentifier);
         subjectDomainPolicyElement.objectIdentifier = this.subjectDomainPolicy;
-        const policyMappingElement = new asn1_ts_1.DERElement(0, 1, 16);
+        const policyMappingElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.constructed, asn1_ts_1.ASN1UniversalType.sequence);
         policyMappingElement.sequence = [
             issuerDomainPolicyElement,
             subjectDomainPolicyElement,

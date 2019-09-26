@@ -21,7 +21,7 @@ class RDNSequence {
         return this.value.map((rdn) => rdn.toString()).join(",");
     }
     static fromElement(value) {
-        switch (value.validateTag([0], [1], [16])) {
+        switch (value.validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.constructed], [asn1_ts_1.ASN1UniversalType.sequence])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on RDNSequence");
             case -2: throw new errors.X509Error("Invalid construction on RDNSequence");
@@ -32,7 +32,7 @@ class RDNSequence {
         return new RDNSequence(rdnSequenceElements.map(RelativeDistinguishedName_1.default.fromElement));
     }
     toElement() {
-        const rdnSequenceElement = new asn1_ts_1.DERElement(0, 1, 16);
+        const rdnSequenceElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.constructed, asn1_ts_1.ASN1UniversalType.sequence);
         rdnSequenceElement.set = this.value.map((rdn) => rdn.toElement());
         return rdnSequenceElement;
     }

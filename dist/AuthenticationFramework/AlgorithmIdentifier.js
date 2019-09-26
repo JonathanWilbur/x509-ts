@@ -22,7 +22,7 @@ class AlgorithmIdentifier {
         if (algorithmIdentifierElements.length > 2) {
             throw new errors.X509Error("Too many elements in AlgorithmIdentifier.");
         }
-        switch (algorithmIdentifierElements[0].validateTag([0], [0], [6])) {
+        switch (algorithmIdentifierElements[0].validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.primitive], [asn1_ts_1.ASN1UniversalType.objectIdentifier])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on AlgorithmIdentifier.algorithm");
             case -2: throw new errors.X509Error("Invalid construction on AlgorithmIdentifier.algorithm");
@@ -35,12 +35,12 @@ class AlgorithmIdentifier {
         if (this.algorithm === undefined)
             throw new errors.X509Error("Algorithm is undefined");
         const algorithmElement = new asn1_ts_1.DERElement();
-        algorithmElement.tagNumber = 6;
+        algorithmElement.tagNumber = asn1_ts_1.ASN1UniversalType.objectIdentifier;
         algorithmElement.objectIdentifier = this.algorithm;
         const algorithmIdentifierElement = new asn1_ts_1.DERElement();
-        algorithmIdentifierElement.tagClass = 0;
-        algorithmIdentifierElement.construction = 1;
-        algorithmIdentifierElement.tagNumber = 16;
+        algorithmIdentifierElement.tagClass = asn1_ts_1.ASN1TagClass.universal;
+        algorithmIdentifierElement.construction = asn1_ts_1.ASN1Construction.constructed;
+        algorithmIdentifierElement.tagNumber = asn1_ts_1.ASN1UniversalType.sequence;
         if (this.parameters === undefined) {
             algorithmIdentifierElement.sequence = [algorithmElement];
         }

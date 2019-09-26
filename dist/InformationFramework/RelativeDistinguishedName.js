@@ -24,7 +24,7 @@ class RelativeDistinguishedName {
         return this.value.map((atav) => atav.toString()).join("+");
     }
     static fromElement(value) {
-        switch (value.validateTag([0], [1], [17])) {
+        switch (value.validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.constructed], [asn1_ts_1.ASN1UniversalType.set])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on RelativeDistinguishedName");
             case -2: throw new errors.X509Error("Invalid construction on RelativeDistinguishedName");
@@ -35,7 +35,7 @@ class RelativeDistinguishedName {
         return new RelativeDistinguishedName(relativeDistinguishedNameElements.map(AttributeTypeAndValue_1.default.fromElement));
     }
     toElement() {
-        const relativeDistinguishedNameElement = new asn1_ts_1.DERElement(0, 1, 17);
+        const relativeDistinguishedNameElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.constructed, asn1_ts_1.ASN1UniversalType.set);
         relativeDistinguishedNameElement.set = this.value.map((atav) => atav.toElement());
         return relativeDistinguishedNameElement;
     }

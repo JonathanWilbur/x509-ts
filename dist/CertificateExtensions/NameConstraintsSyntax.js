@@ -22,7 +22,7 @@ class NameConstraintsSyntax {
         }
     }
     static fromElement(value) {
-        switch (value.validateTag([0], [1], [16])) {
+        switch (value.validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.constructed], [asn1_ts_1.ASN1UniversalType.sequence])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on NameConstraintsSyntax");
             case -2: throw new errors.X509Error("Invalid construction on NameConstraintsSyntax");
@@ -37,9 +37,9 @@ class NameConstraintsSyntax {
         let excludedSubtrees;
         let fixedPositionElementsEncountered = 0;
         nameConstraintsSyntaxElements.forEach((element) => {
-            if (element.tagClass === 2) {
+            if (element.tagClass === asn1_ts_1.ASN1TagClass.context) {
                 if (element.tagNumber === 0) {
-                    if (element.construction !== 0) {
+                    if (element.construction !== asn1_ts_1.ASN1Construction.primitive) {
                         throw new errors.X509Error("NameConstraintsSyntax.permittedSubtrees was not primitively constructed");
                     }
                     if (permittedSubtrees) {
@@ -49,7 +49,7 @@ class NameConstraintsSyntax {
                     fixedPositionElementsEncountered++;
                 }
                 else if (element.tagNumber === 1) {
-                    if (element.construction !== 0) {
+                    if (element.construction !== asn1_ts_1.ASN1Construction.primitive) {
                         throw new errors.X509Error("NameConstraintsSyntax.excludedSubtrees was not primitively constructed");
                     }
                     if (excludedSubtrees) {
@@ -71,18 +71,18 @@ class NameConstraintsSyntax {
     toElement() {
         const nameConstraintsSyntaxElements = [];
         if (this.permittedSubtrees) {
-            const permittedSubtreesElement = new asn1_ts_1.DERElement(2, 1, 0);
+            const permittedSubtreesElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.context, asn1_ts_1.ASN1Construction.constructed, 0);
             permittedSubtreesElement.sequence
                 = this.permittedSubtrees.map((psub) => psub.toElement());
             nameConstraintsSyntaxElements.push(permittedSubtreesElement);
         }
         if (this.excludedSubtrees) {
-            const excludedSubtreesElement = new asn1_ts_1.DERElement(2, 1, 1);
+            const excludedSubtreesElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.context, asn1_ts_1.ASN1Construction.constructed, 1);
             excludedSubtreesElement.sequence
                 = this.excludedSubtrees.map((xsub) => xsub.toElement());
             nameConstraintsSyntaxElements.push(excludedSubtreesElement);
         }
-        const nameConstraintsSyntaxElement = new asn1_ts_1.DERElement(0, 1, 16);
+        const nameConstraintsSyntaxElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.constructed, asn1_ts_1.ASN1UniversalType.sequence);
         nameConstraintsSyntaxElement.sequence = nameConstraintsSyntaxElements;
         return nameConstraintsSyntaxElement;
     }

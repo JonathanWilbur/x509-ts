@@ -21,7 +21,7 @@ class Certificate {
         this.signatureValue = signatureValue;
     }
     static fromElement(value) {
-        switch (value.validateTag([0], [1], [16])) {
+        switch (value.validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.constructed], [asn1_ts_1.ASN1UniversalType.sequence])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on Certificate");
             case -2: throw new errors.X509Error("Invalid construction on Certificate");
@@ -31,7 +31,7 @@ class Certificate {
         const certificateElements = value.sequence;
         if (certificateElements.length !== 3)
             throw new errors.X509Error("Invalid number of elements in Certificate");
-        switch (certificateElements[2].validateTag([0], [0], [3])) {
+        switch (certificateElements[2].validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.primitive], [asn1_ts_1.ASN1UniversalType.bitString])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on Certificate.signatureValue");
             case -2: throw new errors.X509Error("Invalid construction on Certificate.signatureValue");
@@ -41,9 +41,9 @@ class Certificate {
         return new Certificate(TBSCertificate_1.default.fromElement(certificateElements[0]), AlgorithmIdentifier_1.default.fromElement(certificateElements[1]), certificateElements[2].bitString);
     }
     toElement() {
-        const signatureValueElement = new asn1_ts_1.DERElement(0, 0, 3);
+        const signatureValueElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.primitive, asn1_ts_1.ASN1UniversalType.bitString);
         signatureValueElement.bitString = this.signatureValue;
-        const ret = new asn1_ts_1.DERElement(0, 1, 16);
+        const ret = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.constructed, asn1_ts_1.ASN1UniversalType.sequence);
         ret.sequence = [
             this.tbsCertificate.toElement(),
             this.signatureAlgorithm.toElement(),

@@ -19,7 +19,7 @@ class SubjectPublicKeyInfo {
         this.subjectPublicKey = subjectPublicKey;
     }
     static fromElement(value) {
-        switch (value.validateTag([0], [1], [16])) {
+        switch (value.validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.constructed], [asn1_ts_1.ASN1UniversalType.sequence])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on SubjectPublicKeyInfo");
             case -2: throw new errors.X509Error("Invalid construction on SubjectPublicKeyInfo");
@@ -27,7 +27,7 @@ class SubjectPublicKeyInfo {
             default: throw new errors.X509Error("Undefined error when validating SubjectPublicKeyInfo tag");
         }
         const subjectPublicKeyElements = value.sequence;
-        switch (subjectPublicKeyElements[1].validateTag([0], [0], [3])) {
+        switch (subjectPublicKeyElements[1].validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.primitive], [asn1_ts_1.ASN1UniversalType.bitString])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on SubjectPublicKeyInfo.subjectPublicKey");
             case -2: throw new errors.X509Error("Invalid construction on SubjectPublicKeyInfo.subjectPublicKey");
@@ -42,13 +42,13 @@ class SubjectPublicKeyInfo {
         if (this.algorithm === undefined)
             throw new errors.X509Error("Algorithm is undefined");
         const ret = new asn1_ts_1.DERElement();
-        ret.tagClass = 0;
-        ret.construction = 1;
-        ret.tagNumber = 16;
+        ret.tagClass = asn1_ts_1.ASN1TagClass.universal;
+        ret.construction = asn1_ts_1.ASN1Construction.constructed;
+        ret.tagNumber = asn1_ts_1.ASN1UniversalType.sequence;
         const subjectPublicKeyElement = new asn1_ts_1.DERElement();
-        subjectPublicKeyElement.tagClass = 0;
-        subjectPublicKeyElement.construction = 0;
-        subjectPublicKeyElement.tagNumber = 3;
+        subjectPublicKeyElement.tagClass = asn1_ts_1.ASN1TagClass.universal;
+        subjectPublicKeyElement.construction = asn1_ts_1.ASN1Construction.primitive;
+        subjectPublicKeyElement.tagNumber = asn1_ts_1.ASN1UniversalType.bitString;
         subjectPublicKeyElement.bitString = this.subjectPublicKey;
         ret.sequence = [this.algorithm.toElement(), subjectPublicKeyElement];
         return ret;

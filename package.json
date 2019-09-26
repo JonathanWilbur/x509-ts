@@ -1,71 +1,71 @@
 {
-  "bugs": {
-    "email": "jonathan@wilbur.space"
-  },
-  "contributors": [
-    {
-      "email": "jonathan@wilbur.space",
-      "name": "Jonathan M. Wilbur",
-      "url": "https://github.com/JonathanWilbur"
+    "bugs": {
+        "email": "jonathan@wilbur.space"
+    },
+    "contributors": [
+        {
+            "email": "jonathan@wilbur.space",
+            "name": "Jonathan M. Wilbur",
+            "url": "https://github.com/JonathanWilbur"
+        }
+    ],
+    "description": "X.509 in TypeScript, mostly for encoding and decoding TLS certificates.",
+    "devDependencies": {
+        "@babel/core": "^7.6.0",
+        "@babel/preset-env": "^7.6.0",
+        "@babel/preset-typescript": "^7.6.0",
+        "@types/node": "^12.7.5",
+        "@typescript-eslint/eslint-plugin": "^2.3.0",
+        "@typescript-eslint/parser": "^2.3.0",
+        "babel-jest": "^24.9.0",
+        "eslint": "^6.4.0",
+        "jest": "^24.9.0",
+        "jest-junit": "^7.0.0",
+        "serverless": "^1.52.2",
+        "ts-loader": "^6.1.2",
+        "typescript": "^3.6.3",
+        "webpack": "^4.40.2",
+        "webpack-cli": "^3.3.9"
+    },
+    "directories": {
+        "doc": "documentation",
+        "test": "test"
+    },
+    "files": [
+        "dist/**/*"
+    ],
+    "engines": {
+        "node": ">=10.3.0"
+    },
+    "homepage": "https://github.com/JonathanWilbur/x509-ts#readme",
+    "keywords": [
+        "X.509",
+        "x509",
+        "tls",
+        "cert",
+        "certificate",
+        "key",
+        "cryptography",
+        "typescript"
+    ],
+    "license": "MIT",
+    "main": "./dist/index.js",
+    "name": "x509-ts",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/JonathanWilbur/x509-ts.git"
+    },
+    "scripts": {
+        "build": "npx tsc && npx webpack",
+        "clean": "rm -rf dist; mkdir -p dist",
+        "deploy-functions": "npx sls deploy",
+        "lint": "npx eslint --config .eslintrc.yml './source/**/*.ts' || true",
+        "remove-functions": "npx sls remove",
+        "test": "npx jest --ci --reporters=default --reporters=jest-junit"
+    },
+    "types": "./dist/index.d.ts",
+    "version": "0.11.11",
+    "dependencies": {
+        "asn1-ts": "^2.0.0"
     }
-  ],
-  "description": "",
-  "devDependencies": {
-    "@babel/core": "^7.6.0",
-    "@babel/preset-env": "^7.6.0",
-    "@babel/preset-typescript": "^7.6.0",
-    "@types/node": "^12.7.5",
-    "@typescript-eslint/eslint-plugin": "^2.3.0",
-    "@typescript-eslint/parser": "^2.3.0",
-    "babel-jest": "^24.9.0",
-    "eslint": "^6.4.0",
-    "jest": "^24.9.0",
-    "jest-junit": "^7.0.0",
-    "serverless": "^1.52.2",
-    "ts-loader": "^6.1.2",
-    "typescript": "^3.6.3",
-    "webpack": "^4.40.2",
-    "webpack-cli": "^3.3.9"
-  },
-  "directories": {
-    "doc": "documentation",
-    "test": "test"
-  },
-  "files": [
-    "dist/**/*"
-  ],
-  "engines": {
-    "node": ">=10.3.0"
-  },
-  "homepage": "https://github.com/JonathanWilbur/x509-ts#readme",
-  "keywords": [
-    "X.509",
-    "x509",
-    "tls",
-    "cert",
-    "certificate",
-    "key",
-    "cryptography",
-    "typescript"
-  ],
-  "license": "MIT",
-  "main": "./dist/index.js",
-  "name": "x509-ts",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/JonathanWilbur/x509-ts.git"
-  },
-  "scripts": {
-    "build": "npx tsc && npx webpack",
-    "clean": "rm -rf dist; mkdir -p dist",
-    "deploy-functions": "npx sls deploy",
-    "lint": "npx eslint --config .eslintrc.yml './source/**/*.ts' || true",
-    "remove-functions": "npx sls remove",
-    "test": "npx jest --ci --reporters=default --reporters=jest-junit"
-  },
-  "types": "./dist/index.d.ts",
-  "version": "0.11.10",
-  "dependencies": {
-    "asn1-ts": "^1.6.1"
-  }
 }

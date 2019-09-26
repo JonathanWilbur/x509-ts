@@ -21,26 +21,26 @@ class UnboundedDirectoryString {
         return uds.toString();
     }
     static fromElement(value) {
-        if (value.tagClass !== 0) {
+        if (value.tagClass !== asn1_ts_1.ASN1TagClass.universal) {
             throw new errors.X509Error("UnboundedDirectoryString must be of universal class");
         }
-        if (value.construction !== 0) {
+        if (value.construction !== asn1_ts_1.ASN1Construction.primitive) {
             throw new errors.X509Error("UnboundedDirectoryString must be of primitive construction");
         }
         switch (value.tagNumber) {
-            case (20): {
+            case (asn1_ts_1.ASN1UniversalType.teletexString): {
                 return new UnboundedDirectoryString("");
             }
-            case (19): {
+            case (asn1_ts_1.ASN1UniversalType.printableString): {
                 return new UnboundedDirectoryString(value.printableString);
             }
-            case (30): {
+            case (asn1_ts_1.ASN1UniversalType.bmpString): {
                 return new UnboundedDirectoryString(value.bmpString);
             }
-            case (28): {
+            case (asn1_ts_1.ASN1UniversalType.universalString): {
                 return new UnboundedDirectoryString(value.universalString);
             }
-            case (12): {
+            case (asn1_ts_1.ASN1UniversalType.utf8String): {
                 return new UnboundedDirectoryString(value.utf8String);
             }
             default:
@@ -48,7 +48,7 @@ class UnboundedDirectoryString {
         }
     }
     toElement() {
-        const unboundedDirectoryStringElement = new asn1_ts_1.DERElement(0, 0, 12);
+        const unboundedDirectoryStringElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.primitive, asn1_ts_1.ASN1UniversalType.utf8String);
         unboundedDirectoryStringElement.utf8String = this.value;
         return unboundedDirectoryStringElement;
     }

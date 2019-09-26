@@ -16,7 +16,7 @@ class AuthorityKeyIdentifier {
         this.authorityCertSerialNumber = authorityCertSerialNumber;
     }
     static fromElement(value) {
-        switch (value.validateTag([0], [1], [16])) {
+        switch (value.validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.constructed], [asn1_ts_1.ASN1UniversalType.sequence])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on AuthorityKeyIdentifier");
             case -2: throw new errors.X509Error("Invalid construction on AuthorityKeyIdentifier");
@@ -27,7 +27,7 @@ class AuthorityKeyIdentifier {
         if (authorityKeyIdentifierElements.length !== 1
             && authorityKeyIdentifierElements.length !== 3)
             throw new errors.X509Error("Invalid number of elements in AuthorityKeyIdentifier");
-        switch (authorityKeyIdentifierElements[0].validateTag([2], [0], [0])) {
+        switch (authorityKeyIdentifierElements[0].validateTag([asn1_ts_1.ASN1TagClass.context], [asn1_ts_1.ASN1Construction.primitive], [0])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on AuthorityKeyIdentifier.keyIdentifier");
             case -2: throw new errors.X509Error("Invalid construction on AuthorityKeyIdentifier.keyIdentifier");
@@ -38,7 +38,7 @@ class AuthorityKeyIdentifier {
         let authorityCertIssuer;
         let authorityCertSerialNumber;
         if (authorityKeyIdentifierElements.length === 3) {
-            switch (authorityKeyIdentifierElements[1].validateTag([2], [1], [1])) {
+            switch (authorityKeyIdentifierElements[1].validateTag([asn1_ts_1.ASN1TagClass.context], [asn1_ts_1.ASN1Construction.constructed], [1])) {
                 case 0: break;
                 case -1: throw new errors.X509Error("Invalid tag class on AuthorityKeyIdentifier.authorityCertIssuer");
                 case -2: throw new errors.X509Error("Invalid construction on AuthorityKeyIdentifier.authorityCertIssuer");
@@ -47,7 +47,7 @@ class AuthorityKeyIdentifier {
                     throw new errors.X509Error("Undefined error when validating AuthorityKeyIdentifier.authorityCertIssuer tag");
                 }
             }
-            switch (authorityKeyIdentifierElements[2].validateTag([2], [0], [2])) {
+            switch (authorityKeyIdentifierElements[2].validateTag([asn1_ts_1.ASN1TagClass.context], [asn1_ts_1.ASN1Construction.primitive], [2])) {
                 case 0: break;
                 case -1: {
                     throw new errors.X509Error("Invalid tag class on AuthorityKeyIdentifier.authorityCertSerialNumber");
@@ -69,7 +69,7 @@ class AuthorityKeyIdentifier {
     }
     toElement() {
         const authorityKeyIdentifierElements = [];
-        const keyIdentifierElement = new asn1_ts_1.DERElement(2, 0, 0);
+        const keyIdentifierElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.context, asn1_ts_1.ASN1Construction.primitive, 0);
         authorityKeyIdentifierElements.push(keyIdentifierElement);
         if ((this.authorityCertIssuer && !this.authorityCertSerialNumber)
             || (!this.authorityCertIssuer && this.authorityCertSerialNumber)) {
@@ -77,12 +77,12 @@ class AuthorityKeyIdentifier {
                 + "authorityCertSerialNumber PRESENT or ABSENT.");
         }
         else if (this.authorityCertIssuer && this.authorityCertSerialNumber) {
-            const authorityCertIssuer = new asn1_ts_1.DERElement(2, 1, 1);
-            const authorityCertSerialNumber = new asn1_ts_1.DERElement(2, 0, 2);
+            const authorityCertIssuer = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.context, asn1_ts_1.ASN1Construction.constructed, 1);
+            const authorityCertSerialNumber = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.context, asn1_ts_1.ASN1Construction.primitive, 2);
             authorityKeyIdentifierElements.push(authorityCertIssuer);
             authorityKeyIdentifierElements.push(authorityCertSerialNumber);
         }
-        const authorityKeyIdentifierElement = new asn1_ts_1.DERElement(0, 1, 16);
+        const authorityKeyIdentifierElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.constructed, asn1_ts_1.ASN1UniversalType.sequence);
         authorityKeyIdentifierElement.sequence = authorityKeyIdentifierElements;
         return authorityKeyIdentifierElement;
     }

@@ -19,7 +19,7 @@ class PolicyInformation {
         this.policyQualifiers = policyQualifiers;
     }
     static fromElement(value) {
-        switch (value.validateTag([0], [1], [16])) {
+        switch (value.validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.constructed], [asn1_ts_1.ASN1UniversalType.sequence])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on PolicyInformation");
             case -2: throw new errors.X509Error("Invalid construction on PolicyInformation");
@@ -28,7 +28,7 @@ class PolicyInformation {
         }
         const policyInformationElements = value.sequence;
         let policyQualifiers;
-        switch (policyInformationElements[0].validateTag([0], [0], [6])) {
+        switch (policyInformationElements[0].validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.primitive], [asn1_ts_1.ASN1UniversalType.objectIdentifier])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on PolicyInformation.policyIdentifier");
             case -2: throw new errors.X509Error("Invalid construction on PolicyInformation.policyIdentifier");
@@ -48,14 +48,14 @@ class PolicyInformation {
     }
     toElement() {
         const policyInformationElements = [
-            new asn1_ts_1.DERElement(0, 0, 6),
+            new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.primitive, asn1_ts_1.ASN1UniversalType.objectIdentifier),
         ];
         if (this.policyQualifiers) {
-            const policyQualifiersElement = new asn1_ts_1.DERElement(0, 1, 16);
+            const policyQualifiersElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.constructed, asn1_ts_1.ASN1UniversalType.sequence);
             policyQualifiersElement.sequence = this.policyQualifiers.map((pqi) => pqi.toElement());
             policyInformationElements.push(policyQualifiersElement);
         }
-        const policyInformationElement = new asn1_ts_1.DERElement(0, 1, 16);
+        const policyInformationElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.constructed, asn1_ts_1.ASN1UniversalType.sequence);
         policyInformationElement.sequence = policyInformationElements;
         return policyInformationElement;
     }

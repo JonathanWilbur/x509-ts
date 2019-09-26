@@ -15,7 +15,7 @@ class AccessDescription {
         this.accessLocation = accessLocation;
     }
     static fromElement(value) {
-        switch (value.validateTag([0], [1], [16])) {
+        switch (value.validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.constructed], [asn1_ts_1.ASN1UniversalType.sequence])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on AccessDescription");
             case -2: throw new errors.X509Error("Invalid construction on AccessDescription");
@@ -26,7 +26,7 @@ class AccessDescription {
         if (accessDescriptionElements.length !== 2) {
             throw new errors.X509Error("Invalid number of elements in AccessDescription.");
         }
-        switch (accessDescriptionElements[0].validateTag([0], [0], [6])) {
+        switch (accessDescriptionElements[0].validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.primitive], [asn1_ts_1.ASN1UniversalType.objectIdentifier])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on AccessDescription.accessMethod");
             case -2: throw new errors.X509Error("Invalid construction on AccessDescription.accessMethod");
@@ -36,9 +36,9 @@ class AccessDescription {
         return new AccessDescription(accessDescriptionElements[0].objectIdentifier, accessDescriptionElements[1]);
     }
     toElement() {
-        const accessMethodElement = new asn1_ts_1.DERElement(0, 0, 6);
+        const accessMethodElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.primitive, asn1_ts_1.ASN1UniversalType.objectIdentifier);
         accessMethodElement.objectIdentifier = this.accessMethod;
-        const accessDescriptionElement = new asn1_ts_1.DERElement(0, 1, 16);
+        const accessDescriptionElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.constructed, asn1_ts_1.ASN1UniversalType.sequence);
         accessDescriptionElement.sequence = [
             accessMethodElement,
             this.accessLocation,

@@ -38,7 +38,7 @@ class AttributeTypeAndValue {
         if (attributeTypeAndValueElements.length !== 2) {
             throw new errors.X509Error("Invalid number of elements in AttributeTypeAndValue");
         }
-        switch (attributeTypeAndValueElements[0].validateTag([0], [0], [6])) {
+        switch (attributeTypeAndValueElements[0].validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.primitive], [asn1_ts_1.ASN1UniversalType.objectIdentifier])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on AttributeTypeAndValue.type");
             case -2: throw new errors.X509Error("Invalid construction on AttributeTypeAndValue.type");
@@ -49,12 +49,12 @@ class AttributeTypeAndValue {
     }
     toElement() {
         const typeElement = new asn1_ts_1.DERElement();
-        typeElement.tagNumber = 6;
+        typeElement.tagNumber = asn1_ts_1.ASN1UniversalType.objectIdentifier;
         typeElement.objectIdentifier = this.type;
         const attributeTypeAndValueElement = new asn1_ts_1.DERElement();
-        attributeTypeAndValueElement.tagClass = 0;
-        attributeTypeAndValueElement.construction = 1;
-        attributeTypeAndValueElement.tagNumber = 16;
+        attributeTypeAndValueElement.tagClass = asn1_ts_1.ASN1TagClass.universal;
+        attributeTypeAndValueElement.construction = asn1_ts_1.ASN1Construction.constructed;
+        attributeTypeAndValueElement.tagNumber = asn1_ts_1.ASN1UniversalType.sequence;
         attributeTypeAndValueElement.sequence = [typeElement, this.value];
         return attributeTypeAndValueElement;
     }

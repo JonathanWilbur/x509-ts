@@ -15,7 +15,7 @@ class Validity {
         this.notAfter = notAfter;
     }
     static fromElement(value) {
-        switch (value.validateTag([0], [1], [16])) {
+        switch (value.validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.constructed], [asn1_ts_1.ASN1UniversalType.sequence])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on validity");
             case -2: throw new errors.X509Error("Invalid construction on validity");
@@ -26,47 +26,47 @@ class Validity {
         if (validityElements.length !== 2) {
             throw new errors.X509Error("validity contained more than two ASN.1 elements");
         }
-        switch (validityElements[0].validateTag([0], [0], [23, 24])) {
+        switch (validityElements[0].validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.primitive], [asn1_ts_1.ASN1UniversalType.utcTime, asn1_ts_1.ASN1UniversalType.generalizedTime])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on validity.notBefore");
             case -2: throw new errors.X509Error("Invalid construction on validity.notBefore");
             case -3: throw new errors.X509Error("Invalid tag number on validity.notBefore");
             default: throw new errors.X509Error("Undefined error when validating validity.notBefore tag");
         }
-        switch (validityElements[1].validateTag([0], [0], [23, 24])) {
+        switch (validityElements[1].validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.primitive], [asn1_ts_1.ASN1UniversalType.utcTime, asn1_ts_1.ASN1UniversalType.generalizedTime])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on validity.notBefore");
             case -2: throw new errors.X509Error("Invalid construction on validity.notBefore");
             case -3: throw new errors.X509Error("Invalid tag number on validity.notBefore");
             default: throw new errors.X509Error("Undefined error when validating validity.notBefore tag");
         }
-        return new Validity((validityElements[0].tagNumber === 24)
-            ? validityElements[0].generalizedTime : validityElements[0].utcTime, (validityElements[1].tagNumber === 24)
+        return new Validity((validityElements[0].tagNumber === asn1_ts_1.ASN1UniversalType.generalizedTime)
+            ? validityElements[0].generalizedTime : validityElements[0].utcTime, (validityElements[1].tagNumber === asn1_ts_1.ASN1UniversalType.generalizedTime)
             ? validityElements[1].generalizedTime : validityElements[1].utcTime);
     }
     toElement() {
         const notBeforeElement = new asn1_ts_1.DERElement();
         if (this.notBefore.getFullYear() >= 2050) {
-            notBeforeElement.tagNumber = 24;
+            notBeforeElement.tagNumber = asn1_ts_1.ASN1UniversalType.generalizedTime;
             notBeforeElement.generalizedTime = this.notBefore;
         }
         else {
-            notBeforeElement.tagNumber = 23;
+            notBeforeElement.tagNumber = asn1_ts_1.ASN1UniversalType.utcTime;
             notBeforeElement.utcTime = this.notBefore;
         }
         const notAfterElement = new asn1_ts_1.DERElement();
         if (this.notAfter.getFullYear() >= 2050) {
-            notAfterElement.tagNumber = 24;
+            notAfterElement.tagNumber = asn1_ts_1.ASN1UniversalType.generalizedTime;
             notAfterElement.generalizedTime = this.notAfter;
         }
         else {
-            notAfterElement.tagNumber = 23;
+            notAfterElement.tagNumber = asn1_ts_1.ASN1UniversalType.utcTime;
             notAfterElement.utcTime = this.notAfter;
         }
         const validityElement = new asn1_ts_1.DERElement();
-        validityElement.tagClass = 0;
-        validityElement.construction = 1;
-        validityElement.tagNumber = 16;
+        validityElement.tagClass = asn1_ts_1.ASN1TagClass.universal;
+        validityElement.construction = asn1_ts_1.ASN1Construction.constructed;
+        validityElement.tagNumber = asn1_ts_1.ASN1UniversalType.sequence;
         validityElement.sequence = [notBeforeElement, notAfterElement];
         return validityElement;
     }

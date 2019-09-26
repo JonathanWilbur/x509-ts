@@ -22,7 +22,7 @@ class KeyUsage {
         this.decipherOnly = decipherOnly;
     }
     static fromElement(value) {
-        switch (value.validateTag([0], [0], [3])) {
+        switch (value.validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.primitive], [asn1_ts_1.ASN1UniversalType.bitString])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on KeyUsage");
             case -2: throw new errors.X509Error("Invalid construction on KeyUsage");
@@ -33,7 +33,7 @@ class KeyUsage {
         return new KeyUsage(((bits.length > 0) ? bits[0] : false), ((bits.length > 1) ? bits[1] : false), ((bits.length > 2) ? bits[2] : false), ((bits.length > 3) ? bits[3] : false), ((bits.length > 4) ? bits[4] : false), ((bits.length > 5) ? bits[5] : false), ((bits.length > 6) ? bits[6] : false), ((bits.length > 7) ? bits[7] : false), ((bits.length > 8) ? bits[8] : false));
     }
     toElement() {
-        const keyUsageElement = new asn1_ts_1.DERElement(0, 0, 3);
+        const keyUsageElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.primitive, asn1_ts_1.ASN1UniversalType.bitString);
         keyUsageElement.bitString = [
             this.digitalSignature,
             this.contentCommitment,

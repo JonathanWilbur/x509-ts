@@ -22,7 +22,7 @@ class IssuingDistPointSyntax {
         this.indirectCRL = indirectCRL;
     }
     static fromElement(value) {
-        switch (value.validateTag([0], [1], [16])) {
+        switch (value.validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.constructed], [asn1_ts_1.ASN1UniversalType.sequence])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on IssuingDistPointSyntax");
             case -2: throw new errors.X509Error("Invalid construction on IssuingDistPointSyntax");
@@ -43,35 +43,35 @@ class IssuingDistPointSyntax {
             else if (element.tagNumber <= lastEncounteredTagNumber) {
                 throw new errors.X509Error("Elements out of order in IssuingDistPointSyntax.");
             }
-            if (element.tagClass === 2) {
+            if (element.tagClass === asn1_ts_1.ASN1TagClass.context) {
                 switch (element.tagNumber) {
                     case (0): {
                         distributionPoint = element;
                         break;
                     }
                     case (1): {
-                        if (element.construction !== 0) {
+                        if (element.construction !== asn1_ts_1.ASN1Construction.primitive) {
                             throw new errors.X509Error("Invalid construction for IssuingDistPointSyntax.onlyContainsUserPublicKeyCerts.");
                         }
                         onlyContainsUserPublicKeyCerts = element.boolean;
                         break;
                     }
                     case (2): {
-                        if (element.construction !== 0) {
+                        if (element.construction !== asn1_ts_1.ASN1Construction.primitive) {
                             throw new errors.X509Error("Invalid construction for IssuingDistPointSyntax.onlyContainsCACerts.");
                         }
                         onlyContainsCACerts = element.boolean;
                         break;
                     }
                     case (3): {
-                        if (element.construction !== 1) {
+                        if (element.construction !== asn1_ts_1.ASN1Construction.constructed) {
                             throw new errors.X509Error("Invalid construction for IssuingDistPointSyntax.onlySomeReasons.");
                         }
                         onlySomeReasons = ReasonFlags_1.default.fromElement(element);
                         break;
                     }
                     case (4): {
-                        if (element.construction !== 0) {
+                        if (element.construction !== asn1_ts_1.ASN1Construction.primitive) {
                             throw new errors.X509Error("Invalid construction for IssuingDistPointSyntax.indirectCRL.");
                         }
                         indirectCRL = element.boolean;
@@ -90,12 +90,12 @@ class IssuingDistPointSyntax {
             issuingDistPointSyntaxElements.push(this.distributionPoint);
         }
         if (this.onlyContainsUserPublicKeyCerts) {
-            const onlyContainsUserPublicKeyCertsElement = new asn1_ts_1.DERElement(2, 0, 1);
+            const onlyContainsUserPublicKeyCertsElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.context, asn1_ts_1.ASN1Construction.primitive, asn1_ts_1.ASN1UniversalType.boolean);
             onlyContainsUserPublicKeyCertsElement.boolean = this.onlyContainsUserPublicKeyCerts;
             issuingDistPointSyntaxElements.push(onlyContainsUserPublicKeyCertsElement);
         }
         if (this.onlyContainsCACerts) {
-            const onlyContainsCACertsElement = new asn1_ts_1.DERElement(2, 0, 1);
+            const onlyContainsCACertsElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.context, asn1_ts_1.ASN1Construction.primitive, asn1_ts_1.ASN1UniversalType.boolean);
             onlyContainsCACertsElement.boolean = this.onlyContainsUserPublicKeyCerts;
             issuingDistPointSyntaxElements.push(onlyContainsCACertsElement);
         }
@@ -103,11 +103,11 @@ class IssuingDistPointSyntax {
             issuingDistPointSyntaxElements.push(this.onlySomeReasons.toElement());
         }
         if (this.indirectCRL) {
-            const indirectCRLElement = new asn1_ts_1.DERElement(2, 0, 1);
+            const indirectCRLElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.context, asn1_ts_1.ASN1Construction.primitive, asn1_ts_1.ASN1UniversalType.boolean);
             indirectCRLElement.boolean = this.onlyContainsUserPublicKeyCerts;
             issuingDistPointSyntaxElements.push(indirectCRLElement);
         }
-        const issuingDistPointSyntaxElement = new asn1_ts_1.DERElement(0, 1, 16);
+        const issuingDistPointSyntaxElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.constructed, asn1_ts_1.ASN1UniversalType.sequence);
         issuingDistPointSyntaxElement.sequence = issuingDistPointSyntaxElements;
         return issuingDistPointSyntaxElement;
     }

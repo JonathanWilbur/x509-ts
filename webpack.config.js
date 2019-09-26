@@ -10,7 +10,7 @@ module.exports = {
         library: "x509",
         libraryTarget: "var",
     },
-    mode: "development",
+    mode: "production",
     module: {
         rules: [
             {

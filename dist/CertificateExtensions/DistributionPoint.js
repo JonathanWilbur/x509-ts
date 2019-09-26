@@ -20,7 +20,7 @@ class DistributionPoint {
         this.cRLIssuer = cRLIssuer;
     }
     static fromElement(value) {
-        switch (value.validateTag([0], [1], [16])) {
+        switch (value.validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.constructed], [asn1_ts_1.ASN1UniversalType.sequence])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on DistributionPoint");
             case -2: throw new errors.X509Error("Invalid construction on DistributionPoint");
@@ -38,7 +38,7 @@ class DistributionPoint {
                     break;
                 }
                 case (1): {
-                    if (element.construction !== 0) {
+                    if (element.construction !== asn1_ts_1.ASN1Construction.primitive) {
                         throw new errors.X509Error("DistributionPoint.reasons may not be constructed.");
                     }
                     reasons = ReasonFlags_1.default.fromElement(element);
@@ -62,11 +62,11 @@ class DistributionPoint {
             distributionPointElements.push(this.reasons.toElement());
         }
         if (this.cRLIssuer) {
-            const crlIssuerElement = new asn1_ts_1.DERElement(2, 1, 2);
+            const crlIssuerElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.context, asn1_ts_1.ASN1Construction.constructed, 2);
             crlIssuerElement.sequence = this.cRLIssuer;
             distributionPointElements.push(crlIssuerElement);
         }
-        const ret = new asn1_ts_1.DERElement(0, 1, 16);
+        const ret = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.constructed, asn1_ts_1.ASN1UniversalType.sequence);
         ret.sequence = distributionPointElements;
         return ret;
     }

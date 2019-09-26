@@ -16,7 +16,7 @@ class Extension {
         this.extnValue = extnValue;
     }
     static fromElement(value) {
-        switch (value.validateTag([0], [1], [16])) {
+        switch (value.validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.constructed], [asn1_ts_1.ASN1UniversalType.sequence])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on Extension");
             case -2: throw new errors.X509Error("Invalid construction on Extension");
@@ -30,7 +30,7 @@ class Extension {
         else if (extensionElements.length < 2) {
             throw new errors.X509Error("An Extension encoded fewer than two elements");
         }
-        switch (extensionElements[0].validateTag([0], [0], [6])) {
+        switch (extensionElements[0].validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.primitive], [asn1_ts_1.ASN1UniversalType.objectIdentifier])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on Extension.identifier");
             case -2: throw new errors.X509Error("Invalid construction on Extension.identifier");
@@ -39,7 +39,7 @@ class Extension {
         }
         let critical = false;
         if (extensionElements.length === 3) {
-            switch (extensionElements[1].validateTag([0], [0], [1])) {
+            switch (extensionElements[1].validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.primitive], [asn1_ts_1.ASN1UniversalType.boolean])) {
                 case 0: break;
                 case -1: throw new errors.X509Error("Invalid tag class on Extension.critical");
                 case -2: throw new errors.X509Error("Invalid construction on Extension.critical");
@@ -48,7 +48,7 @@ class Extension {
             }
             critical = extensionElements[1].boolean;
         }
-        switch (extensionElements[extensionElements.length - 1].validateTag([0], [0, 1], [4])) {
+        switch (extensionElements[extensionElements.length - 1].validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.primitive, asn1_ts_1.ASN1Construction.constructed], [asn1_ts_1.ASN1UniversalType.octetString])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on Extension.extnValue");
             case -2: throw new errors.X509Error("Invalid construction on Extension.extnValue");
@@ -63,24 +63,24 @@ class Extension {
         if (this.extnID === undefined)
             throw new errors.X509Error("extnID is undefined");
         const extnIDElement = new asn1_ts_1.DERElement();
-        extnIDElement.tagClass = 0;
-        extnIDElement.construction = 0;
-        extnIDElement.tagNumber = 6;
+        extnIDElement.tagClass = asn1_ts_1.ASN1TagClass.universal;
+        extnIDElement.construction = asn1_ts_1.ASN1Construction.primitive;
+        extnIDElement.tagNumber = asn1_ts_1.ASN1UniversalType.objectIdentifier;
         extnIDElement.objectIdentifier = this.extnID;
         const extnValueElement = new asn1_ts_1.DERElement();
-        extnValueElement.tagClass = 0;
-        extnValueElement.construction = 0;
-        extnValueElement.tagNumber = 4;
+        extnValueElement.tagClass = asn1_ts_1.ASN1TagClass.universal;
+        extnValueElement.construction = asn1_ts_1.ASN1Construction.primitive;
+        extnValueElement.tagNumber = asn1_ts_1.ASN1UniversalType.octetString;
         extnValueElement.octetString = this.extnValue;
         const ret = new asn1_ts_1.DERElement();
-        ret.tagClass = 0;
-        ret.construction = 1;
-        ret.tagNumber = 16;
+        ret.tagClass = asn1_ts_1.ASN1TagClass.universal;
+        ret.construction = asn1_ts_1.ASN1Construction.constructed;
+        ret.tagNumber = asn1_ts_1.ASN1UniversalType.sequence;
         if (this.critical) {
             const criticalElement = new asn1_ts_1.DERElement();
-            criticalElement.tagClass = 0;
-            criticalElement.construction = 0;
-            criticalElement.tagNumber = 1;
+            criticalElement.tagClass = asn1_ts_1.ASN1TagClass.universal;
+            criticalElement.construction = asn1_ts_1.ASN1Construction.primitive;
+            criticalElement.tagNumber = asn1_ts_1.ASN1UniversalType.boolean;
             criticalElement.boolean = this.critical;
             ret.sequence = [extnIDElement, criticalElement, extnValueElement];
         }

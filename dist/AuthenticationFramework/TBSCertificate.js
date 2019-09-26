@@ -31,7 +31,7 @@ class TBSCertificate {
         this.extensions = extensions;
     }
     static fromElement(value) {
-        switch (value.validateTag([0], [1], [16])) {
+        switch (value.validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.constructed], [asn1_ts_1.ASN1UniversalType.sequence])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on TBSCertificate");
             case -2: throw new errors.X509Error("Invalid construction on TBSCertificate");
@@ -49,13 +49,13 @@ class TBSCertificate {
         let extensions = undefined;
         let encounteredElements = 0;
         {
-            if (tbsCertificateElements[encounteredElements].tagClass === 2
-                && tbsCertificateElements[encounteredElements].construction === 1
+            if (tbsCertificateElements[encounteredElements].tagClass === asn1_ts_1.ASN1TagClass.context
+                && tbsCertificateElements[encounteredElements].construction === asn1_ts_1.ASN1Construction.constructed
                 && tbsCertificateElements[encounteredElements].tagNumber === 0) {
                 const versionElements = tbsCertificateElements[encounteredElements].sequence;
                 if (versionElements.length !== 1)
                     throw new errors.X509Error("version can only contain one element.");
-                switch (versionElements[0].validateTag([0], [0], [2])) {
+                switch (versionElements[0].validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.primitive], [asn1_ts_1.ASN1UniversalType.integer])) {
                     case 0: break;
                     case -1: throw new errors.X509Error("Invalid tag class on TBSCertificate.version inner element");
                     case -2: throw new errors.X509Error("Invalid construction on TBSCertificate.version inner element");
@@ -81,7 +81,7 @@ class TBSCertificate {
             }
         }
         {
-            switch (tbsCertificateElements[encounteredElements].validateTag([0], [0], [2])) {
+            switch (tbsCertificateElements[encounteredElements].validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.primitive], [asn1_ts_1.ASN1UniversalType.integer])) {
                 case 0: break;
                 case -1: throw new errors.X509Error("Invalid tag class on TBSCertificate.serialNumber");
                 case -2: throw new errors.X509Error("Invalid construction on TBSCertificate.serialNumber");
@@ -96,8 +96,8 @@ class TBSCertificate {
         const subject = InformationFramework_1.RDNSequence.fromElement(tbsCertificateElements[encounteredElements++]);
         const subjectPublicKeyInfo = SubjectPublicKeyInfo_1.default.fromElement(tbsCertificateElements[encounteredElements++]);
         if (encounteredElements < tbsCertificateElements.length
-            && tbsCertificateElements[encounteredElements].tagClass === 2
-            && tbsCertificateElements[encounteredElements].construction === 0
+            && tbsCertificateElements[encounteredElements].tagClass === asn1_ts_1.ASN1TagClass.context
+            && tbsCertificateElements[encounteredElements].construction === asn1_ts_1.ASN1Construction.primitive
             && tbsCertificateElements[encounteredElements].tagNumber === 1) {
             if (ver === 0) {
                 throw new errors.X509Error("issuerUniqueIdentifier not allowed in Version 1 X.509 certificate.");
@@ -107,14 +107,14 @@ class TBSCertificate {
         }
         let endOfTBSCertficateExtensionsIndex = encounteredElements;
         while (endOfTBSCertficateExtensionsIndex < tbsCertificateElements.length
-            && !(tbsCertificateElements[encounteredElements].tagClass === 2
+            && !(tbsCertificateElements[encounteredElements].tagClass === asn1_ts_1.ASN1TagClass.context
                 && (tbsCertificateElements[encounteredElements].tagNumber === 2
                     || tbsCertificateElements[encounteredElements].tagNumber === 3)))
             endOfTBSCertficateExtensionsIndex++;
         asn1_ts_1.DERElement.isInCanonicalOrder(tbsCertificateElements.slice(encounteredElements, endOfTBSCertficateExtensionsIndex));
         asn1_ts_1.DERElement.isUniquelyTagged(tbsCertificateElements.slice(encounteredElements, endOfTBSCertficateExtensionsIndex));
         while (encounteredElements < tbsCertificateElements.length) {
-            if (tbsCertificateElements[encounteredElements].tagClass === 2) {
+            if (tbsCertificateElements[encounteredElements].tagClass === asn1_ts_1.ASN1TagClass.context) {
                 switch (tbsCertificateElements[encounteredElements].tagNumber) {
                     case (2): {
                         if (ver === 0) {
@@ -133,7 +133,7 @@ class TBSCertificate {
                         if ((tbsCertificateElements.length - encounteredElements) !== 1) {
                             throw new errors.X509Error("extensions must be the last element in the TBSCertificate.");
                         }
-                        switch (tbsCertificateElements[encounteredElements].validateTag([2], [1], [3])) {
+                        switch (tbsCertificateElements[encounteredElements].validateTag([asn1_ts_1.ASN1TagClass.context], [asn1_ts_1.ASN1Construction.constructed], [3])) {
                             case 0: break;
                             case -1: {
                                 throw new errors.X509Error("Invalid tag class on a TBSCertificate.extensions outer element");
@@ -170,14 +170,14 @@ class TBSCertificate {
     toElement() {
         const retSequence = [];
         {
-            const versionInnerElement = new asn1_ts_1.DERElement(0, 0, 2);
+            const versionInnerElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.primitive, asn1_ts_1.ASN1UniversalType.integer);
             versionInnerElement.integer = this.ver;
-            const versionOuterElement = new asn1_ts_1.DERElement(2, 1, 0);
+            const versionOuterElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.context, asn1_ts_1.ASN1Construction.constructed, 0);
             versionOuterElement.sequence = [versionInnerElement];
             retSequence.push(versionOuterElement);
         }
         {
-            const serialNumberElement = new asn1_ts_1.DERElement(0, 0, 2);
+            const serialNumberElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.primitive, asn1_ts_1.ASN1UniversalType.integer);
             serialNumberElement.octetString = this.serialNumber;
             retSequence.push(serialNumberElement);
         }
@@ -185,9 +185,9 @@ class TBSCertificate {
             retSequence.push(this.signature.toElement());
         }
         {
-            const issuerElement = new asn1_ts_1.DERElement(0, 1, 16);
+            const issuerElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.constructed, asn1_ts_1.ASN1UniversalType.sequence);
             issuerElement.sequence = this.issuer.value.map((rdn) => {
-                const rdnElement = new asn1_ts_1.DERElement(0, 1, 17);
+                const rdnElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.constructed, asn1_ts_1.ASN1UniversalType.set);
                 rdnElement.sequence = rdn.value.map((rdnValue) => rdnValue.toElement());
                 return rdnElement;
             });
@@ -197,9 +197,9 @@ class TBSCertificate {
             retSequence.push(this.validity.toElement());
         }
         {
-            const subjectElement = new asn1_ts_1.DERElement(0, 1, 16);
+            const subjectElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.constructed, asn1_ts_1.ASN1UniversalType.sequence);
             subjectElement.sequence = this.subject.value.map((rdn) => {
-                const rdnElement = new asn1_ts_1.DERElement(0, 1, 17);
+                const rdnElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.constructed, asn1_ts_1.ASN1UniversalType.set);
                 rdnElement.sequence = rdn.value.map((rdnValue) => rdnValue.toElement());
                 return rdnElement;
             });
@@ -210,12 +210,12 @@ class TBSCertificate {
         }
         if (this.ver !== 0) {
             if (this.issuerUniqueID) {
-                const issuerUniqueIdentifierElement = new asn1_ts_1.DERElement(2, 0, 1);
+                const issuerUniqueIdentifierElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.context, asn1_ts_1.ASN1Construction.primitive, 1);
                 issuerUniqueIdentifierElement.bitString = this.issuerUniqueID;
                 retSequence.push(issuerUniqueIdentifierElement);
             }
             if (this.subjectUniqueID) {
-                const subjectUniqueIdentifierElement = new asn1_ts_1.DERElement(2, 0, 2);
+                const subjectUniqueIdentifierElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.context, asn1_ts_1.ASN1Construction.primitive, 2);
                 subjectUniqueIdentifierElement.bitString = this.subjectUniqueID;
                 retSequence.push(subjectUniqueIdentifierElement);
             }
@@ -226,14 +226,14 @@ class TBSCertificate {
                 this.extensions.forEach((extension) => {
                     extensionElements.push(extension.toElement());
                 });
-                const extensionsElement = new asn1_ts_1.DERElement(0, 1, 16);
+                const extensionsElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.constructed, asn1_ts_1.ASN1UniversalType.sequence);
                 extensionsElement.sequence = extensionElements;
-                const extensionsOuterElement = new asn1_ts_1.DERElement(2, 1, 3);
+                const extensionsOuterElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.context, asn1_ts_1.ASN1Construction.constructed, 3);
                 extensionsOuterElement.sequence = [extensionsElement];
                 retSequence.push(extensionsOuterElement);
             }
         }
-        const ret = new asn1_ts_1.DERElement(0, 1, 16);
+        const ret = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.constructed, asn1_ts_1.ASN1UniversalType.sequence);
         ret.sequence = retSequence;
         return ret;
     }

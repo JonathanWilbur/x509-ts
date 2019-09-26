@@ -10,15 +10,16 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const asn1_ts_1 = require("asn1-ts");
 const EDIPartyName_1 = __importDefault(require("./EDIPartyName"));
 const InformationFramework_1 = require("../InformationFramework");
 const errors = __importStar(require("../errors"));
 function printGeneralName(value) {
-    if (value.tagClass !== 2)
+    if (value.tagClass !== asn1_ts_1.ASN1TagClass.context)
         return "";
     switch (value.tagNumber) {
         case (0): {
-            switch (value.validateTag([0], [1], [8])) {
+            switch (value.validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.constructed], [asn1_ts_1.ASN1UniversalType.external])) {
                 case 0: break;
                 case -1: throw new errors.X509Error("Invalid tag class on INSTANCE OF OTHER-NAME");
                 case -2: throw new errors.X509Error("Invalid construction on INSTANCE OF OTHER-NAME");
@@ -29,7 +30,7 @@ function printGeneralName(value) {
             if (otherNameElements.length !== 2) {
                 throw new errors.X509Error("Invalid number of elements in INSTANCE OF OTHER-NAME");
             }
-            switch (otherNameElements[0].validateTag([0], [0], [6])) {
+            switch (otherNameElements[0].validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.primitive], [asn1_ts_1.ASN1UniversalType.objectIdentifier])) {
                 case 0: break;
                 case -1: throw new errors.X509Error("Invalid tag class on OTHER-NAME.id");
                 case -2: throw new errors.X509Error("Invalid construction on OTHER-NAME.id");

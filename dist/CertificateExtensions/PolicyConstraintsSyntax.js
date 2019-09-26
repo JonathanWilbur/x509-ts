@@ -18,7 +18,7 @@ class PolicyConstraintsSyntax {
         }
     }
     static fromElement(value) {
-        switch (value.validateTag([0], [1], [16])) {
+        switch (value.validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.constructed], [asn1_ts_1.ASN1UniversalType.sequence])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on PolicyConstraintsSyntax");
             case -2: throw new errors.X509Error("Invalid construction on PolicyConstraintsSyntax");
@@ -33,9 +33,9 @@ class PolicyConstraintsSyntax {
         let inhibitPolicyMapping;
         let fixedPositionElementsEncountered = 0;
         policyConstraintsSyntaxElements.forEach((element, index) => {
-            if (element.tagClass === 2) {
+            if (element.tagClass === asn1_ts_1.ASN1TagClass.context) {
                 if (element.tagNumber === 0) {
-                    if (element.construction !== 0) {
+                    if (element.construction !== asn1_ts_1.ASN1Construction.primitive) {
                         throw new errors.X509Error("PolicyConstraintsSyntax.requireExplicitPolicy was not primitively constructed.");
                     }
                     if (requireExplicitPolicy) {
@@ -45,16 +45,16 @@ class PolicyConstraintsSyntax {
                     fixedPositionElementsEncountered++;
                 }
                 else if (element.tagNumber === 1) {
-                    if (element.construction !== 0) {
+                    if (element.construction !== asn1_ts_1.ASN1Construction.primitive) {
                         throw new errors.X509Error("PolicyConstraintsSyntax.inhibitPolicyMapping was not primitively constructed.");
                     }
                     if (inhibitPolicyMapping) {
                         throw new errors.X509Error("PolicyConstraintsSyntax.inhibitPolicyMapping already defined.");
                     }
                     if (index === 1
-                        && (policyConstraintsSyntaxElements[0].tagClass !== 0
-                            || policyConstraintsSyntaxElements[0].construction !== 0
-                            || policyConstraintsSyntaxElements[0].tagNumber !== 2)) {
+                        && (policyConstraintsSyntaxElements[0].tagClass !== asn1_ts_1.ASN1TagClass.universal
+                            || policyConstraintsSyntaxElements[0].construction !== asn1_ts_1.ASN1Construction.primitive
+                            || policyConstraintsSyntaxElements[0].tagNumber !== asn1_ts_1.ASN1UniversalType.integer)) {
                         throw new errors.X509Error("PolicyConstraintsSyntax missing "
                             + "requireExplicitPolicy element before "
                             + "inhibitPolicyMapping when "
@@ -76,16 +76,16 @@ class PolicyConstraintsSyntax {
     toElement() {
         const policyConstraintsSyntaxElements = [];
         if (this.requireExplicitPolicy) {
-            const requireExplicitPolicyElement = new asn1_ts_1.DERElement(2, 0, 0);
+            const requireExplicitPolicyElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.context, asn1_ts_1.ASN1Construction.primitive, 0);
             requireExplicitPolicyElement.integer = this.requireExplicitPolicy;
             policyConstraintsSyntaxElements.push(requireExplicitPolicyElement);
         }
         if (this.inhibitPolicyMapping) {
-            const inhibitPolicyMappingElement = new asn1_ts_1.DERElement(2, 0, 1);
+            const inhibitPolicyMappingElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.context, asn1_ts_1.ASN1Construction.primitive, 1);
             inhibitPolicyMappingElement.integer = this.inhibitPolicyMapping;
             policyConstraintsSyntaxElements.push(inhibitPolicyMappingElement);
         }
-        const policyConstraintsSyntaxElement = new asn1_ts_1.DERElement(0, 1, 16);
+        const policyConstraintsSyntaxElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.constructed, asn1_ts_1.ASN1UniversalType.sequence);
         policyConstraintsSyntaxElement.sequence = policyConstraintsSyntaxElements;
         return policyConstraintsSyntaxElement;
     }

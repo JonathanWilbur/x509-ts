@@ -23,7 +23,7 @@ class ReasonFlags {
         this.weakAlgorithmOrKeySize = weakAlgorithmOrKeySize;
     }
     static fromElement(value) {
-        switch (value.validateTag([0], [0], [3])) {
+        switch (value.validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.primitive], [asn1_ts_1.ASN1UniversalType.bitString])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on ReasonFlags");
             case -2: throw new errors.X509Error("Invalid construction on ReasonFlags");
@@ -34,7 +34,7 @@ class ReasonFlags {
         return new ReasonFlags(((bits.length >= 1) ? bits[0] : false), ((bits.length >= 2) ? bits[1] : false), ((bits.length >= 3) ? bits[2] : false), ((bits.length >= 4) ? bits[3] : false), ((bits.length >= 5) ? bits[4] : false), ((bits.length >= 6) ? bits[5] : false), ((bits.length >= 7) ? bits[6] : false), ((bits.length >= 8) ? bits[7] : false), ((bits.length >= 9) ? bits[8] : false), ((bits.length >= 10) ? bits[9] : false));
     }
     toElement() {
-        const ret = new asn1_ts_1.DERElement(0, 1, 3);
+        const ret = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.constructed, asn1_ts_1.ASN1UniversalType.bitString);
         ret.bitString = [
             this.unused,
             this.keyCompromise,

@@ -22,7 +22,7 @@ class EDIPartyName {
         return this.partyName.toString();
     }
     static fromElement(value) {
-        switch (value.validateTag([0], [1], [16])) {
+        switch (value.validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.constructed], [asn1_ts_1.ASN1UniversalType.sequence])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on EDIPartyName");
             case -2: throw new errors.X509Error("Invalid construction on EDIPartyName");
@@ -37,9 +37,9 @@ class EDIPartyName {
         let partyName;
         let fixedPositionElementsEncountered = 0;
         ediPartNameElements.forEach((element, index) => {
-            if (element.tagClass === 2) {
+            if (element.tagClass === asn1_ts_1.ASN1TagClass.context) {
                 if (element.tagNumber === 0) {
-                    if (element.construction !== 0) {
+                    if (element.construction !== asn1_ts_1.ASN1Construction.primitive) {
                         throw new errors.X509Error("EDIPartyName.nameAssigner was not primitively constructed");
                     }
                     if (index !== 0)
@@ -48,15 +48,15 @@ class EDIPartyName {
                     fixedPositionElementsEncountered++;
                 }
                 else if (element.tagNumber === 1) {
-                    if (element.construction !== 0) {
+                    if (element.construction !== asn1_ts_1.ASN1Construction.primitive) {
                         throw new errors.X509Error("EDIPartyName.partyName was not primitively constructed");
                     }
                     if (index > 1) {
                         throw new errors.X509Error("partyName out of order in EDIPartyName");
                     }
                     if (index === 1
-                        && (ediPartNameElements[0].tagClass !== 2
-                            || ediPartNameElements[0].construction !== 0
+                        && (ediPartNameElements[0].tagClass !== asn1_ts_1.ASN1TagClass.context
+                            || ediPartNameElements[0].construction !== asn1_ts_1.ASN1Construction.primitive
                             || ediPartNameElements[0].tagNumber !== 1)) {
                         throw new errors.X509Error("EDIPartyName missing nameAssigner element before "
                             + "partyName when partyName was the second "
@@ -82,7 +82,7 @@ class EDIPartyName {
         }
         ediPartNameElements.push(this.partyName.toElement());
         ediPartNameElements[(ediPartNameElements.length - 1)].tagNumber = 1;
-        const ediPartNameElement = new asn1_ts_1.DERElement(0, 1, 16);
+        const ediPartNameElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.constructed, asn1_ts_1.ASN1UniversalType.sequence);
         ediPartNameElement.sequence = ediPartNameElements;
         return ediPartNameElement;
     }

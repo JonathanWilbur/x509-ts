@@ -18,7 +18,7 @@ class PrivateKeyUsagePeriod {
         }
     }
     static fromElement(value) {
-        switch (value.validateTag([0], [1], [16])) {
+        switch (value.validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.constructed], [asn1_ts_1.ASN1UniversalType.sequence])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on inner sequence of PrivateKeyUsagePeriod");
             case -2: throw new errors.X509Error("Invalid construction on inner sequence of PrivateKeyUsagePeriod");
@@ -35,7 +35,7 @@ class PrivateKeyUsagePeriod {
         let notAfter;
         let fixedPositionElementsEncountered = 0;
         privateKeyUsagePeriodElements.forEach((element) => {
-            if (element.tagClass === 2) {
+            if (element.tagClass === asn1_ts_1.ASN1TagClass.context) {
                 if (element.tagNumber === 0) {
                     if (notBefore)
                         throw new errors.X509Error("PrivateKeyUsagePeriod.notBefore already defined");
@@ -58,16 +58,16 @@ class PrivateKeyUsagePeriod {
     toElement() {
         const privateKeyUsagePeriodElements = [];
         if (this.notBefore) {
-            const notBeforeElement = new asn1_ts_1.DERElement(0, 0, 24);
+            const notBeforeElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.primitive, asn1_ts_1.ASN1UniversalType.generalizedTime);
             notBeforeElement.generalizedTime = this.notBefore;
             privateKeyUsagePeriodElements.push(notBeforeElement);
         }
         if (this.notAfter) {
-            const notAfterElement = new asn1_ts_1.DERElement(0, 0, 24);
+            const notAfterElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.primitive, asn1_ts_1.ASN1UniversalType.generalizedTime);
             notAfterElement.generalizedTime = this.notAfter;
             privateKeyUsagePeriodElements.push(notAfterElement);
         }
-        const privateKeyUsagePeriodElement = new asn1_ts_1.DERElement(0, 1, 16);
+        const privateKeyUsagePeriodElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.constructed, asn1_ts_1.ASN1UniversalType.sequence);
         privateKeyUsagePeriodElement.sequence = privateKeyUsagePeriodElements;
         return privateKeyUsagePeriodElement;
     }

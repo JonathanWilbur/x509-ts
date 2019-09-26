@@ -16,7 +16,7 @@ class GeneralSubtree {
         this.maximum = maximum;
     }
     static fromElement(value) {
-        switch (value.validateTag([0], [1], [16])) {
+        switch (value.validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.constructed], [asn1_ts_1.ASN1UniversalType.sequence])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on GeneralSubtree");
             case -2: throw new errors.X509Error("Invalid construction on GeneralSubtree");
@@ -32,9 +32,9 @@ class GeneralSubtree {
         let maximum;
         let fixedPositionElementsEncountered = 1;
         generalSubtreeElements.slice(1).forEach((element) => {
-            if (element.tagClass === 2) {
+            if (element.tagClass === asn1_ts_1.ASN1TagClass.context) {
                 if (element.tagNumber === 0) {
-                    if (element.construction !== 0) {
+                    if (element.construction !== asn1_ts_1.ASN1Construction.primitive) {
                         throw new errors.X509Error("GeneralSubtree.minimum was not primitively constructed");
                     }
                     if (minimum)
@@ -43,7 +43,7 @@ class GeneralSubtree {
                     fixedPositionElementsEncountered++;
                 }
                 else if (element.tagNumber === 1) {
-                    if (element.construction !== 0) {
+                    if (element.construction !== asn1_ts_1.ASN1Construction.primitive) {
                         throw new errors.X509Error("GeneralSubtree.maximum was not primitively constructed");
                     }
                     if (maximum)
@@ -70,16 +70,16 @@ class GeneralSubtree {
     toElement() {
         const generalSubtreeElements = [this.base];
         if (this.minimum) {
-            const minimumElement = new asn1_ts_1.DERElement(2, 0, 0);
+            const minimumElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.context, asn1_ts_1.ASN1Construction.primitive, 0);
             minimumElement.integer = this.minimum;
             generalSubtreeElements.push(minimumElement);
         }
         if (this.maximum) {
-            const maximumElement = new asn1_ts_1.DERElement(2, 0, 1);
+            const maximumElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.context, asn1_ts_1.ASN1Construction.primitive, 1);
             maximumElement.integer = this.minimum;
             generalSubtreeElements.push(maximumElement);
         }
-        const generalSubtreeElement = new asn1_ts_1.DERElement(0, 1, 16);
+        const generalSubtreeElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.constructed, asn1_ts_1.ASN1UniversalType.sequence);
         generalSubtreeElement.sequence = generalSubtreeElements;
         return generalSubtreeElement;
     }

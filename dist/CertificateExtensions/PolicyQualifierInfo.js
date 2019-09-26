@@ -15,7 +15,7 @@ class PolicyQualifierInfo {
         this.qualifier = qualifier;
     }
     static fromElement(value) {
-        switch (value.validateTag([0], [1], [16])) {
+        switch (value.validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.constructed], [asn1_ts_1.ASN1UniversalType.sequence])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on PolicyQualifierInfo");
             case -2: throw new errors.X509Error("Invalid construction on PolicyQualifierInfo");
@@ -27,7 +27,7 @@ class PolicyQualifierInfo {
         if (policyQualifierInfoElements.length === 0) {
             throw new errors.X509Error("PolicyQualifierInfo contained zero elements");
         }
-        switch (policyQualifierInfoElements[0].validateTag([0], [0], [6])) {
+        switch (policyQualifierInfoElements[0].validateTag([asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.primitive], [asn1_ts_1.ASN1UniversalType.objectIdentifier])) {
             case 0: break;
             case -1: throw new errors.X509Error("Invalid tag class on PolicyQualifierInfo.policyQualifierId");
             case -2: throw new errors.X509Error("Invalid construction on PolicyQualifierInfo.policyQualifierId");
@@ -49,11 +49,11 @@ class PolicyQualifierInfo {
     }
     toElement() {
         const policyQualifierInfoElements = [
-            new asn1_ts_1.DERElement(0, 0, 6),
+            new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.primitive, asn1_ts_1.ASN1UniversalType.objectIdentifier),
         ];
         if (this.qualifier)
             policyQualifierInfoElements.push(this.qualifier);
-        const policyQualifierInfoElement = new asn1_ts_1.DERElement(0, 1, 16);
+        const policyQualifierInfoElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.constructed, asn1_ts_1.ASN1UniversalType.sequence);
         policyQualifierInfoElement.sequence = policyQualifierInfoElements;
         return policyQualifierInfoElement;
     }
