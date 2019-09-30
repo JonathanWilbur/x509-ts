@@ -70,6 +70,7 @@ class AuthorityKeyIdentifier {
     toElement() {
         const authorityKeyIdentifierElements = [];
         const keyIdentifierElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.context, asn1_ts_1.ASN1Construction.primitive, 0);
+        keyIdentifierElement.octetString = this.keyIdentifier;
         authorityKeyIdentifierElements.push(keyIdentifierElement);
         if ((this.authorityCertIssuer && !this.authorityCertSerialNumber)
             || (!this.authorityCertIssuer && this.authorityCertSerialNumber)) {

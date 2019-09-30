@@ -126,7 +126,7 @@ class AuthorityKeyIdentifier {
             ASN1Construction.primitive,
             0
         );
-
+        keyIdentifierElement.octetString = this.keyIdentifier;
         authorityKeyIdentifierElements.push(keyIdentifierElement);
 
         if (
