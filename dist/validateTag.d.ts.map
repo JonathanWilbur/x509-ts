@@ -1,0 +1,1 @@
+{"version":3,"file":"validateTag.d.ts","sourceRoot":"","sources":["../source/validateTag.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,UAAU,EAAE,YAAY,EAAE,gBAAgB,EAAE,MAAM,SAAS,CAAC;AAGrE,MAAM,CAAC,OAAO,UACL,WAAW,CAChB,OAAO,EAAE,UAAU,EACnB,IAAI,EAAE,MAAM,EACZ,oBAAoB,EAAE,YAAY,EAAE,EACpC,uBAAuB,EAAE,gBAAgB,EAAE,EAC3C,oBAAoB,EAAE,MAAM,EAAE,GAC/B,IAAI,CAkBN"}
