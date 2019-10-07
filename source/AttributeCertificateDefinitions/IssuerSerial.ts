@@ -54,6 +54,9 @@ class IssuerSerial {
         }
 
         const issuer: GeneralNames = issuerSerialElements[0].sequence;
+        if (issuer.length < 1) {
+            throw new errors.X509Error("No GeneralNames provided in IssuerSerial.issuer.");
+        }
         const serial: CertificateSerialNumber = issuerSerialElements[1].octetString;
         const issuerUID: UniqueIdentifier | undefined = ((): UniqueIdentifier | undefined => {
             if (issuerSerialElements.length === 3) return issuerSerialElements[2].bitString;

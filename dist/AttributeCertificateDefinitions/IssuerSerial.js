@@ -31,6 +31,9 @@ class IssuerSerial {
             validateTag_1.default(issuerSerialElements[2], "IssuerSerial.issuerUID", [asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.primitive], [asn1_ts_1.ASN1UniversalType.bitString]);
         }
         const issuer = issuerSerialElements[0].sequence;
+        if (issuer.length < 1) {
+            throw new errors.X509Error("No GeneralNames provided in IssuerSerial.issuer.");
+        }
         const serial = issuerSerialElements[1].octetString;
         const issuerUID = (() => {
             if (issuerSerialElements.length === 3)

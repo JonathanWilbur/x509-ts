@@ -3,25 +3,13 @@
 - [ ] Add toString to almost everything
 - [ ] Add static print to almost anything
 - [ ] Make sure that each root constructed element is validated
-- [ ] Create ASN1Element.serialize
-  - [ ] Encode undefined as EOC
-  - [ ] Encode boolean as BOOLEAN
-  - [ ] Encode integer as INTEGER
-  - [ ] Encode Int8Array as BIT STRING
-  - [ ] Encode Uint8ClampedArray or Uint8Array as OCTET STRING
-  - [ ] Encode float as REAL
-  - [ ] Encode null as NULL
-  - [ ] Encode Uint32Array as OBJECT IDENTIFIER
-  - [ ] Encode Uint16Array as RELATIVE OBJECT IDENTIFIER
-  - [ ] Encode object as SEQUENCE
-  - [ ] Encode array as SET
-  - [ ] Encode string as UTF8String
-  - [ ] Encode Date as GeneralizedTime
 - [ ] PolicyQualifierInfo.qualified
 - [ ] Put these in an x501 library:
   - [ ] PkiPMIProtocolSpecifications
   - [ ] PkiPmiWrapper
 - [ ] Make fromBytes static
+- [ ] Tolerate additional elements in extensible constructed types.
+- [ ] Cease use of `Element.validateTag`.
 - [ ] Find some interface you can implement
 - [ ] See if you can implement methods on type aliases or implement them as classes gracefully.
 - [ ] Certificate Extensions
