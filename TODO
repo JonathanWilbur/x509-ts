@@ -1,5 +1,4 @@
 - [ ] I noticed that GeneralSubtree is not done...
-- [ ] Add "platform" bullet point to ASN.1 library
 - [ ] Add toString to almost everything
 - [ ] Add static print to almost anything
 - [ ] Make sure that each root constructed element is validated
@@ -13,7 +12,7 @@
 - [ ] Find some interface you can implement
 - [ ] See if you can implement methods on type aliases or implement them as classes gracefully.
 - [ ] Certificate Extensions
-  - [ ] authorityKeyIdentifier (Done)
+  - [x] authorityKeyIdentifier
   - [ ] keyAttributes
   - [ ] certificatePolicies (Too complicated)
   - [ ] keyUsageRestriction (Cannot find)
@@ -22,25 +21,25 @@
   - [ ] subjectAltName
   - [ ] issuerAltName
   - [ ] subjectDirectoryAttributes
-  - [ ] basicConstraints (Done)
+  - [x] basicConstraints
   - [ ] subjectKeyIdentifier
   - [ ] keyUsage
   - [ ] privateKeyUsagePeriod
-  - [ ] subjectAltName (Done)
-  - [ ] issuerAltName (Done)
-  - [ ] basicConstraints (Done)
+  - [x] subjectAltName
+  - [x] issuerAltName
+  - [x] basicConstraints
   - [ ] cRLNumber
   - [ ] reasonCode
   - [ ] expirationDate
   - [ ] instructionCode
   - [ ] invalidityDate
-  - [ ] cRLDistributionPoints (Done)
-  - [ ] issuingDistributionPoint (Done)
+  - [x] cRLDistributionPoints
+  - [x] issuingDistributionPoint
   - [ ] deltaCRLIndicator
-  - [ ] issuingDistributionPoint (Done)
+  - [x] issuingDistributionPoint
   - [ ] certificateIssuer
   - [ ] nameConstraints
-  - [ ] cRLDistributionPoints (Done)
+  - [x] cRLDistributionPoints
   - [ ] certificatePolicies
   - [ ] policyMappings
   - [ ] policyConstraints

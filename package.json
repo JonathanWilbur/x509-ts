@@ -34,9 +34,6 @@
     "files": [
         "dist/**/*"
     ],
-    "engines": {
-        "node": ">=10.3.0"
-    },
     "homepage": "https://github.com/JonathanWilbur/x509-ts#readme",
     "keywords": [
         "X.509",
