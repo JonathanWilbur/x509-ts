@@ -13,12 +13,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const asn1_ts_1 = require("asn1-ts");
 const errors = __importStar(require("../errors"));
 const Validity_1 = __importDefault(require("./Validity"));
+const Version_1 = __importDefault(require("./Version"));
 const SubjectPublicKeyInfo_1 = __importDefault(require("./SubjectPublicKeyInfo"));
 const AlgorithmIdentifier_1 = __importDefault(require("./AlgorithmIdentifier"));
 const Extension_1 = __importDefault(require("./Extension"));
 const InformationFramework_1 = require("../InformationFramework");
 class TBSCertificate {
-    constructor(ver = 0, serialNumber, signature, issuer, validity, subject, subjectPublicKeyInfo, issuerUniqueID, subjectUniqueID, extensions) {
+    constructor(ver = Version_1.default.v1, serialNumber, signature, issuer, validity, subject, subjectPublicKeyInfo, issuerUniqueID, subjectUniqueID, extensions) {
         this.ver = ver;
         this.serialNumber = serialNumber;
         this.signature = signature;
@@ -42,7 +43,7 @@ class TBSCertificate {
         if (tbsCertificateElements.length < 6) {
             throw new errors.X509Error(`TBSCertificate was too short. It contained ${tbsCertificateElements.length} elements.`);
         }
-        let ver = 0;
+        let ver = Version_1.default.v1;
         let serialNumber;
         let issuerUniqueID = undefined;
         let subjectUniqueID = undefined;
@@ -66,13 +67,13 @@ class TBSCertificate {
                 }
                 switch (versionElements[0].integer) {
                     case 0:
-                        ver = 0;
+                        ver = Version_1.default.v1;
                         break;
                     case 1:
-                        ver = 1;
+                        ver = Version_1.default.v2;
                         break;
                     case 2:
-                        ver = 2;
+                        ver = Version_1.default.v3;
                         break;
                     default:
                         throw new errors.X509Error("Invalid X.509 Certificate version.");
@@ -99,7 +100,7 @@ class TBSCertificate {
             && tbsCertificateElements[encounteredElements].tagClass === asn1_ts_1.ASN1TagClass.context
             && tbsCertificateElements[encounteredElements].construction === asn1_ts_1.ASN1Construction.primitive
             && tbsCertificateElements[encounteredElements].tagNumber === 1) {
-            if (ver === 0) {
+            if (ver === Version_1.default.v1) {
                 throw new errors.X509Error("issuerUniqueIdentifier not allowed in Version 1 X.509 certificate.");
             }
             issuerUniqueID = tbsCertificateElements[encounteredElements].bitString;
@@ -117,7 +118,7 @@ class TBSCertificate {
             if (tbsCertificateElements[encounteredElements].tagClass === asn1_ts_1.ASN1TagClass.context) {
                 switch (tbsCertificateElements[encounteredElements].tagNumber) {
                     case (2): {
-                        if (ver === 0) {
+                        if (ver === Version_1.default.v1) {
                             throw new errors.X509Error("subjectUniqueIdentifier not allowed in Version 1 X.509 certificate.");
                         }
                         if ((tbsCertificateElements.length - encounteredElements) > 2) {
@@ -127,7 +128,7 @@ class TBSCertificate {
                         break;
                     }
                     case (3): {
-                        if (ver !== 2) {
+                        if (ver !== Version_1.default.v3) {
                             throw new errors.X509Error("extensions not allowed in Version 1 or 2 X.509 certificate.");
                         }
                         if ((tbsCertificateElements.length - encounteredElements) !== 1) {
@@ -208,7 +209,7 @@ class TBSCertificate {
         {
             retSequence.push(this.subjectPublicKeyInfo.toElement());
         }
-        if (this.ver !== 0) {
+        if (this.ver !== Version_1.default.v1) {
             if (this.issuerUniqueID) {
                 const issuerUniqueIdentifierElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.context, asn1_ts_1.ASN1Construction.primitive, 1);
                 issuerUniqueIdentifierElement.bitString = this.issuerUniqueID;
@@ -220,7 +221,7 @@ class TBSCertificate {
                 retSequence.push(subjectUniqueIdentifierElement);
             }
         }
-        if (this.ver === 2) {
+        if (this.ver === Version_1.default.v3) {
             if (this.extensions) {
                 const extensionElements = [];
                 this.extensions.forEach((extension) => {

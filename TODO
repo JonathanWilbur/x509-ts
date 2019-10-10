@@ -1,5 +1,8 @@
 - [ ] I noticed that GeneralSubtree is not done...
+- [ ] I may have erred in Attribute Certificate, because I may have used implicit tagging
+      when explicit tagging should have been used.
 - [ ] Add toString to almost everything
+- [ ] Test against default trusted root stores
 - [ ] Add static print to almost anything
 - [ ] Make sure that each root constructed element is validated
 - [ ] PolicyQualifierInfo.qualified
@@ -7,6 +10,8 @@
   - [ ] PkiPMIProtocolSpecifications
   - [ ] PkiPmiWrapper
 - [ ] Make fromBytes static
+- [ ] Experiment with making a `SIGNED` object instead of using a separate
+      `Certificate`, `AttributeCertificate`, `CertificateList`.
 - [ ] Tolerate additional elements in extensible constructed types.
 - [ ] Cease use of `Element.validateTag`.
 - [ ] Find some interface you can implement

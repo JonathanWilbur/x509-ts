@@ -10,32 +10,32 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const TBSAttributeCertificate_1 = __importDefault(require("./TBSAttributeCertificate"));
-const AlgorithmIdentifier_1 = __importDefault(require("../AuthenticationFramework/AlgorithmIdentifier"));
+const CertificateListContent_1 = __importDefault(require("./CertificateListContent"));
+const AlgorithmIdentifier_1 = __importDefault(require("./AlgorithmIdentifier"));
 const asn1_ts_1 = require("asn1-ts");
 const errors = __importStar(require("../errors"));
 const validateTag_1 = __importDefault(require("../validateTag"));
-class AttributeCertificate {
-    constructor(tbsAttributeCertificate, signatureAlgorithm, signatureValue) {
-        this.tbsAttributeCertificate = tbsAttributeCertificate;
+class CertificateList {
+    constructor(certificateListContent, signatureAlgorithm, signatureValue) {
+        this.certificateListContent = certificateListContent;
         this.signatureAlgorithm = signatureAlgorithm;
         this.signatureValue = signatureValue;
     }
     static fromElement(value) {
-        validateTag_1.default(value, "AttributeCertificate", [asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.constructed], [asn1_ts_1.ASN1UniversalType.sequence]);
-        const attributeCertificateElements = value.sequence;
-        if (attributeCertificateElements.length !== 3) {
-            throw new errors.X509Error("Invalid number of elements in AttributeCertificate");
+        validateTag_1.default(value, "CertificateList", [asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.constructed], [asn1_ts_1.ASN1UniversalType.sequence]);
+        const certificateListElements = value.sequence;
+        if (certificateListElements.length !== 3) {
+            throw new errors.X509Error("Invalid number of elements in CertificateList");
         }
-        validateTag_1.default(attributeCertificateElements[2], "AttributeCertificate.signatureValue", [asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.primitive], [asn1_ts_1.ASN1UniversalType.bitString]);
-        return new AttributeCertificate(TBSAttributeCertificate_1.default.fromElement(attributeCertificateElements[0]), AlgorithmIdentifier_1.default.fromElement(attributeCertificateElements[1]), attributeCertificateElements[2].bitString);
+        validateTag_1.default(certificateListElements[2], "CertificateList.signatureValue", [asn1_ts_1.ASN1TagClass.universal], [asn1_ts_1.ASN1Construction.primitive], [asn1_ts_1.ASN1UniversalType.bitString]);
+        return new CertificateList(CertificateListContent_1.default.fromElement(certificateListElements[0]), AlgorithmIdentifier_1.default.fromElement(certificateListElements[1]), certificateListElements[2].bitString);
     }
     toElement() {
         const signatureValueElement = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.primitive, asn1_ts_1.ASN1UniversalType.bitString);
         signatureValueElement.bitString = this.signatureValue;
         const ret = new asn1_ts_1.DERElement(asn1_ts_1.ASN1TagClass.universal, asn1_ts_1.ASN1Construction.constructed, asn1_ts_1.ASN1UniversalType.sequence);
         ret.sequence = [
-            this.tbsAttributeCertificate.toElement(),
+            this.certificateListContent.toElement(),
             this.signatureAlgorithm.toElement(),
             signatureValueElement,
         ];
@@ -44,12 +44,12 @@ class AttributeCertificate {
     static fromBytes(value) {
         const el = new asn1_ts_1.DERElement();
         el.fromBytes(value);
-        return AttributeCertificate.fromElement(el);
+        return CertificateList.fromElement(el);
     }
     toBytes() {
         return this.toElement().toBytes();
     }
 }
-exports.default = AttributeCertificate;
-AttributeCertificate.maximumX509AttributeCertificateSizeInBytes = 100000;
-//# sourceMappingURL=AttributeCertificate.js.map
+exports.default = CertificateList;
+CertificateList.maximumX509CertificateSizeInBytes = 100000;
+//# sourceMappingURL=CertificateList.js.map

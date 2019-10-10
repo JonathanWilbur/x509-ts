@@ -1,10 +1,10 @@
-import TBSAttributeCertificate from "./TBSAttributeCertificate";
-import AlgorithmIdentifier from "../AuthenticationFramework/AlgorithmIdentifier";
+import CertificateListContent from "./CertificateListContent";
+import AlgorithmIdentifier from "./AlgorithmIdentifier";
 import { DERElement, ASN1TagClass, ASN1Construction, ASN1UniversalType } from "asn1-ts";
 import * as errors from "../errors";
 import validateTag from "../validateTag";
 
-// AttributeCertificate ::= SIGNED{TBSAttributeCertificate}
+// CertificateList ::= SIGNED{CertificateListContent}
 //
 // SIGNED{ToBeSigned} ::= SEQUENCE {
 //     toBeSigned ToBeSigned,
@@ -17,37 +17,37 @@ import validateTag from "../validateTag";
 //     ... }
 
 export default
-class AttributeCertificate {
-    public static maximumX509AttributeCertificateSizeInBytes: number = 100000;
+class CertificateList {
+    public static maximumX509CertificateSizeInBytes: number = 100000;
 
     constructor (
-        readonly tbsAttributeCertificate: TBSAttributeCertificate,
+        readonly certificateListContent: CertificateListContent,
         readonly signatureAlgorithm: AlgorithmIdentifier,
         readonly signatureValue: boolean[],
     ) {}
 
-    public static fromElement (value: DERElement): AttributeCertificate {
-        validateTag(value, "AttributeCertificate",
+    public static fromElement (value: DERElement): CertificateList {
+        validateTag(value, "CertificateList",
             [ ASN1TagClass.universal ],
             [ ASN1Construction.constructed ],
             [ ASN1UniversalType.sequence ],
         );
 
-        const attributeCertificateElements: DERElement[] = value.sequence;
-        if (attributeCertificateElements.length !== 3) {
-            throw new errors.X509Error("Invalid number of elements in AttributeCertificate");
+        const certificateListElements: DERElement[] = value.sequence;
+        if (certificateListElements.length !== 3) {
+            throw new errors.X509Error("Invalid number of elements in CertificateList");
         }
 
-        validateTag(attributeCertificateElements[2], "AttributeCertificate.signatureValue",
+        validateTag(certificateListElements[2], "CertificateList.signatureValue",
             [ ASN1TagClass.universal ],
             [ ASN1Construction.primitive ],
             [ ASN1UniversalType.bitString ],
         );
 
-        return new AttributeCertificate(
-            TBSAttributeCertificate.fromElement(attributeCertificateElements[0]),
-            AlgorithmIdentifier.fromElement(attributeCertificateElements[1]),
-            attributeCertificateElements[2].bitString,
+        return new CertificateList(
+            CertificateListContent.fromElement(certificateListElements[0]),
+            AlgorithmIdentifier.fromElement(certificateListElements[1]),
+            certificateListElements[2].bitString,
         );
     }
 
@@ -65,17 +65,17 @@ class AttributeCertificate {
             ASN1UniversalType.sequence,
         );
         ret.sequence = [
-            this.tbsAttributeCertificate.toElement(),
+            this.certificateListContent.toElement(),
             this.signatureAlgorithm.toElement(),
             signatureValueElement,
         ];
         return ret;
     }
 
-    public static fromBytes (value: Uint8Array): AttributeCertificate {
+    public static fromBytes (value: Uint8Array): CertificateList {
         const el: DERElement = new DERElement();
         el.fromBytes(value);
-        return AttributeCertificate.fromElement(el);
+        return CertificateList.fromElement(el);
     }
 
     public toBytes (): Uint8Array {

@@ -3,6 +3,8 @@ export const authenticationFrameworkOID: ObjectIdentifier = new ObjectIdentifier
 
 export { default as AlgorithmIdentifier } from "./AlgorithmIdentifier";
 export { default as Certificate } from "./Certificate";
+export { default as CertificateList } from "./CertificateList";
+export { default as CertificateListContent } from "./CertificateListContent";
 export { default as CertificateSerialNumber } from "./CertificateSerialNumber";
 // export { default as Encrypted } from "./Encrypted";
 // export { default as EncryptedHash } from "./EncryptedHash";

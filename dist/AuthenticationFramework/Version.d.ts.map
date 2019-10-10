@@ -1,1 +1,1 @@
-{"version":3,"file":"Version.d.ts","sourceRoot":"","sources":["../../source/AuthenticationFramework/Version.ts"],"names":[],"mappings":"AAEA,mBAAW,OAAO;IACd,EAAE,IAAI;IACN,EAAE,IAAI;IACN,EAAE,IAAI;CACT;AACD,eAAe,OAAO,CAAC"}
+{"version":3,"file":"Version.d.ts","sourceRoot":"","sources":["../../source/AuthenticationFramework/Version.ts"],"names":[],"mappings":"AAEA,aAAK,OAAO;IACR,EAAE,IAAI;IACN,EAAE,IAAI;IACN,EAAE,IAAI;CACT;AACD,eAAe,OAAO,CAAC"}

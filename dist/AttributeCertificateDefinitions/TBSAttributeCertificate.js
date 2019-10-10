@@ -13,6 +13,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const asn1_ts_1 = require("asn1-ts");
 const errors = __importStar(require("../errors"));
 const validateTag_1 = __importDefault(require("../validateTag"));
+const AttCertVersion_1 = __importDefault(require("./AttCertVersion"));
 const AlgorithmIdentifier_1 = __importDefault(require("../AuthenticationFramework/AlgorithmIdentifier"));
 const Holder_1 = __importDefault(require("./Holder"));
 const AttCertIssuer_1 = __importDefault(require("./AttCertIssuer"));
@@ -20,7 +21,7 @@ const AttCertValidityPeriod_1 = __importDefault(require("./AttCertValidityPeriod
 const Attribute_1 = __importDefault(require("../InformationFramework/Attribute"));
 const AuthenticationFramework_1 = require("../AuthenticationFramework");
 class TBSAttributeCertificate {
-    constructor(ver = 1, holder, issuer, signature, serialNumber, attrCertValidityPeriod, attributes, issuerUniqueID, extensions) {
+    constructor(ver = AttCertVersion_1.default.v2, holder, issuer, signature, serialNumber, attrCertValidityPeriod, attributes, issuerUniqueID, extensions) {
         this.ver = ver;
         this.holder = holder;
         this.issuer = issuer;

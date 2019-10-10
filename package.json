@@ -9,9 +9,9 @@
             "url": "https://github.com/JonathanWilbur"
         }
     ],
-    "description": "X.509 in TypeScript, mostly for encoding and decoding TLS certificates.",
+    "description": "Encode and decode X.509 (TLS) Certificates, Attribute Certificates, CRLs, and more.",
     "devDependencies": {
-        "@babel/core": "^7.6.3",
+        "@babel/core": "^7.6.4",
         "@babel/preset-env": "^7.6.3",
         "@babel/preset-typescript": "^7.6.0",
         "@types/node": "^12.7.12",
@@ -21,9 +21,9 @@
         "eslint": "^6.5.1",
         "jest": "^24.9.0",
         "jest-junit": "^7.0.0",
-        "serverless": "^1.53.0",
+        "serverless": "^1.54.0",
         "ts-loader": "^6.2.0",
-        "typescript": "^3.6.3",
+        "typescript": "^3.6.4",
         "webpack": "^4.41.0",
         "webpack-cli": "^3.3.9"
     },
@@ -43,7 +43,8 @@
         "certificate",
         "key",
         "cryptography",
-        "typescript"
+        "typescript",
+        "crl"
     ],
     "license": "MIT",
     "main": "./dist/index.js",
@@ -61,7 +62,7 @@
         "test": "npx jest --ci --reporters=default --reporters=jest-junit"
     },
     "types": "./dist/index.d.ts",
-    "version": "0.12.0",
+    "version": "0.13.0",
     "dependencies": {
         "asn1-ts": "^2.0.0"
     }

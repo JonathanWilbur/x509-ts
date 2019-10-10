@@ -1,4 +1,4 @@
-declare const enum AttCertVersion {
+declare enum AttCertVersion {
     v2 = 1
 }
 export default AttCertVersion;
